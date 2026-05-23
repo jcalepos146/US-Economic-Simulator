@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACROSCOPE — U.S. Economic Outlook Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #060b18;
+  --surface: #0b1422;
+  --surface2: #0f1d33;
+  --surface3: #142140;
+  --border: #1a2d4a;
+  --border2: #243d6a;
+  --text: #c8d8f0;
+  --text-dim: #7a9abf;
+  --muted: #3a5470;
+  --accent: #f0a030;
+  --accent-dim: rgba(240,160,48,0.10);
+  --accent-border: rgba(240,160,48,0.30);
+  --pos: #00d47a;
+  --pos-dim: rgba(0,212,122,0.08);
+  --neg: #ff4055;
+  --neg-dim: rgba(255,64,85,0.08);
+  --info: #4a9eff;
+  --info-dim: rgba(74,158,255,0.08);
+  --warn: #ffd44a;
+  --warn-dim: rgba(255,212,74,0.10);
+  --font-ui: 'Barlow', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-cond: 'Barlow Condensed', sans-serif;
+  --r: 5px;
+  --r-lg: 9px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-ui);overflow:hidden;font-size:14px;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+button,input,select{font-family:inherit;}
+
+/* === LAYOUT === */
+#app{display:grid;grid-template-rows:48px 104px 1fr;height:100vh;overflow:hidden;}
+
+/* === HEADER === */
+#hdr{display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:baseline;gap:10px;}
+.logo-mark{font-family:var(--font-cond);font-size:21px;font-weight:700;letter-spacing:2.5px;color:var(--text);}
+.logo-mark .acc{color:var(--accent);}
+.logo-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.8px;}
+.hdr-r{display:flex;align-items:center;gap:7px;}
+.hdr-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:11px;padding:5px 10px;border-radius:var(--r);width:180px;outline:none;}
+.hdr-input:focus{border-color:var(--accent);}
+.btn{background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-size:12px;font-weight:500;padding:5px 13px;border-radius:var(--r);cursor:pointer;transition:all 0.13s;white-space:nowrap;}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn.primary{border-color:var(--accent-border);color:var(--accent);}
+
+/* === METRICS BAR === */
+/* === METRICS BAR — two-row layout === */
+#mbar{display:flex;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--border);}
+.mbar-row{display:grid;overflow:hidden;}
+/* Primary row: 8 big tiles */
+.mbar-primary{grid-template-columns:repeat(8,1fr);flex:1.15;border-bottom:1px solid var(--border);}
+/* Secondary row: 7 smaller tiles */
+.mbar-secondary{grid-template-columns:repeat(7,1fr);flex:0.85;}
+.mc{padding:10px 12px 6px;border-right:1px solid var(--border);min-width:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;}
+.mc:last-child{border-right:none;}
+/* Primary tile typography */
+.mbar-primary .mc-lbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px;}
+.mbar-primary .mc-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--text);line-height:1.05;margin-top:0;}
+.mbar-primary .mc-delta{font-family:var(--font-mono);font-size:9.5px;margin-top:2px;white-space:nowrap;}
+/* Secondary tile typography */
+.mbar-secondary .mc-lbl{font-family:var(--font-mono);font-size:8px;letter-spacing:0.7px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mbar-secondary .mc-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--text);line-height:1.1;margin-top:1px;}
+.mbar-secondary .mc-delta{font-family:var(--font-mono);font-size:8.5px;margin-top:1px;white-space:nowrap;}
+/* Shared colour classes */
+.mc-val.good{color:var(--pos);}
+.mc-val.bad{color:var(--neg);}
+.mc-val.warn{color:var(--warn);}
+.mc-delta.pos{color:var(--pos);}
+.mc-delta.neg{color:var(--neg);}
+.mc-delta.neu{color:var(--muted);}
+
+/* === BODY LAYOUT === */
+#body{display:grid;grid-template-columns:192px 1fr;overflow:hidden;}
+
+/* === SIDEBAR === */
+#sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:6px 0;display:flex;flex-direction:column;}
+.nav-grp{padding:10px 14px 3px;font-family:var(--font-mono);font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 14px;cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--text-dim);font-size:12.5px;font-weight:400;border-left:2px solid transparent;transition:all 0.1s;white-space:nowrap;overflow:hidden;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent-dim);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
+.nav-icon{font-size:13px;width:15px;text-align:center;flex-shrink:0;opacity:0.75;}
+.nav-item.active .nav-icon{opacity:1;}
+.nav-warn{font-size:9px;color:var(--warn);margin-left:auto;flex-shrink:0;}
+
+/* === CONTENT AREA === */
+#content-wrap{display:grid;grid-template-rows:1fr 38px;overflow:hidden;}
+#content{overflow-y:auto;padding:18px 20px;}
+.section{display:none;}
+.section.active{display:block;}
+.sec-hdr{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sec-title{font-family:var(--font-cond);font-size:17px;font-weight:700;letter-spacing:0.5px;color:var(--text);}
+.sec-desc{font-size:12px;color:var(--text-dim);margin-top:2px;line-height:1.4;}
+.sec-warn{margin-top:6px;padding:6px 12px;background:var(--warn-dim);border:1px solid rgba(255,212,74,0.2);border-radius:var(--r);font-size:11px;color:var(--warn);font-family:var(--font-mono);}
+
+/* === SLIDER GRID === */
+.slider-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;}
+.slider-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;transition:border-color 0.15s;}
+.slider-card:hover{border-color:var(--border2);}
+.sl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;}
+.sl-label{font-size:12.5px;font-weight:500;color:var(--text);line-height:1.3;}
+.sl-val{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0;}
+.sl-desc{font-size:10.5px;color:var(--muted);margin-bottom:7px;line-height:1.4;}
+input[type=range]{width:100%;height:3px;cursor:pointer;-webkit-appearance:none;appearance:none;background:var(--surface3);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:13px;height:13px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 5px rgba(240,160,48,0.45);}
+.sl-range{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);font-family:var(--font-mono);margin-top:3px;}
+.sl-link{font-size:9px;color:var(--info);font-family:var(--font-mono);margin-top:3px;}
+
+/* === EVENTS === */
+.ev-custom{display:flex;gap:7px;margin-bottom:14px;align-items:stretch;}
+.ev-custom input,.ev-custom select{background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:12px;padding:7px 11px;border-radius:var(--r);outline:none;}
+.ev-custom input{flex:1;}
+.ev-custom input:focus,.ev-custom select:focus{border-color:var(--accent);}
+.ev-custom .btn{padding:7px 14px;}
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:7px;}
+.ev-card{border:1px solid var(--border);border-radius:var(--r);padding:9px 13px;cursor:pointer;background:var(--surface);transition:all 0.13s;}
+.ev-card:hover{background:var(--surface2);border-color:var(--border2);}
+.ev-card.active.pos-ev{border-color:var(--pos);background:var(--pos-dim);}
+.ev-card.active.neg-ev{border-color:var(--neg);background:var(--neg-dim);}
+.ev-title{font-size:12.5px;font-weight:500;color:var(--text);margin-bottom:3px;}
+.ev-cat{font-size:10px;font-family:var(--font-mono);color:var(--muted);}
+.ev-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
+.ev-chip{font-family:var(--font-mono);font-size:9.5px;padding:1px 6px;border-radius:3px;}
+.ev-chip.pos{background:var(--pos-dim);color:var(--pos);}
+.ev-chip.neg{background:var(--neg-dim);color:var(--neg);}
+
+/* === EVENT LOG === */
+#elog{background:var(--surface);border-top:1px solid var(--border);padding:0 14px;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;font-size:10.5px;}
+.elog-empty{color:var(--muted);font-family:var(--font-mono);}
+.elog-chip{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-family:var(--font-mono);font-size:10px;white-space:nowrap;flex-shrink:0;}
+.elog-chip.pos{background:var(--pos-dim);color:var(--pos);border:1px solid rgba(0,212,122,0.3);}
+.elog-chip.neg{background:var(--neg-dim);color:var(--neg);border:1px solid rgba(255,64,85,0.3);}
+.elog-x{cursor:pointer;opacity:0.55;margin-left:2px;}
+.elog-x:hover{opacity:1;}
+.elog-label{flex-shrink:0;font-size:9px;color:var(--muted);margin-right:4px;}
+
+/* === CHARTS === */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.chart-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;}
+.chart-panel.wide{grid-column:1/-1;}
+.chart-title{font-family:var(--font-cond);font-size:13px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.chart-sub{font-size:10px;color:var(--muted);margin-bottom:10px;font-family:var(--font-mono);}
+.chart-wrap{position:relative;}
+
+/* === SCENARIOS === */
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.sc-slot{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;min-height:180px;display:flex;flex-direction:column;}
+.sc-slot.filled{border-color:var(--border2);}
+.sc-name{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.sc-date{font-size:10px;color:var(--muted);margin-bottom:10px;}
+.sc-metrics{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;}
+.sc-m{font-size:10.5px;color:var(--text-dim);}
+.sc-m span{color:var(--text);font-family:var(--font-mono);font-weight:700;}
+.sc-actions{display:flex;gap:5px;margin-top:10px;}
+.sc-btn{flex:1;padding:5px 6px;font-size:10.5px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--font-ui);}
+.sc-btn:hover{border-color:var(--accent);color:var(--accent);}
+.sc-btn.danger:hover{border-color:var(--neg);color:var(--neg);}
+.sc-empty{color:var(--muted);font-size:12px;text-align:center;margin:auto;}
+
+/* === SENSITIVITY === */
+.sens-grid{display:grid;gap:8px;}
+.sens-row{display:flex;align-items:center;gap:10px;}
+.sens-lbl{font-size:12px;color:var(--text-dim);width:220px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sens-track{flex:1;height:7px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.sens-fill{height:100%;border-radius:3px;transition:width 0.4s;}
+.sens-v{font-family:var(--font-mono);font-size:10px;width:55px;text-align:right;color:var(--text-dim);}
+
+/* === SCROLLABLE SECTIONS FOR CHARTS === */
+.section#sec-charts .charts-grid,.section#sec-scenarios,.section#sec-sensitivity{max-height:none;}
+
+/* === ANNOTATION === */
+.annotation{background:var(--info-dim);border:1px solid rgba(74,158,255,0.2);border-radius:var(--r);padding:8px 12px;font-size:11px;color:var(--info);font-family:var(--font-mono);margin-bottom:12px;}
+
+/* === PDF UPLOAD MODAL === */
+#pdf-modal-overlay{position:fixed;inset:0;background:rgba(4,8,20,0.88);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+#pdf-modal-overlay.open{display:flex;}
+#pdf-modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);width:640px;max-width:94vw;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.7);}
+.pm-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.pm-title{font-family:var(--font-cond);font-size:16px;font-weight:700;letter-spacing:0.5px;color:var(--text);}
+.pm-title span{color:var(--accent);}
+.pm-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:3px;line-height:1;}
+.pm-close:hover{color:var(--neg);}
+.pm-body{padding:20px;overflow-y:auto;flex:1;}
+#pdf-drop-zone{border:2px dashed var(--border2);border-radius:var(--r-lg);padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.15s;margin-bottom:16px;position:relative;}
+#pdf-drop-zone:hover,#pdf-drop-zone.drag-over{border-color:var(--accent);background:var(--accent-dim);}
+#pdf-drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dz-icon{font-size:32px;margin-bottom:10px;color:var(--muted);}
+.dz-label{font-size:14px;font-weight:500;color:var(--text-dim);margin-bottom:4px;}
+.dz-sub{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
+#pdf-status{display:none;margin-bottom:16px;}
+.ps-bar{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-bottom:10px;}
+.ps-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s;}
+.ps-label{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);}
+.ps-label .ps-file{color:var(--accent);}
+#pdf-results{display:none;}
+.pr-summary{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:14px;}
+.pr-summary strong{color:var(--text);font-family:var(--font-cond);font-size:14px;display:block;margin-bottom:6px;}
+.pr-changes-title{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.pr-changes{display:grid;gap:6px;max-height:260px;overflow-y:auto;}
+.pr-change{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;}
+.pr-change.up{border-color:rgba(0,212,122,0.25);background:var(--pos-dim);}
+.pr-change.dn{border-color:rgba(255,64,85,0.25);background:var(--neg-dim);}
+.prc-arrow{font-size:14px;flex-shrink:0;}
+.prc-arrow.up{color:var(--pos);}
+.prc-arrow.dn{color:var(--neg);}
+.prc-name{font-size:12px;color:var(--text);flex:1;}
+.prc-old{font-family:var(--font-mono);font-size:11px;color:var(--muted);}
+.prc-new{font-family:var(--font-mono);font-size:11px;font-weight:700;}
+.prc-new.up{color:var(--pos);}
+.prc-new.dn{color:var(--neg);}
+.prc-reason{font-size:10.5px;color:var(--muted);grid-column:1/-1;margin-top:2px;line-height:1.4;}
+.pr-apply{width:100%;margin-top:14px;padding:10px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:var(--r);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-cond);letter-spacing:0.5px;transition:all 0.15s;}
+.pr-apply:hover{background:rgba(240,160,48,0.2);}
+.pr-error{background:var(--neg-dim);border:1px solid rgba(255,64,85,0.25);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--neg);font-family:var(--font-mono);}
+.btn.upload-btn{border-color:var(--info);color:var(--info);gap:5px;display:flex;align-items:center;}
+.btn.upload-btn:hover{background:var(--info-dim);}
+
+/* === TIME HORIZON TOGGLE === */
+.hz-wrap{padding:8px 10px 2px;border-bottom:1px solid var(--border);}
+.hz-lbl{display:block;font-family:var(--font-mono);font-size:8px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:5px;padding-left:2px;}
+.hz-toggle{display:flex;gap:4px;}
+.hz-btn{flex:1;padding:5px 0;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:0.5px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;border-radius:var(--r);transition:all 0.13s;}
+.hz-btn:hover{border-color:var(--text-dim);color:var(--text-dim);}
+.hz-btn.active{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
+.hz-hint{font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px;text-align:center;line-height:1.3;padding:0 2px;}
+
+/* === CALIBRATION PANEL === */
+.cal-grp-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;}
+.cal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.cal-field{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;transition:border-color 0.13s;}
+.cal-field:focus-within{border-color:var(--accent-border);}
+.cal-lbl{font-size:9.5px;color:var(--muted);margin-bottom:3px;font-family:var(--font-mono);}
+.cal-row{display:flex;align-items:baseline;gap:3px;}
+.cal-inp{width:100%;background:transparent;border:none;outline:none;font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--accent);}
+.cal-unit{font-size:10px;color:var(--muted);flex-shrink:0;}
+.cal-actions{display:flex;gap:7px;margin:12px 0;}
+.cal-actions .btn{flex:1;padding:9px 6px;font-size:12px;}
+.cal-results{margin-top:14px;}
+.cal-results-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.cal-row-item{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;font-size:11.5px;}
+.cal-row-item.ok{border-color:rgba(0,212,122,0.25);background:var(--pos-dim);}
+.cal-row-item.warn{border-color:rgba(255,212,74,0.25);background:var(--warn-dim);}
+.cal-row-item.miss{border-color:rgba(255,64,85,0.25);background:var(--neg-dim);}
+.cri-lbl{flex:1;color:var(--text-dim);}
+.cri-actual{font-family:var(--font-mono);font-weight:700;color:var(--text);width:60px;text-align:right;}
+.cri-model{font-family:var(--font-mono);color:var(--muted);width:60px;text-align:right;}
+.cri-gap{font-family:var(--font-mono);font-size:10px;width:55px;text-align:right;}
+.cri-gap.pos{color:var(--pos);}
+.cri-gap.neg{color:var(--neg);}
+.cri-gap.neu{color:var(--muted);}
+.cal-note{font-size:10px;color:var(--muted);line-height:1.55;font-family:var(--font-mono);margin-top:10px;padding:9px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);}
+
+
+/* === TAYLOR RULE === */
+.tr-btn{border-color:var(--border2);color:var(--muted);}
+.tr-btn.on{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+.tr-active input[type=range]{background:rgba(240,160,48,0.30);}
+.tr-active .sl-val{color:var(--warn);}
+
+/* === HISTORICAL SCENARIOS === */
+.hist-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 15px;cursor:pointer;transition:all 0.13s;}
+.hist-card:hover{background:var(--surface2);border-color:var(--border2);}
+.hist-card.recession{border-left:3px solid var(--neg);}
+.hist-card.boom{border-left:3px solid var(--pos);}
+.hist-card.crisis{border-left:3px solid var(--warn);}
+.hist-name{font-family:var(--font-cond);font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.hist-period{font-family:var(--font-mono);font-size:9px;color:var(--muted);margin-bottom:6px;}
+.hist-desc{font-size:11px;color:var(--text-dim);line-height:1.4;margin-bottom:7px;}
+.hist-stats{display:flex;flex-wrap:wrap;gap:4px;}
+.hist-tag{font-family:var(--font-mono);font-size:9px;padding:1px 6px;border-radius:3px;background:var(--surface2);}
+.hist-tag.pos{color:var(--pos);}
+.hist-tag.neg{color:var(--neg);}
+.hist-tag.neu{color:var(--muted);}
+
+/* === FINANCIAL STABILITY INDEX (FSI) === */
+.fsi-bar-wrap{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:2px;}
+.fsi-bar{height:100%;border-radius:3px;transition:width 0.4s;}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div id="hdr">
+    <div class="logo">
+      <span class="logo-mark">MACRO<span class="acc">SCOPE</span></span>
+      <span class="logo-sub">/ U.S. ECONOMIC OUTLOOK SIMULATOR</span>
+    </div>
+    <div class="hdr-r">
+      <input id="sc-name" class="hdr-input" type="text" value="Baseline 2026" placeholder="Scenario name">
+      <button class="btn primary" onclick="saveScenario()">Save Scenario</button>
+      <button class="btn" onclick="exportJSON()">Export JSON</button>
+      <button id="tr-toggle" class="btn tr-btn" onclick="toggleTaylorRule()" title="Auto-sets FFR via Taylor Rule: FFR = 2 + 1.5×(π−2) + 0.5×(4−u)">&#9889; Taylor Rule: OFF</button>
+      <button class="btn upload-btn" onclick="openPdfModal()">&#128196; Upload Article PDF</button>
+      <button class="btn" onclick="resetAll()">Reset All</button>
+    </div>
+  </div>
+
+  <!-- METRICS BAR -->
+  <div id="mbar"></div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+      <div class="hz-wrap">
+        <span class="hz-lbl">Analysis Horizon</span>
+        <div class="hz-toggle">
+          <button class="hz-btn active" id="hz-1"  onclick="setHorizon(1)">1 YR</button>
+          <button class="hz-btn"        id="hz-3"  onclick="setHorizon(3)">3 YR</button>
+          <button class="hz-btn"        id="hz-10" onclick="setHorizon(10)">10 YR</button>
+        </div>
+        <div class="hz-hint" id="hz-hint">Cyclical factors dominate</div>
+      </div>
+      <div class="nav-grp">Macro Inputs</div>
+      <div id="nav-inputs"></div>
+      <div class="nav-grp">Analysis</div>
+      <div id="nav-analysis"></div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div id="content-wrap">
+      <main id="content"></main>
+      <div id="elog"><span class="elog-empty">No events active — inject scenarios via the Events panel</span></div>
+    </div>
+
+  </div>
+
+<!-- PDF UPLOAD MODAL -->
+<div id="pdf-modal-overlay" onclick="if(event.target===this)closePdfModal()">
+  <div id="pdf-modal">
+    <div class="pm-header">
+      <div class="pm-title">&#128196; Upload <span>News Article / PDF</span></div>
+      <button class="pm-close" onclick="closePdfModal()">&#10005;</button>
+    </div>
+    <div class="pm-body">
+      <div id="pdf-drop-zone"
+        ondragover="event.preventDefault();this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="handleDrop(event)">
+        <input type="file" accept=".pdf" onchange="handleFileSelect(event)">
+        <div class="dz-icon">&#128196;</div>
+        <div class="dz-label">Drop a PDF here, or click to browse</div>
+        <div class="dz-sub">News articles, Fed minutes, economic reports, headlines — any PDF</div>
+      </div>
+      <div id="pdf-status">
+        <div class="ps-bar"><div class="ps-fill" id="ps-fill" style="width:0%"></div></div>
+        <div class="ps-label">Analyzing <span class="ps-file" id="ps-filename"></span>…</div>
+      </div>
+      <div id="pdf-results">
+        <div class="pr-summary" id="pr-summary-box"></div>
+        <div class="pr-changes-title">Suggested Slider Adjustments</div>
+        <div class="pr-changes" id="pr-changes-list"></div>
+        <button class="pr-apply" id="pr-apply-btn" onclick="applyPdfChanges()">Apply All Changes to Simulator ↗</button>
+      </div>
+      <div id="pdf-error" style="display:none" class="pr-error"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* =================================================================
+   MACROSCOPE — U.S. Economic Outlook Simulator
+   ================================================================= */
+
+// ── DEFAULTS (also used for reset) ──────────────────────────────
+const DEFAULTS = {
+  ffr:4.5, qePace:-25, guidanceTone:6, stressTest:6, ioer:4.4, warshrules:5,
+  deficit:6.5, corpTax:21, incomeTax:37, capGainsTax:20, govSpend:4.0, defenseSpend:3.5, regBurden:6, fedPermit:4,
+  innovRate:1.5, rdSpend:3.1, aiAdoption:6, vcFunding:170, patentRate:6, stemGrowth:2.0, uniIndustry:5,
+  foreignDemand:6, igSpreads:100, hySpreads:350, tstIssuance:7, ycc:0, termPremium:30, creditImpulse:0,
+  tariff:10, dxy:104, tradeBalance:-3.5, chinaDecoupling:6, fdiInflows:6, nearshoring:4,
+  housingSupply:1.4, zoning:7, fedLandPermit:4, pti:7.0, vacancyRate:6.0, commercialREStress:6, housingAct:0,
+  unemp:4.1, lfp:62.5, minWage:7.25, unionMem:10, highSkillImmig:5, autoDisplace:5, skillsGap:6, noncompete:5,
+  oil:72, natgas:3.5, electricCost:5, renewableShare:22, carbonPolicy:3, spr:55, lngExport:6, oilConflict:5,
+  privateCapex:17.0, infraSpend:350, permitSpeed:4, localPermit:4, shippingCost:4, portEff:6, broadband:82, gridReliability:6,
+  stateCorpTax:5.0, stateRegEnv:5, interstateMigration:6, stateFiscalHealth:5, localPermitState:3, propTax:1.1, rightToWork:50,
+  policyCert:4, polarization:8, ruleOfLaw:7, govEffective:5, cbIndependence:7, socialCapital:5, regCapture:5, mediaQuality:5, electoralStab:7,
+  conflictIndex:6, natoCommit:6, chinaMilRisk:6, energyGeopolitics:5, dollarReserve:8, cyberRisk:6, allyRelations:6
+};
+let vals = {...DEFAULTS};
+let activeEventIds = {};
+
+// ── CATEGORIES ───────────────────────────────────────────────────
+const CATEGORIES = [
+  { id:'monetary', label:'Monetary Policy', icon:'⚡',
+    desc:'Federal Reserve (Chair Kevin Warsh) monetary conditions, rate policy, and balance sheet dynamics.',
+    sliders:[
+      {id:'ffr',        label:'Fed Funds Rate',              min:0,   max:10,  step:0.25, fmt:v=>`${(+v).toFixed(2)}%`,   desc:'Primary FOMC policy lever. Warsh favors rules-based approach over discretion.'},
+      {id:'qePace',     label:'Balance Sheet (QT ↔ QE)',    min:-150,max:150, step:5,    fmt:v=>`${v>0?'+':''}${v}B/mo`,  desc:'Neg = Quantitative Tightening. Pos = QE. Warsh strongly favors continued QT.'},
+      {id:'guidanceTone',label:'Forward Guidance Tone',     min:1,   max:10,  step:1,    fmt:v=>['','Ultra-dovish','Dovish','Mildly dovish','Lean dovish','Neutral','Lean hawkish','Mildly hawkish','Hawkish','Very hawkish','Ultra-hawkish'][+v]||`${v}/10`,desc:'Signals future rate path. Shapes long-term yield expectations.'},
+      {id:'stressTest', label:'Bank Stress-Test Stringency',min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,                desc:'Higher = tighter capital requirements. Reduces credit supply, improves stability.'},
+      {id:'ioer',       label:'Interest on Excess Reserves',min:0,   max:8,   step:0.25, fmt:v=>`${(+v).toFixed(2)}%`,   desc:'Rate paid on bank reserves at the Fed. Sets effective floor for overnight rates.'},
+      {id:'warshrules', label:'Rules-Based Policy Adherence',min:1,  max:10,  step:1,    fmt:v=>`${v}/10`,                desc:'Adherence to Taylor Rule vs. discretion. Higher = more predictable, lower inflation risk premium.'},
+    ]
+  },
+  { id:'fiscal', label:'Fiscal Policy', icon:'◆',
+    desc:'Federal taxation, spending, regulation, and the budget deficit — the government\'s role in the economy.',
+    sliders:[
+      {id:'deficit',     label:'Federal Deficit (% of GDP)',   min:-2,  max:20,  step:0.5,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Primary deficit as % of GDP. US currently ~6.5%. High deficits crowd out private investment and raise yields.'},
+      {id:'corpTax',     label:'Corporate Tax Rate',           min:10,  max:40,  step:1,    fmt:v=>`${v}%`,                 desc:'Federal corporate income tax. Directly affects business investment and profit repatriation.'},
+      {id:'incomeTax',   label:'Top Marginal Income Tax',      min:30,  max:70,  step:1,    fmt:v=>`${v}%`,                 desc:'Top federal rate. Affects high-earner behavior, capital formation, and talent retention.'},
+      {id:'capGainsTax', label:'Capital Gains Tax Rate',       min:0,   max:45,  step:1,    fmt:v=>`${v}%`,                 desc:'Long-term capital gains rate. Key driver of investment realization and startup ecosystem health.'},
+      {id:'govSpend',    label:'Gov\'t Spending Growth (% YoY)',min:-5, max:15,  step:0.5,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Year-over-year federal outlay growth. Keynesian multiplier effects; inflationary at high rates.'},
+      {id:'defenseSpend',label:'Defense Spending (% of GDP)', min:2,   max:8,   step:0.1,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Military outlays. Technology spillovers (internet, GPS) but crowds out productive investment.'},
+      {id:'regBurden',   label:'Federal Regulatory Burden',    min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Cost of federal regulatory compliance. Every +1 costs ~0.05% GDP per year in model.'},
+      {id:'fedPermit',   label:'Federal Permitting Speed',     min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'NEPA and agency permit timelines. Critical bottleneck for energy, mining, and infrastructure.'},
+    ]
+  },
+  { id:'innovation', label:'Innovation & Productivity', icon:'◉',
+    desc:'TFP growth, R&D investment, AI adoption, and the long-run productive potential of the economy.',
+    sliders:[
+      {id:'innovRate',   label:'Benchmark TFP Growth Rate',    min:0,   max:4,   step:0.1,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Total Factor Productivity growth. Pre-AI trend: ~1.2%/yr. Key long-run GDP potential driver.'},
+      {id:'rdSpend',     label:'R&D Spending (% of GDP)',      min:1,   max:6,   step:0.1,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Public + private R&D investment. US currently ~3.1%. Each +1% boosts TFP by ~0.18%/yr.'},
+      {id:'aiAdoption',  label:'AI/Automation Adoption Index', min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Breadth of AI integration across industries. Major productivity unlock — potentially transformative.'},
+      {id:'vcFunding',   label:'VC/Startup Funding ($B/yr)',   min:50,  max:600, step:10,   fmt:v=>`$${v}B`,                desc:'Annual venture capital deployment. Funds frontier innovation and new market creation.'},
+      {id:'patentRate',  label:'Patent Filing Rate (index)',   min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Innovation output proxy. Linked to university-industry tech transfer quality.'},
+      {id:'stemGrowth',  label:'STEM Workforce Growth (% YoY)',min:0,   max:8,   step:0.5,  fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Growth of science and engineering workforce. Critical constraint on innovation rate.'},
+      {id:'uniIndustry', label:'University–Industry Linkage',  min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Research commercialization depth. US leads globally but varies enormously by metro.'},
+    ]
+  },
+  { id:'bonds', label:'Bond Markets', icon:'⟁',
+    desc:'Treasury yield curve dynamics. Yields directly drive mortgage rates, housing affordability, and corporate borrowing.',
+    warn:'Bond yields are the central transmission mechanism: 10yr UST → mortgage rates → housing prices → consumer wealth → GDP.',
+    sliders:[
+      {id:'foreignDemand',label:'Foreign UST Demand (index)', min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Demand from foreign central banks (China, Japan). Anchors long yields. Any pullback raises rates substantially.'},
+      {id:'igSpreads',   label:'IG Credit Spreads (bps)',     min:50,  max:600, step:10,   fmt:v=>`${v}bps`,               desc:'Investment-grade corporate spreads over Treasuries. Widens in recessions, tightens in booms.'},
+      {id:'hySpreads',   label:'High-Yield Spreads (bps)',    min:200, max:2000,step:25,   fmt:v=>`${v}bps`,               desc:'Junk bond spreads. Best real-time recession barometer. >800bps historically precedes contractions.'},
+      {id:'tstIssuance', label:'Treasury Issuance Pace',      min:1,   max:10,  step:1,    fmt:v=>`${v}/10`,               desc:'Volume of new Treasury supply hitting markets. High supply competes for demand, raises yields.'},
+      {id:'ycc',         label:'Yield Curve Control Intensity',min:0,  max:10,  step:1,    fmt:v=>+v===0?'None (Off)':`${v}/10`,desc:'BoJ-style Fed cap on long yields. Suppresses 10yr, but at risk of inflation loss of control.'},
+      {id:'termPremium', label:'Term Premium (bps)',          min:-100,max:300, step:10,   fmt:v=>`${v}bps`,               desc:'Extra yield demanded for duration risk. Negative in 2010s (safe haven flows). Rising with deficit.'},
+      {id:'creditImpulse', label:'Credit Impulse (YoY Δ pp)',    min:-5,  max:5,   step:0.5,  fmt:v=>`${v>0?'+':''}${(+v).toFixed(1)}pp`, desc:'Change in YoY private credit growth — the most powerful short-run GDP leading indicator (Bridges et al., BIS). Positive = credit accelerating; negative = contracting.'},
+    ]
+  },
+  { id:'trade', label:'Trade & FX', icon:'↔',
+    desc:'Tariff policy, dollar strength, global trade balances, and supply chain configuration.',
+    sliders:[
+      {id:'tariff',         label:'Average Tariff Rate',          min:0,   max:60,  step:1,   fmt:v=>`${v}%`,                 desc:'Effective average tariff on all imports. Each +1% tariff → ~+0.02% CPI and -0.015% GDP.'},
+      {id:'dxy',            label:'Dollar Strength (DXY)',        min:75,  max:135, step:1,   fmt:v=>`${v}`,                  desc:'USD index vs major currencies. Strong dollar = cheaper imports, but hurts exports and EM debt.'},
+      {id:'tradeBalance',   label:'Trade Balance (% of GDP)',     min:-10, max:3,   step:0.5, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Current account. US structural deficit. Strong dollar widens it; tariffs have mixed effects.'},
+      {id:'chinaDecoupling',label:'China Decoupling Intensity',   min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Supply chain and tech bifurcation from China. Higher = more nearshoring costs short-term; more resilience long-term.'},
+      {id:'fdiInflows',     label:'FDI Inflows Index',            min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Foreign direct investment into US. Driven by policy certainty, profitability, and dollar stability.'},
+      {id:'nearshoring',    label:'Nearshoring/Reshoring Progress',min:1,  max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Pace of supply chain return to US/Mexico/Canada. Short-term costs, long-term resilience dividend.'},
+    ]
+  },
+  { id:'housing', label:'Housing & Real Estate', icon:'▦',
+    desc:'Bonds → mortgages → affordability → prices. The most interest-rate-sensitive sector of the economy.',
+    warn:'30yr mortgage ≈ 10yr Treasury + 2.1%. Every 100bps yield increase reduces housing affordability by ~7-10 points.',
+    sliders:[
+      {id:'housingSupply',   label:'New Housing Units/yr (M)',    min:0.5, max:3.0, step:0.1, fmt:v=>`${(+v).toFixed(1)}M`,  desc:'Annual residential construction. Structural US deficit ~400K/yr. Biggest long-run affordability lever.'},
+      {id:'zoning',          label:'Zoning Restrictiveness',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Density restrictions at local level. Primary barrier to housing supply in coastal metros.'},
+      {id:'fedLandPermit',   label:'Federal Land Permitting',     min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Access to federal land for development. Major lever in Mountain West and Sun Belt.'},
+      {id:'pti',             label:'Price-to-Income Ratio',       min:3,   max:14,  step:0.5, fmt:v=>`${(+v).toFixed(1)}x`,  desc:'Median home price / median HH income. Historical avg ~3.5x. US now ~7x; coastal metros 10-14x.'},
+      {id:'vacancyRate',     label:'Vacancy Rate (%)',            min:1,   max:12,  step:0.5, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Share of housing stock vacant. Low vacancy = tight market = upward price pressure.'},
+      {id:'commercialREStress',label:'Commercial RE Stress',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Office vacancies, CRE loan delinquencies. Threatens regional bank balance sheets.'},
+      {id:'housingAct',      label:'Housing Act Implementation',  min:0,   max:10,  step:1,   fmt:v=>+v===0?'Not enacted':`${v}/10`,desc:'21st Century Road to Housing Act — federal incentives to build. Each unit = implementation progress.'},
+    ]
+  },
+  { id:'labor', label:'Labor Market', icon:'◐',
+    desc:'Employment, wages, skills, immigration, and workforce structure — the labor side of the growth equation.',
+    sliders:[
+      {id:'unemp',          label:'Unemployment Rate',           min:2,   max:15,  step:0.1, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'U-3 headline. Fed dual mandate target ~4.0%. Okun\'s Law: 1% unemployment = ~-0.15% GDP.'},
+      {id:'lfp',            label:'Labor Force Participation (%)',min:55, max:70,  step:0.5, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Share of working-age in labor force. Pre-2008 peak: 66%. Aging demographics create structural drag.'},
+      {id:'minWage',        label:'Federal Minimum Wage ($/hr)', min:7.25,max:25,  step:0.25,fmt:v=>`$${(+v).toFixed(2)}`,  desc:'Federal floor unchanged since 2009. Many cities/states far exceed this. Wage floor affects CPI.'},
+      {id:'unionMem',       label:'Union Membership (%)',        min:5,   max:35,  step:1,   fmt:v=>`${v}%`,                 desc:'Unionization rate. Drives wage floors and labor market rigidity. Currently at historic lows (~10%).'},
+      {id:'highSkillImmig', label:'High-Skill Immigration (index)',min:1, max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'H-1B, EB-5, O-1 policy generosity. Critical for tech/biotech/finance talent pipeline.'},
+      {id:'autoDisplace',   label:'Automation Displacement Rate',min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Speed of AI/robot job displacement. Creates structural unemployment if skills gap is large.'},
+      {id:'skillsGap',      label:'Skills Gap Severity',         min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Mismatch between available workers and employer needs. Major bottleneck for growth and investment.'},
+      {id:'noncompete',     label:'Noncompete Enforcement',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Higher enforcement = less labor mobility, less startup formation, lower wage competition.'},
+    ]
+  },
+  { id:'energy', label:'Energy & Commodities', icon:'⬡',
+    desc:'Oil, natural gas, electricity, renewables — core inflation inputs and industrial competitiveness drivers.',
+    sliders:[
+      {id:'oil',          label:'Crude Oil Price ($/bbl)',       min:30,  max:200, step:1,   fmt:v=>`$${v}`,                 desc:'WTI spot price. ~$10 change → ~0.15% CPI. Central variable linking geopolitics to inflation.'},
+      {id:'natgas',       label:'Natural Gas ($/MMBtu)',         min:1,   max:20,  step:0.5, fmt:v=>`$${(+v).toFixed(1)}`,  desc:'Henry Hub. Drives electricity costs, industrial production, winter heating. Very seasonal.'},
+      {id:'electricCost', label:'Electricity Cost Index',        min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Industrial and residential power costs. High costs hurt manufacturing competitiveness vs. Asia.'},
+      {id:'renewableShare',label:'Renewable Capacity Share (%)', min:5,   max:70,  step:1,   fmt:v=>`${v}%`,                 desc:'Wind + solar + hydro of US power. Long-run deflationary; short-run requires grid investment.'},
+      {id:'carbonPolicy', label:'Carbon Policy Stringency',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Carbon taxes/cap-and-trade. Short-run inflationary; long-run efficiency gains and energy security.'},
+      {id:'spr',          label:'Strategic Petroleum Reserve (%)',min:15, max:100, step:5,   fmt:v=>`${v}%`,                 desc:'SPR fill level (max 713M barrels). Drawdowns can dampen price spikes. Currently rebuilding.'},
+      {id:'lngExport',    label:'LNG Export Capacity',           min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'US liquefied natural gas export terminals. Revenue source + energy diplomacy with EU allies.'},
+      {id:'oilConflict',  label:'Middle East Supply Risk',       min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Iran, Yemen, Strait of Hormuz risk. Directly maps to oil price volatility premium.'},
+    ]
+  },
+  { id:'infra', label:'Infrastructure & CAPEX', icon:'⬛',
+    desc:'Capital investment, permitting speed, shipping costs, ports, grid reliability — the physical economy.',
+    sliders:[
+      {id:'privateCapex',  label:'Private CAPEX (% of GDP)',     min:10,  max:25,  step:0.5, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Private business fixed investment. Strongest leading indicator of future productivity growth.'},
+      {id:'infraSpend',    label:'Infrastructure Spending ($B/yr)',min:100,max:1200,step:25,  fmt:v=>`$${v}B`,               desc:'Federal + state infrastructure. IIJA authorized $1.2T over 5 years. Roads, rail, grid, broadband.'},
+      {id:'permitSpeed',   label:'Federal Permitting Speed',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'NEPA review timelines. A 2-year permit takes 4-7 years in practice. Reform = massive CAPEX unlock.'},
+      {id:'localPermit',   label:'Local Permitting Speed',        min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Building permits at city/county level. Critical bottleneck for housing AND industrial siting.'},
+      {id:'shippingCost',  label:'Shipping/Freight Cost Index',   min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Container rates, trucking costs, port congestion. Post-COVID has normalized but remains elevated.'},
+      {id:'portEff',       label:'Port Efficiency Index',         min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'US port throughput vs. global peers. Chronic lag vs. Rotterdam and Singapore costs US competitiveness.'},
+      {id:'broadband',     label:'Broadband Penetration (%)',     min:60,  max:100, step:1,   fmt:v=>`${v}%`,                 desc:'Households with high-speed access. Critical for remote work, digital economy, rural inclusion.'},
+      {id:'gridReliability',label:'Grid Reliability Index',       min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Power grid resilience. AI data centers creating massive new demand. Blackouts = GDP loss.'},
+    ]
+  },
+  { id:'state', label:'State & Local Policy', icon:'◈',
+    desc:'Tax competition, regulation, interstate migration, and subnational fiscal health — often overlooked macro driver.',
+    sliders:[
+      {id:'stateCorpTax',    label:'Avg State Corporate Tax (%)',  min:0,   max:12,  step:0.5, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Average state corporate income tax. Ranges: 0% (SD, WY, NV) to 11.5% (NJ). Location decisions.'},
+      {id:'stateRegEnv',     label:'State Regulatory Environment', min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Composite state-level regulatory burden. CA/NY (high) vs TX/FL (low). Divergence accelerating.'},
+      {id:'interstateMigration',label:'Migration to Low-Tax States',min:1,  max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Net domestic migration to Sun Belt/low-tax states. Reallocates labor, capital, and tax base.'},
+      {id:'stateFiscalHealth',label:'State Fiscal Health Index',   min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Pension funding ratios, unfunded liabilities, credit ratings. Underfunded = future tax hikes.'},
+      {id:'localPermitState', label:'State Housing Reform Progress',min:1,  max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Zoning reform, ADU legalization, by-right permitting. CA SB9, MT HB 382 examples.'},
+      {id:'propTax',          label:'Avg Property Tax Rate (%)',   min:0.3, max:3.5, step:0.1, fmt:v=>`${(+v).toFixed(1)}%`,  desc:'Effective property tax. NJ ~2.5%, HI ~0.3%. Major component of housing carrying costs.'},
+      {id:'rightToWork',      label:'Right-to-Work Coverage (%)',  min:30,  max:80,  step:5,   fmt:v=>`${v}%`,                 desc:'Share of US workers in RTW states. Affects union density, labor costs, and business location.'},
+    ]
+  },
+  { id:'politecon', label:'Political Economy', icon:'◎',
+    desc:'Policy certainty, institutional quality, rule of law — the most underrated driver of long-run economic outcomes.',
+    warn:'⚠ UNDERRATED: Political economy factors account for an estimated 20-40% of cross-country growth variance. Invisible in standard models, but decisive over time horizons >3 years.',
+    sliders:[
+      {id:'policyCert',     label:'Policy Certainty Index',       min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Baker-Bloom-Davis EPU (inverted). Uncertainty = deferred CAPEX and hiring. Currently elevated.'},
+      {id:'polarization',   label:'Political Polarization',       min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Congressional gridlock, societal division. Legislates through crises, not planning. Currently ~8/10.'},
+      {id:'ruleOfLaw',      label:'Rule of Law Strength',         min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Property rights, contract enforcement, judicial independence. Foundation of long-term investment.'},
+      {id:'govEffective',   label:'Government Effectiveness',     min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Bureaucratic quality, public service delivery. Affects permitting execution, spending efficiency.'},
+      {id:'cbIndependence', label:'Central Bank Independence',    min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Political insulation of the Fed. Erosion raises inflation risk premium in long-term bonds.'},
+      {id:'socialCapital',  label:'Social Capital (Trust Index)', min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Putnam: trust in institutions, civic participation. Predicts investment, cooperation, long-run growth.'},
+      {id:'regCapture',     label:'Regulatory Capture Risk',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Degree regulators serve industry vs. public interest. Distorts markets, suppresses competition.'},
+      {id:'mediaQuality',   label:'Information Quality Index',    min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Media independence, misinformation prevalence. Low quality → policy dysfunction and misallocation.'},
+      {id:'electoralStab',  label:'Electoral Stability',          min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Legitimacy of elections and transitions. Instability raises risk premia across all asset classes.'},
+    ]
+  },
+  { id:'geopolitics', label:'Geopolitical Risk', icon:'⊕',
+    desc:'Global conflicts, alliance structures, strategic competition, and dollar reserve status.',
+    sliders:[
+      {id:'conflictIndex',    label:'Global Conflict Index',       min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Active conflicts affecting trade, energy, and capital flows. Currently elevated.'},
+      {id:'natoCommit',       label:'NATO Commitment Strength',    min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'US commitment to Article 5. Lower commitment shifts burden to Europe, affects defense budgets.'},
+      {id:'chinaMilRisk',     label:'China Military Risk (Taiwan)',min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Taiwan Strait, South China Sea. Escalation scenario would dwarf 2008 financial crisis in scope.'},
+      {id:'energyGeopolitics',label:'Energy Supply Chain Fragility',min:1,  max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'Risk of oil/LNG/critical mineral supply disruption. Iran, Russia, and Hormuz key chokepoints.'},
+      {id:'dollarReserve',    label:'Dollar Reserve Currency Status',min:1,  max:10, step:1,   fmt:v=>`${v}/10`,               desc:'USD share of global FX reserves. Erosion raises US borrowing costs and reduces policy space.'},
+      {id:'cyberRisk',        label:'Cyber Security Risk',         min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'State-sponsored attacks on financial system, grid, and infrastructure. Systemic and underpriced risk.'},
+      {id:'allyRelations',    label:'Allied Relations Index',      min:1,   max:10,  step:1,   fmt:v=>`${v}/10`,               desc:'US relations with Five Eyes, EU, Japan, South Korea. Affects trade, tech cooperation, and security.'},
+    ]
+  },
+];
+
+const ANALYSIS_SECTIONS = [
+  { id:'events',      label:'Events & Shocks', icon:'◬' },
+  { id:'charts',      label:'Charts & Analysis', icon:'◫' },
+  { id:'scenarios',   label:'Scenarios', icon:'◩' },
+  { id:'sensitivity', label:'Sensitivity Analysis', icon:'◧' },
+  { id:'calibrate',   label:'2026 Q2 Calibration', icon:'◎' },
+  { id:'history',     label:'Historical Scenarios', icon:'◑' },
+];
+
+// ── PRESET EVENTS ────────────────────────────────────────────────
+const EVENTS = [
+  // Housing
+  {id:'housing_act',      label:'21st Century Road to Housing Act signed', cat:'Housing',     pos:true,  chips:['GDP +0.2%','CPI -0.1%','Supply +0.3M'],  d:{housingSupply:0.3,housingAct:5,  gdpA:0.20,cpiA:-0.10}},
+  {id:'rent_ctrl',        label:'National rent control enacted',            cat:'Housing',     pos:false, chips:['Supply -0.3M','GDP -0.15%'],              d:{housingSupply:-0.3,              gdpA:-0.15,cpiA:0.05}},
+  {id:'zoning_reform',    label:'Federal zoning override — by-right builds',cat:'Housing',     pos:true,  chips:['Zoning -3','Supply +0.4M','Aff. +8pts'],  d:{zoning:-3,housingSupply:0.4,    gdpA:0.15}},
+  // Energy
+  {id:'iran_end',         label:'End of Iran conflict — oil shock reversal', cat:'Energy',     pos:true,  chips:['Oil -$18','CPI -0.4%','GDP +0.3%'],       d:{oil:-18,oilConflict:-3,          gdpA:0.30,cpiA:-0.40}},
+  {id:'oil_shock',        label:'OPEC+ major supply cut — oil +$35/bbl',    cat:'Energy',     pos:false, chips:['Oil +$35','CPI +0.8%','GDP -0.5%'],       d:{oil:35,                          gdpA:-0.50,cpiA:0.80}},
+  {id:'pipeline_ok',      label:'Major pipeline network approved & built',  cat:'Energy',     pos:true,  chips:['Gas -$0.8','CPI -0.1%'],                   d:{natgas:-0.8,lngExport:1,        gdpA:0.15,cpiA:-0.10}},
+  {id:'spr_big',          label:'Large SPR release (100M bbl)',             cat:'Energy',     pos:true,  chips:['Oil -$10','CPI -0.15%'],                   d:{oil:-10,spr:-15,                gdpA:0.10,cpiA:-0.15}},
+  {id:'carbon_tax',       label:'$100/ton carbon tax enacted',              cat:'Energy',     pos:false, chips:['CPI +0.4%','GDP -0.2%','Renew. +5%'],     d:{carbonPolicy:3,renewableShare:5, gdpA:-0.20,cpiA:0.40}},
+  // Monetary (Warsh)
+  {id:'warsh_cuts3',      label:'Warsh signals 3 rate cuts this year',     cat:'Monetary',   pos:true,  chips:['FFR -0.75%','GDP +0.35%','S&P +7%'],      d:{ffr:-0.75,                       gdpA:0.35,cpiA:0.15,spA:7}},
+  {id:'warsh_hike75',     label:'Emergency rate hike +75bps',              cat:'Monetary',   pos:false, chips:['FFR +0.75%','GDP -0.4%','S&P -9%'],       d:{ffr:0.75,                        gdpA:-0.40,cpiA:-0.20,spA:-9}},
+  {id:'warsh_qt_accel',   label:'Warsh accelerates QT to $150B/mo',        cat:'Monetary',   pos:false, chips:['Balance sheet -$1.8T/yr','S&P -5%'],       d:{qePace:-25,                      gdpA:-0.20,spA:-5}},
+  {id:'warsh_taylor',     label:'Warsh formally adopts Taylor Rule',        cat:'Monetary',   pos:true,  chips:['Policy cert +2','GDP +0.15%','S&P +3%'],   d:{warshrules:3,policyCert:2,       gdpA:0.15,spA:3}},
+  {id:'fed_independence', label:'White House pressures Fed on rates',       cat:'Monetary',   pos:false, chips:['CB independence -2','Risk prem. rises'],   d:{cbIndependence:-2,               gdpA:-0.20,cpiA:0.15,spA:-6}},
+  {id:'ycc_intro',        label:'Fed introduces Yield Curve Control',       cat:'Monetary',   pos:false, chips:['YCC +5','CPI +0.5%','Yields capped'],      d:{ycc:5,                           gdpA:0.10,cpiA:0.50,spA:5}},
+  // Trade
+  {id:'eu_deal',          label:'EU-US Free Trade Agreement ratified',      cat:'Trade',      pos:true,  chips:['Tariff -3%','GDP +0.4%','FDI +1'],         d:{tariff:-3,fdiInflows:1,          gdpA:0.40,cpiA:-0.15}},
+  {id:'china_tariff60',   label:'60% tariffs on all Chinese goods',        cat:'Trade',      pos:false, chips:['Tariff +15%','CPI +0.9%','GDP -0.6%'],     d:{tariff:15,shippingCost:2,        gdpA:-0.60,cpiA:0.90}},
+  {id:'china_rare_earth', label:'China bans rare earth exports to US',      cat:'Trade',      pos:false, chips:['Decoupling +2','GDP -0.4%'],               d:{chinaDecoupling:2,               gdpA:-0.40,cpiA:0.30}},
+  {id:'usmca_renegotiate',label:'USMCA renegotiated — nearshoring surge',   cat:'Trade',      pos:true,  chips:['Nearshoring +3','GDP +0.25%'],             d:{nearshoring:3,                   gdpA:0.25,cpiA:-0.05}},
+  {id:'dollar_dump',      label:'BRICS nations dump USD reserves',          cat:'Trade',      pos:false, chips:['DXY -10','Reserve status -2','CPI +0.3%'], d:{dxy:-10,dollarReserve:-2,        gdpA:-0.25,cpiA:0.30}},
+  // Fiscal
+  {id:'stimulus2t',       label:'$2T fiscal stimulus package',              cat:'Fiscal',     pos:true,  chips:['GDP +0.6%','CPI +0.5%','Deficit +1.5%'],  d:{govSpend:3,deficit:1.5,          gdpA:0.60,cpiA:0.50,spA:5}},
+  {id:'austerity_big',    label:'$500B/yr spending cuts enacted',           cat:'Fiscal',     pos:false, chips:['GDP -0.4%','Deficit -2%','CPI -0.1%'],     d:{govSpend:-3,deficit:-2,          gdpA:-0.40,cpiA:-0.10}},
+  {id:'debt_ceiling',     label:'Debt ceiling crisis — brink of default',   cat:'Fiscal',     pos:false, chips:['GDP -0.9%','S&P -15%','Policy cert -2'],   d:{policyCert:-2,foreignDemand:-2,  gdpA:-0.90,cpiA:0.20,spA:-15}},
+  {id:'corp_tax_cut',     label:'Corporate tax cut to 15%',                 cat:'Fiscal',     pos:true,  chips:['Corp tax -6%','GDP +0.5%','S&P +8%'],      d:{corpTax:-6,                      gdpA:0.50,spA:8}},
+  {id:'permitting_reform',label:'NEPA reform — 90-day federal reviews',     cat:'Fiscal',     pos:true,  chips:['Permit speed +3','CAPEX +0.8%','GDP +0.3%'],d:{permitSpeed:3,privateCapex:0.8, gdpA:0.30}},
+  // Innovation
+  {id:'ai_boom',          label:'AI productivity boom — economy-wide',      cat:'Innovation', pos:true,  chips:['TFP +0.5%','GDP +0.8%','S&P +12%'],       d:{aiAdoption:3,innovRate:0.5,      gdpA:0.80,cpiA:-0.20,spA:12}},
+  {id:'chips_act2',       label:'CHIPS Act 2.0 — fab expansion surge',      cat:'Innovation', pos:true,  chips:['R&D +0.3%','CAPEX +1%','GDP +0.3%'],       d:{rdSpend:0.3,privateCapex:1,      gdpA:0.30,spA:5}},
+  {id:'stem_exodus',      label:'STEM talent exodus to other countries',     cat:'Innovation', pos:false, chips:['TFP -0.3%','VC -$50B','GDP -0.2%'],       d:{stemGrowth:-2,vcFunding:-50,     gdpA:-0.20}},
+  // Geopolitical
+  {id:'taiwan_crisis',    label:'Taiwan Strait military escalation',         cat:'Geopolit.',  pos:false, chips:['GDP -1.2%','Oil +$25','S&P -20%'],         d:{oil:25,conflictIndex:2,          gdpA:-1.20,cpiA:0.60,spA:-20}},
+  {id:'ukraine_peace',    label:'Russia-Ukraine comprehensive ceasefire',    cat:'Geopolit.',  pos:true,  chips:['Gas -$1.5','Oil -$8','GDP +0.4%'],         d:{natgas:-1.5,oil:-8,conflictIndex:-2,gdpA:0.40}},
+  {id:'nato_collapse',    label:'NATO credibility collapse',                 cat:'Geopolit.',  pos:false, chips:['Defense +1.5% GDP','Uncertainty up'],      d:{natoCommit:-3,defenseSpend:1.5,  gdpA:-0.50,spA:-10}},
+  // Labor
+  {id:'fed_layoffs',      label:'Large-scale federal workforce reductions',  cat:'Labor',      pos:false, chips:['Unemp +0.4%','GovSpend -1%'],              d:{unemp:0.4,govSpend:-1,           gdpA:-0.20}},
+  {id:'highskill_expand', label:'Major high-skill visa expansion (H-1B 3×)', cat:'Labor',      pos:true,  chips:['TFP +0.2%','Stem +1%','GDP +0.4%'],        d:{highSkillImmig:3,stemGrowth:1,   gdpA:0.40}},
+  // Infrastructure
+  {id:'port_strike',      label:'Major US port strike — 6-week shutdown',    cat:'Infra.',     pos:false, chips:['Shipping +3','CPI +0.4%','GDP -0.3%'],     d:{shippingCost:3,                  gdpA:-0.30,cpiA:0.40}},
+  // Political Economy
+  {id:'const_crisis',     label:'Constitutional/institutional crisis',        cat:'Pol. Econ.', pos:false, chips:['Rule of law -2','S&P -12%','GDP -0.7%'],  d:{ruleOfLaw:-2,electoralStab:-2,   gddA:-0.70,spA:-12}},
+  {id:'bipartisan_deal',  label:'Bipartisan infrastructure + fiscal deal',    cat:'Pol. Econ.', pos:true,  chips:['Policy cert +3','GDP +0.5%','S&P +6%'],   d:{policyCert:3,infraSpend:150,     gdpA:0.50,spA:6}},
+  // ── POSITIVE SHOCKS (new) ────────────────────────────────────────
+  {id:'china_bargain',    label:'US-China grand bargain — full tariff rollback + tech licensing', cat:'Trade',      pos:true,
+   chips:['Tariff -10%','GDP +0.5%','CPI -0.3%','FDI +2'],
+   d:{tariff:-10, chinaDecoupling:-3, fdiInflows:2, nearshoring:1, gdpA:0.50, cpiA:-0.30}},
+
+  {id:'stem_greencards',  label:'STEM green card reform — automatic residency for US graduates', cat:'Labor',       pos:true,
+   chips:['Hi-skill +4','TFP +0.3%','GDP +0.4%'],
+   d:{highSkillImmig:4, stemGrowth:2, innovRate:0.3, gdpA:0.40}},
+
+  {id:'zoning_federal',   label:'National zoning preemption — federal override of exclusionary zoning', cat:'Housing', pos:true,
+   chips:['Zoning -4','Supply +0.5M','Afford. +10pts'],
+   d:{zoning:-4, housingSupply:0.5, localPermitState:3, housingAct:3, gdpA:0.25, cpiA:-0.10}},
+
+  {id:'ss_reform',        label:'Social Security structural reform — 75-year actuarial solvency', cat:'Fiscal',     pos:true,
+   chips:['Deficit -1.5%','Policy cert +2','GDP +0.3%'],
+   d:{deficit:-1.5, policyCert:2, socialCapital:1, gdpA:0.30}},
+
+  {id:'nuclear_smr',      label:'Nuclear renaissance — 20 SMR approvals, construction begins', cat:'Energy',      pos:true,
+   chips:['Elec cost -2','Renew +5%','GDP +0.3%','Grid +2'],
+   d:{electricCost:-2, renewableShare:5, gridReliability:2, carbonPolicy:1, gdpA:0.30, cpiA:-0.15}},
+
+  {id:'rare_earth_secure',label:'Domestic rare earth supply secured — end China mineral dependency', cat:'Trade',    pos:true,
+   chips:['Energy geo -1','CAPEX +1%','GDP +0.25%'],
+   d:{energyGeopolitics:-1, chinaDecoupling:-1, privateCapex:1, gdpA:0.25}},
+
+  {id:'reshoring_mega',   label:'Reshoring mega-incentive — $500B manufacturing tax credits', cat:'Trade',          pos:true,
+   chips:['Nearshoring +3','CAPEX +1.5%','GDP +0.4%'],
+   d:{nearshoring:3, privateCapex:1.5, chinaDecoupling:1, gdpA:0.40, cpiA:0.10}},
+
+  {id:'sovereign_fund',   label:'US sovereign wealth fund launched — federal royalties invested', cat:'Fiscal',    pos:true,
+   chips:['CAPEX +0.5%','Deficit -0.5%','GDP +0.2%'],
+   d:{privateCapex:0.5, deficit:-0.5, policyCert:1, gdpA:0.20}},
+
+  {id:'mexico_energy_pact',label:'US-Mexico energy partnership — LNG + manufacturing hub', cat:'Trade',            pos:true,
+   chips:['Nearshoring +3','LNG +2','Gas -$0.5','GDP +0.35%'],
+   d:{nearshoring:3, lngExport:2, natgas:-0.5, gdpA:0.35, cpiA:-0.10}},
+
+  {id:'drug_pricing',     label:'Drug pricing reform — Medicare negotiation + biosimilar surge', cat:'Labor',       pos:true,
+   chips:['LFP +0.5%','CAPEX +0.5%','CPI -0.15%','GDP +0.25%'],
+   d:{lfp:0.5, privateCapex:0.5, gdpA:0.25, cpiA:-0.15}},
+
+  {id:'ai_governance',    label:'Global AI governance framework — G7 regulatory certainty achieved', cat:'Innovation', pos:true,
+   chips:['AI adoption +2','TFP +0.3%','GDP +0.4%'],
+   d:{aiAdoption:2, innovRate:0.3, policyCert:1, gdpA:0.40}},
+
+  {id:'permit_overhaul',  label:'Comprehensive permitting overhaul — all federal reviews capped at 1yr', cat:'Fiscal', pos:true,
+   chips:['Permit +4','CAPEX +1.5%','GDP +0.5%'],
+   d:{permitSpeed:4, fedPermit:3, localPermit:2, privateCapex:1.5, gdpA:0.50}},
+
+  {id:'broadband_100pct', label:'Rural broadband completion — 100% high-speed coverage achieved', cat:'Infra.',    pos:true,
+   chips:['Broadband 100%','LFP +0.5%','GDP +0.2%'],
+   d:{broadband:18, lfp:0.5, gdpA:0.20}},
+
+  {id:'pension_bipartisan',label:'Bipartisan state pension reform — unfunded liabilities federally addressed', cat:'State', pos:true,
+   chips:['State health +3','Policy cert +1','GDP +0.25%'],
+   d:{stateFiscalHealth:3, policyCert:1, stateCorpTax:-0.5, gdpA:0.25}},
+
+  {id:'semicon_independence',label:'US semiconductor self-sufficiency achieved — CHIPS Act dividend realized', cat:'Innovation', pos:true,
+   chips:['R&D +0.3%','Decoupling risk -2','GDP +0.3%'],
+   d:{rdSpend:0.3, innovRate:0.2, chinaDecoupling:-2, energyGeopolitics:-1, gdpA:0.30}},
+
+  // ── NEGATIVE SHOCKS (new) ────────────────────────────────────────
+  {id:'credit_downgrade',  label:'US sovereign credit downgrade — Moody’s + S&P cut to AA', cat:'Bonds',        pos:false,
+   chips:['Foreign demand -3','Term prem +80bps','GDP -0.5%','S&P -10%'],
+   d:{foreignDemand:-3, termPremium:80, dollarReserve:-2, ruleOfLaw:-1, gdpA:-0.50, spA:-10}},
+
+  {id:'regional_bank_cascade',label:'Regional banking cascade — 20+ mid-size bank failures (CRE losses)', cat:'Bonds', pos:false,
+   chips:['HY +400bps','IG +150bps','GDP -0.7%','S&P -12%'],
+   d:{hySpreads:400, igSpreads:150, commercialREStress:3, creditImpulse:-3, gdpA:-0.70, spA:-12}},
+
+  {id:'china_hard_landing', label:'China hard landing — GDP collapses to ~1%, global demand shock', cat:'Trade',  pos:false,
+   chips:['Oil -$15','FDI -2','GDP -0.5%'],
+   d:{oil:-15, fdiInflows:-2, chinaDecoupling:1, tradeBalance:-1, gdpA:-0.50}},
+
+  {id:'swift_cyberattack',  label:'SWIFT cyberattack — state-sponsored, 3-day banking system freeze', cat:'Geopolit.', pos:false,
+   chips:['Credit impulse -3','Policy cert -2','GDP -0.6%','S&P -8%'],
+   d:{creditImpulse:-3, policyCert:-2, cyberRisk:2, gdpA:-0.60, spA:-8}},
+
+  {id:'ss_depletion',       label:'Social Security depletion — automatic 23% benefit cuts', cat:'Fiscal', pos:false,
+   chips:['Gov spend -3','Unemp +0.5%','GDP -0.5%'],
+   d:{govSpend:-3, unemp:0.5, polarization:1, gdpA:-0.50, cpiA:-0.10}},
+
+  {id:'ai_displacement_surge',label:'Mass white-collar AI displacement — 15M professional jobs automated', cat:'Labor', pos:false,
+   chips:['Unemp +2.5%','Skills gap +2','GDP -0.4%'],
+   d:{autoDisplace:3, unemp:2.5, skillsGap:2, gdpA:-0.40}},
+
+  {id:'stagflation_spiral', label:'Stagflation spiral — supply shock + unanchored expectations + fiscal excess', cat:'Energy', pos:false,
+   chips:['Oil +$25','CPI +0.8%','HY +200bps','GDP -0.5%'],
+   d:{oil:25, hySpreads:200, gdpA:-0.50, cpiA:0.80}},
+
+  {id:'iran_direct_conflict',label:'US-Iran direct military conflict — Hormuz partially blocked', cat:'Geopolit.', pos:false,
+   chips:['Oil +$45','CPI +1.0%','GDP -0.7%','S&P -15%'],
+   d:{oil:45, oilConflict:3, conflictIndex:2, lngExport:-2, gdpA:-0.70, cpiA:1.00, spA:-15}},
+
+  {id:'state_pension_cascade',label:'State pension cascade — IL, NJ, CT seek simultaneous federal bailout', cat:'State', pos:false,
+   chips:['State health -3','Deficit +1.5%','GDP -0.35%'],
+   d:{stateFiscalHealth:-3, deficit:1.5, stateCorpTax:1, policyCert:-1, gdpA:-0.35}},
+
+  {id:'brics_dollar_exit',  label:'BRICS+ payment system reaches critical mass — dollar reserves fall 8pts', cat:'Trade', pos:false,
+   chips:['Reserve status -3','DXY -8','CPI +0.4%','GDP -0.3%'],
+   d:{dollarReserve:-3, foreignDemand:-2, dxy:-8, gdpA:-0.30, cpiA:0.40}},
+
+  {id:'major_bank_failure', label:'Systemic US bank failure — top-10 bank collapses (Bear Stearns scale)', cat:'Bonds', pos:false,
+   chips:['HY +600bps','IG +250bps','GDP -1.0%','S&P -18%'],
+   d:{hySpreads:600, igSpreads:250, creditImpulse:-4, commercialREStress:2, gdpA:-1.00, spA:-18}},
+
+  {id:'climate_cluster',    label:'Climate disaster cluster — three Cat-5 hurricanes + western megadrought', cat:'Geopolit.', pos:false,
+   chips:['Deficit +1%','Shipping +2','CPI +0.3%','GDP -0.4%'],
+   d:{deficit:1, shippingCost:2, oil:8, infraSpend:150, gdpA:-0.40, cpiA:0.30}},
+
+  {id:'pandemic2',          label:'Pandemic 2.0 — novel respiratory pathogen, 60% more transmissible than COVID', cat:'Geopolit.', pos:false,
+   chips:['GDP -2.5%','Unemp +4%','Oil -$20','S&P -25%'],
+   d:{unemp:4, lfp:-3, oil:-20, govSpend:8, deficit:8, hySpreads:500, gdpA:-2.50, spA:-25}},
+
+  {id:'shutdown_6mo',       label:'6-month government shutdown — debt ceiling standoff, federal freeze', cat:'Fiscal', pos:false,
+   chips:['Policy cert -3','Gov spend -5','GDP -0.5%','S&P -6%'],
+   d:{govSpend:-5, unemp:0.5, policyCert:-3, foreignDemand:-1, gdpA:-0.50, spA:-6}},
+
+  {id:'demographic_cliff',  label:'Demographic cliff accelerates — full Boomer labor market exit', cat:'Labor',    pos:false,
+   chips:['LFP -2.5%','Skills gap +2','GDP -0.3%','CPI +0.2%'],
+   d:{lfp:-2.5, skillsGap:2, autoDisplace:1, gdpA:-0.30, cpiA:0.20}},
+];
+
+
+// ── TAYLOR RULE ────────────────────────────────────────────────────
+let taylorRuleOn = false;
+
+function toggleTaylorRule() {
+  taylorRuleOn = !taylorRuleOn;
+  const btn = document.getElementById('tr-toggle');
+  if (btn) {
+    btn.textContent = taylorRuleOn ? '\u26a1 Taylor Rule: ON' : '\u26a1 Taylor Rule: OFF';
+    btn.classList.toggle('on', taylorRuleOn);
+  }
+  const ffrCard = document.getElementById('r-ffr');
+  if (ffrCard) ffrCard.closest('.slider-card').classList.toggle('tr-active', taylorRuleOn);
+  render();
+}
+
+// ── MONTE CARLO ─────────────────────────────────────────────────────
+function randNormal() {
+  const u1 = Math.max(1e-10, Math.random());
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * Math.random());
+}
+
+const MC_PARAMS = [
+  { key:'oil',          sigma:14   },
+  { key:'deficit',      sigma:1.5  },
+  { key:'innovRate',    sigma:0.40 },
+  { key:'policyCert',   sigma:1.4  },
+  { key:'foreignDemand',sigma:1.3  },
+  { key:'hySpreads',    sigma:115  },
+  { key:'conflictIndex',sigma:1.1  },
+  { key:'ffr',          sigma:0.45 },
+];
+
+function runMonteCarlo(nSims) {
+  nSims = nSims || 220;
+  const saved = Object.assign({}, vals);
+  const savedTR = taylorRuleOn;
+  taylorRuleOn = false;
+  const results = [];
+  for (let i = 0; i < nSims; i++) {
+    for (const u of MC_PARAMS) {
+      const def = getSliderDef(u.key);
+      if (!def) continue;
+      vals[u.key] = Math.max(def.min, Math.min(def.max, saved[u.key] + randNormal() * u.sigma));
+    }
+    results.push(compute().gdp);
+  }
+  Object.assign(vals, saved);
+  taylorRuleOn = savedTR;
+  results.sort((a, b) => a - b);
+  const p = (pct) => results[Math.max(0, Math.min(nSims-1, Math.floor(nSims * pct)))];
+  return { p10:p(0.10), p25:p(0.25), p50:p(0.50), p75:p(0.75), p90:p(0.90) };
+}
+
+// ── HISTORICAL PRESETS ──────────────────────────────────────────────
+const HISTORICAL_PRESETS = {
+  gfc2008: {
+    name:'2008 Global Financial Crisis', period:'Sep 2008\u2013Mar 2009', type:'recession',
+    desc:'Lehman collapse triggered the worst financial crisis since 1929. Housing implosion, credit seizure, and global demand collapse.',
+    stats:[{t:'GDP \u22124.3%',c:'neg'},{t:'Unemp 10%',c:'neg'},{t:'HY 1750bps',c:'neg'},{t:'S&P \u221257%',c:'neg'}],
+    vals:{ ffr:1.0, qePace:80, deficit:9.8, govSpend:8, unemp:9.5, lfp:64.5, oil:55,
+           housingSupply:0.7, hySpreads:1750, igSpreads:450, foreignDemand:8,
+           commercialREStress:9, pti:9.0, privateCapex:12, policyCert:2,
+           polarization:6, ruleOfLaw:7, creditImpulse:-4.5, termPremium:-20 }
+  },
+  covid2020: {
+    name:'2020 COVID-19 Shock', period:'Q2 2020 (Apr\u2013Jun)', type:'crisis',
+    desc:'Fastest GDP contraction in US history \u2014 pandemic supply+demand shock met with unprecedented fiscal and monetary response.',
+    stats:[{t:'GDP \u221231%',c:'neg'},{t:'Unemp 14.7%',c:'neg'},{t:'Deficit +17%',c:'neg'},{t:'QE +$3T',c:'neu'}],
+    vals:{ ffr:0.25, qePace:120, deficit:17, govSpend:14, unemp:13, oil:35,
+           hySpreads:800, igSpreads:350, privateCapex:12, shippingCost:8,
+           housingSupply:0.9, creditImpulse:-3.0, polarization:7, policyCert:3,
+           foreignDemand:8 }
+  },
+  volcker1981: {
+    name:'1979\u201382 Volcker Disinflation', period:'1981 Peak Tightening', type:'recession',
+    desc:'Paul Volcker broke 1970s inflation with rates above 20%. Two recessions and mass unemployment \u2014 but lasting price stability.',
+    stats:[{t:'FFR 20%+',c:'neg'},{t:'CPI 13%',c:'neg'},{t:'Unemp 10.8%',c:'neg'},{t:'Long-run win',c:'pos'}],
+    vals:{ ffr:10, deficit:4.0, unemp:10.5, oil:95, govSpend:3, hySpreads:700,
+           igSpreads:250, guidanceTone:9, warshrules:9, foreignDemand:6,
+           privateCapex:14, polarization:5, innovRate:1.0, creditImpulse:-3.0,
+           termPremium:150, oilConflict:8, energyGeopolitics:8 }
+  },
+  goldilocks1998: {
+    name:'1995\u20132000 Goldilocks Boom', period:'Late Clinton Expansion', type:'boom',
+    desc:'Balanced federal budget, internet-driven TFP boom, near-full employment, benign inflation. Longest US expansion on record at the time.',
+    stats:[{t:'GDP 4.5%',c:'pos'},{t:'Unemp 4.0%',c:'pos'},{t:'Budget surplus',c:'pos'},{t:'TFP +2.1%',c:'pos'}],
+    vals:{ ffr:5.25, deficit:-0.5, unemp:4.0, oil:25, govSpend:1, housingSupply:1.8,
+           innovRate:2.2, rdSpend:2.5, aiAdoption:2, vcFunding:100, patentRate:7,
+           policyCert:8, polarization:4, ruleOfLaw:9, creditImpulse:2.0,
+           socialCapital:7, cbIndependence:9, privateCapex:19 }
+  },
+  stagflation1974: {
+    name:'1974\u201375 Stagflation', period:'Oil Shock Recession', type:'crisis',
+    desc:'OPEC oil embargo triggered simultaneous high inflation + recession, invalidating the Phillips Curve. Classic supply-side stagflation.',
+    stats:[{t:'CPI 12%',c:'neg'},{t:'Unemp 9%',c:'neg'},{t:'Oil +400%',c:'neg'},{t:'GDP \u22123.1%',c:'neg'}],
+    vals:{ ffr:7.5, oil:95, deficit:4.5, unemp:8.5, govSpend:3, hySpreads:600,
+           igSpreads:280, innovRate:0.8, privateCapex:13, oilConflict:9,
+           energyGeopolitics:9, lngExport:1, spr:20, creditImpulse:-2.0,
+           polarization:6, policyCert:3 }
+  }
+};
+
+function loadHistoricalPreset(id) {
+  const preset = HISTORICAL_PRESETS[id];
+  if (!preset) return;
+  // Reset to defaults first, then overlay preset values
+  vals = Object.assign({}, DEFAULTS, preset.vals);
+  activeEventIds = {};
+  // Update all slider UI
+  for (const cat of CATEGORIES) {
+    for (const sl of cat.sliders) {
+      const el = document.getElementById('r-' + sl.id);
+      const vEl = document.getElementById('v-' + sl.id);
+      if (el) el.value = vals[sl.id];
+      if (vEl) vEl.textContent = sl.fmt(vals[sl.id]);
+    }
+  }
+  document.querySelectorAll('.ev-card').forEach(c => c.classList.remove('active'));
+  render();
+  renderEventLog();
+  document.getElementById('sc-name').value = preset.name;
+  // Switch to monetary view to show the changes
+  const monBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.textContent.trim().startsWith('Monetary'));
+  if (monBtn) showSection('monetary', monBtn);
+}
+
+// ── TIME HORIZON & ANALYSIS WEIGHTS ─────────────────────────────
+// Controls which factors dominate across short/medium/long run.
+// Empirical basis: cyclical factors (monetary, fiscal stimulus) mean-revert
+// within 1-3yr; structural factors (TFP, institutions, infrastructure) compound
+// over decades and are wildly underweighted in 1yr forecast models.
+let timeHorizon = 1;
+
+const HZ_HINTS = {
+  1:  'Cyclical: monetary & demand factors dominate',
+  3:  'Structural: CAPEX, reform & trade fully transmit',
+  10: 'Fundamental: TFP, institutions & demographics rule'
+};
+
+function setHorizon(h) {
+  timeHorizon = h;
+  [1, 3, 10].forEach(x => {
+    const b = document.getElementById('hz-' + x);
+    if (b) b.classList.toggle('active', x === h);
+  });
+  const hint = document.getElementById('hz-hint');
+  if (hint) hint.textContent = HZ_HINTS[h] || '';
+  render();
+  if (chartsVisible) renderCharts(compute());
+}
+
+function getHorizonWeights(h) {
+  // Each weight multiplies the GDP sensitivity coefficient for that category.
+  // mon:     monetary policy (mean-reverts; Fed responds over time)
+  // fis:     fiscal spending multiplier (decays as crowding-out builds)
+  // tax:     tax/regulatory reform (capital allocation shift takes years)
+  // innov:   innovation/TFP (slow diffusion but enormous compounding)
+  // capex:   private investment & infrastructure (builds productive capacity)
+  // polEcon: institutional quality (invisible short-term, decisive long-term)
+  // trade:   tariff/FX transmission (hits fast, partially re-routes over time)
+  // labor:   unemployment slack (purely cyclical)
+  // dxyLag:  DXY→CPI passthrough lag (6-18mo for import prices to adjust)
+  //          [dollar lag improvement] only 55% passes through in year 1
+  if (h === 1)  return { mon:1.00, fis:1.00, tax:0.40, innov:0.28, capex:0.38, polEcon:0.28, trade:0.85, labor:1.00, dxyLag:0.55 };
+  if (h === 3)  return { mon:0.55, fis:0.75, tax:0.85, innov:1.00, capex:1.00, polEcon:0.88, trade:1.00, labor:0.88, dxyLag:0.82 };
+  if (h === 10) return { mon:0.08, fis:0.28, tax:1.30, innov:2.20, capex:1.65, polEcon:2.10, trade:0.65, labor:0.65, dxyLag:1.00 };
+  return        { mon:1.00, fis:1.00, tax:1.00, innov:1.00, capex:1.00, polEcon:1.00, trade:1.00, labor:1.00, dxyLag:1.00 };
+}
+
+// ── ECONOMIC MODEL (v2 — with 7 structural improvements) ────────
+//
+// Improvements implemented:
+//  [1] Debt service feedback loop (deficit → yields → interest cost → wider deficit)
+//  [2] Nonlinearities at extremes (FFR overshoot, HY crisis, CPI spiral, deficit vigilante)
+//  [3] Cross-variable amplifiers (credit seizure hits CAPEX + hiring)
+//  [4] Wealth effects feedback (S&P + housing → consumption → GDP, two-pass)
+//  [5] Recession regime-switching (GDP<0 triggers amplified unemployment, confidence collapse)
+//  [6] TFP compounding in projection chart (handled in renderGdpChart)
+//  [7] Labor market nonlinearity (unemp < 3.5% → convex wage-price pressure)
+//  [8] Political economy asymmetric hysteresis (degradation >> improvement)
+//  [9] Confidence as multiplier on CAPEX sensitivity (not just additive)
+// v3 additions:
+//  [A] Time horizon weights (1yr/3yr/10yr) — shifts which factors dominate
+//  [B] Dollar → CPI passthrough lag (55%/82%/100% by horizon)
+//  [C] Monetary policy lag — FFR effect attenuates at longer horizons
+
+// [8] Asymmetric pol-econ GDP impact: degradation hits harder than improvement
+function polEconGdpImpact(s) {
+  // asymCoeff: below-neutral slope > above-neutral slope
+  function asym(val, neutral, upC, dnC) {
+    const d = val - neutral;
+    return d >= 0 ? d * upC : d * dnC;
+  }
+  return (
+    asym(s.policyCert,     4,  0.072, 0.110)   // degradation 53% more damaging
+    + asym(s.ruleOfLaw,    7,  0.042, 0.075)   // rule of law very hard to rebuild
+    + asym(s.cbIndependence,7, 0.048, 0.090)   // CB erosion triggers risk premium spike
+    + asym(s.govEffective,  5, 0.030, 0.046)
+    + asym(s.socialCapital, 5, 0.025, 0.038)
+    + asym(s.electoralStab, 7, 0.020, 0.055)   // instability has outsized negative effect
+    - (s.polarization - 5) * 0.022             // symmetric (both directions bad)
+    - (s.regCapture   - 5) * 0.018
+  );
+}
+
+function compute() {
+  // ── Merge event deltas ──────────────────────────────────────────
+  const s = {...vals};
+  let gdpA = 0, cpiA = 0, spA = 0;
+  for (const eid of Object.keys(activeEventIds)) {
+    const ev = EVENTS.find(e => e.id === eid);
+    if (!ev) continue;
+    for (const [k, v] of Object.entries(ev.d)) {
+      if (k === 'gdpA') { gdpA += v; continue; }
+      if (k === 'cpiA') { cpiA += v; continue; }
+      if (k === 'spA')  { spA  += v; continue; }
+      if (k === 'gddA') { gdpA += v; continue; }
+      if (s[k] !== undefined) s[k] = +(s[k] + v).toFixed(3);
+    }
+  }
+
+  // Horizon-weighted coefficients for all GDP categories
+  const W = getHorizonWeights(timeHorizon);
+
+  // ── [TAYLOR RULE] Endogenous Fed reaction function ───────────────
+  // Bernanke-Taylor rule: FFR = r* + pi + 1.5*(pi-pi*) + 0.5*(y-y*)
+  // where r*=2, pi*=2, y-y* approximated via (4-unemp)*1.8 (Okun)
+  let taylorFFR = s.ffr;
+  if (taylorRuleOn) {
+    const cpi0 = 2.5 + (s.oil-70)*0.016 + (s.tariff-10)*0.022
+               + (s.deficit-4)*0.038 - (s.ffr-3)*0.18 + s.govSpend*0.025
+               + (s.oilConflict-5)*0.025;
+    taylorFFR = Math.max(0, Math.min(10, 2 + 1.5*(cpi0-2) + 0.5*(4-s.unemp)));
+    s.ffr = taylorFFR;
+    const ffrEl  = document.getElementById('r-ffr');
+    const ffrVEl = document.getElementById('v-ffr');
+    if (ffrEl)  ffrEl.value = taylorFFR;
+    if (ffrVEl) ffrVEl.textContent = taylorFFR.toFixed(2) + '%';
+  }
+
+  // ── PASS 1: Preliminary CPI (needed to compute yields) ──────────
+  let cpi = 2.5
+    + (s.oil       - 70)   * 0.016
+    + (s.natgas    - 3.5)  * 0.04
+    + (s.tariff    - 10)   * 0.022
+    + (s.deficit   - 4)    * 0.038
+    - (s.ffr       - 3)    * 0.18
+    +  s.govSpend          * 0.025
+    - (s.innovRate  - 1.5) * 0.15
+    + (s.shippingCost - 4) * 0.035
+    - (s.renewableShare-22)* 0.006
+    + (s.qePace > 0 ? s.qePace * 0.007 : 0)
+    - (s.policyCert - 4)   * 0.015
+    + (s.minWage   - 7.25) * 0.012
+    + (s.unionMem  - 10)   * 0.018
+    - (s.portEff   - 6)    * 0.015
+    + (s.oilConflict - 5)  * 0.025
+    - (s.dxy - 104)        * 0.010 * W.dxyLag  // [dollar lag] stronger USD → cheaper imports, lagged
+    + cpiA;
+
+  // [7] Labor market nonlinearity: below 3.5% unemp → convex wage-price spiral
+  const unempGap = Math.max(0, 3.5 - s.unemp);
+  const wagePriceSpiral = unempGap * unempGap * 0.10;
+  cpi += wagePriceSpiral;
+
+  // [2] CPI self-reinforcement above 6% (second-round effects, expectations unanchoring)
+  if (cpi > 6) cpi += (cpi - 6) * 0.12;
+  cpi = Math.max(0, Math.min(22, cpi));
+
+  // ── [1] DEBT SERVICE FEEDBACK LOOP ─────────────────────────────
+  // US debt ~$34T, GDP ~$28T → debt/GDP ≈ 122%
+  // Weighted avg maturity ~6yr: effective avg rate = 65% locked at ~3.2% + 35% rolling
+  const DEBT_TO_GDP = 1.22;
+  const avgDebtRate = 0.35 * (4.2 + (s.ffr - 4.5) * 0.45 + Math.max(0, cpi - 2.5) * 0.28)
+                    + 0.65 * 3.2; // approximate preliminary tenyr
+  const interestCostPctGDP = DEBT_TO_GDP * avgDebtRate;
+  // Baseline interest cost ~2.8% GDP; excess mechanically widens the deficit
+  const debtServiceExcess = Math.max(0, interestCostPctGDP - 2.8);
+  const effectiveDeficit  = s.deficit + debtServiceExcess;
+
+  // [2] Bond vigilante premium: kicks in when effective deficit > 8% GDP
+  const vigilantePremium = effectiveDeficit > 8 ? (effectiveDeficit - 8) * 0.09 : 0;
+
+  // ── YIELDS (using effective deficit) ───────────────────────────
+  let tenyr = 4.2
+    + (s.ffr         - 4.5) * 0.45
+    + (effectiveDeficit - 6) * 0.055   // [1] effective deficit (includes interest cost)
+    - (s.foreignDemand - 6) * 0.07
+    - s.qePace              * 0.008
+    + Math.max(0, cpi - 2.5)* 0.28
+    + (s.termPremium  - 30) * 0.004
+    + (s.tstIssuance  - 7)  * 0.04
+    - s.ycc                 * 0.15
+    - (s.cbIndependence - 7)* 0.04
+    + vigilantePremium;                // [2] vigilante premium
+
+  // [2] Nonlinearity: deficit > 10% triggers additional premium (Liz Truss moment)
+  if (effectiveDeficit > 10) tenyr += (effectiveDeficit - 10) * 0.13;
+
+  tenyr = Math.max(0.5, Math.min(12, tenyr));
+
+  const twoyr  = Math.max(0.2, s.ffr * 0.88 + 0.3
+                  - (s.guidanceTone < 5 ? (5 - s.guidanceTone) * 0.12 : 0));
+  const fiveyr  = (twoyr + tenyr) / 2 + 0.1;
+  const thirtyr = Math.min(12, tenyr + 0.3 + (s.termPremium - 30) * 0.002);
+  const yldSprd = tenyr - twoyr;
+
+  // [2] Inverted yield curve amplifies recession probability
+  const inversionPenalty = yldSprd < -0.5 ? (Math.abs(yldSprd + 0.5)) * 0.18 : 0;
+
+  // Mortgage: 10yr + 2.1% + credit stress
+  const mortg = Math.max(3, Math.min(14,
+    tenyr + 2.1
+    + (s.igSpreads - 100) * 0.0025
+    + (s.hySpreads > 700 ? (s.hySpreads - 700) / 1300 * 0.6 : 0))); // [2] nonlinear spread passthrough
+
+  // ── [3] CROSS-VARIABLE AMPLIFIERS ─────────────────────────────
+  // HY > 800bps: credit seizure propagates to CAPEX and hiring
+  const hyStressRatio = s.hySpreads > 800 ? Math.min(1, (s.hySpreads - 800) / 1200) : 0;
+  const creditSeizureGdp = -hyStressRatio * 1.4;   // up to -1.4% GDP
+  const creditSeizureCpi = -hyStressRatio * 0.4;   // deflationary in crises
+
+  // [2] FFR > 7%: convex tightening damage (credit channels seize)
+  const ffrOvershoot  = Math.max(0, s.ffr - 7);
+  const ffrConvexHit  = -(ffrOvershoot * ffrOvershoot) * 0.09;
+
+  // [9] Confidence multiplier on CAPEX: uncertainty makes firms undershoot
+  const confMultiplier = 0.65 + (s.policyCert / 10) * 0.70;
+  const capexEffect    = (s.privateCapex - 17) * 0.058 * confMultiplier;
+
+  // [CREDIT IMPULSE] Rate of change of private credit — best 2-quarter GDP lead
+  // BIS research: 1pp credit impulse -> ~0.08% GDP within 2 quarters
+  const creditImpulseEffect = (s.creditImpulse || 0) * 0.085;
+
+  // [FISCAL MULTIPLIER REGIME] IMF (2013): multiplier 1.5+ at ZLB, 0.5-0.8 at normal rates
+  // High debt + high rates = crowding out and confidence headwinds
+  const fisMultScale = Math.max(0.22, Math.min(1.65,
+    1.0
+    - Math.max(0, s.ffr - 2.5)          * 0.110  // rising rates crowd out spending
+    - Math.max(0, effectiveDeficit - 5)  * 0.030  // debt overhang
+    + (s.ffr < 0.75 ? (0.75 - s.ffr) * 0.40 : 0) // ZLB bonus
+  ));
+
+  // ── PASS 2: GDP core ─────────────────────────────────────────────
+  let gdp = 2.5
+    // Monetary
+    - (s.ffr   - 3.5) * 0.28 * W.mon
+    + ffrConvexHit * W.mon                       // [2] convex FFR overshoot
+    + (s.qePace > 0 ? s.qePace * 0.006 : s.qePace * 0.004) * W.mon
+    - inversionPenalty * W.mon                   // [2] yield curve inversion
+    // Fiscal — use effectiveDeficit for crowding-out [1]
+    - (effectiveDeficit - 4) * 0.032
+    - (s.corpTax    - 21)    * 0.022 * W.tax
+    - (s.incomeTax  - 37)    * 0.005 * W.tax
+    - (s.regBurden  - 5)     * 0.052 * W.tax
+    + s.govSpend             * 0.048 * W.fis * fisMultScale
+    + (s.fedPermit  - 4)     * 0.032 * W.fis
+    // Innovation
+    + (s.innovRate  - 1.5)   * 0.42  * W.innov
+    + (s.rdSpend    - 3.1)   * 0.12  * W.innov
+    + (s.aiAdoption - 6)     * 0.055 * W.innov
+    + (s.vcFunding  - 170) / 170 * 0.12 * W.innov
+    + (s.stemGrowth - 2)     * 0.025 * W.innov
+    // Trade
+    - (s.tariff         - 10) * 0.015 * W.trade
+    + (s.fdiInflows     - 6)  * 0.035 * W.trade
+    - (s.chinaDecoupling - 6) * 0.020 * W.trade
+    + (s.nearshoring    - 4)  * 0.012 * W.trade
+    // Labor
+    - (s.unemp         - 4)   * 0.15  * W.labor
+    + (s.lfp           - 62.5)* 0.05  * W.labor
+    + (s.highSkillImmig - 5)  * 0.040 * W.labor
+    - (s.skillsGap     - 6)   * 0.025 * W.labor
+    - (s.autoDisplace  - 5)   * 0.010 * W.labor
+    // Energy
+    - (s.oil           - 70)  * 0.005
+    + (s.renewableShare - 22) * 0.003
+    // Infra & CAPEX
+    + capexEffect                * W.capex       // [9] confidence-scaled CAPEX
+    + (s.infraSpend  - 350) / 350 * 0.08 * W.capex
+    + (s.permitSpeed - 4)    * 0.032 * W.capex
+    - (s.shippingCost - 4)   * 0.022
+    + (s.portEff     - 6)    * 0.015
+    + (s.gridReliability-6)  * 0.012
+    // State
+    - (s.stateCorpTax - 5)   * 0.012
+    - (s.stateRegEnv  - 5)   * 0.020
+    + (s.stateFiscalHealth-5)* 0.010
+    // Political Economy [8] asymmetric hysteresis
+    + polEconGdpImpact(s) * W.polEcon
+    // Geopolitics
+    - (s.conflictIndex - 5)  * 0.040
+    - (s.chinaMilRisk  - 6)  * 0.025
+    - (s.cyberRisk     - 6)  * 0.010
+    + (s.dollarReserve - 8)  * 0.020
+    + (s.allyRelations - 6)  * 0.012
+    // Cross-variable amplifiers [3]
+    + creditSeizureGdp
+    + creditImpulseEffect  // [CREDIT IMPULSE] leading indicator
+    + gdpA;
+
+  gdp = Math.max(-8, Math.min(10, gdp));
+
+  // ── [5] RECESSION REGIME-SWITCHING ─────────────────────────────
+  // When GDP < 0, animal spirits collapse and feedback loops amplify
+  const inRecession = gdp < 0;
+  let recessionAmplifier = 0;
+  if (inRecession) {
+    const depth = Math.abs(gdp);             // 0–8
+    recessionAmplifier = depth * 0.12;       // deeper = worse feedback
+    gdp  = Math.max(-8, gdp - recessionAmplifier);
+    cpi += creditSeizureCpi;                 // deflationary credit crunch
+  }
+
+  // ── [INTERNATIONAL SPILLBACK] ─────────────────────────────────────
+  // US growth drives global demand, which feeds back via export channel
+  // US exports ~12% of GDP; estimated spillback multiplier: ~0.07
+  const rowGrowth = 2.8
+    + (gdp - 2.5)           * 0.28   // US growth spills to trading partners
+    - (s.conflictIndex - 5) * 0.14   // geopolitical drag
+    - (s.tariff - 10)       * 0.018  // protectionism reduces global activity
+    + (s.allyRelations - 6) * 0.06;  // allied coordination dividend
+  const rowSpillback = (rowGrowth - 2.8) * 0.07;
+  gdp = Math.max(-8, Math.min(10, gdp + rowSpillback));
+
+  // ── [4] WEALTH EFFECTS (two-pass) ──────────────────────────────
+  // Compute preliminary S&P and housing to derive wealth effect on consumption
+  const sp_pre = 100
+    + (gdp  - 2.5)   * 12
+    - Math.max(0, cpi - 2.5) * 4.5
+    - (s.ffr - 3.5)  * 5.5
+    - (s.corpTax-21) * 1.5
+    + (s.innovRate-1.5)* 8
+    + (s.aiAdoption-6) * 3.5
+    - (s.igSpreads-100)* 0.06
+    + (s.policyCert-4) * 2.0
+    - (s.polarization-5)*1.5
+    - (s.chinaMilRisk-6)*1.2
+    + (s.dollarReserve-8)*1.0
+    + spA;
+
+  const haff_pre = 50
+    - (mortg - 6.9)         * 5.5
+    + (s.housingSupply-1.4) * 10
+    - (s.zoning - 7)        * 2.5
+    - (s.pti   - 7)         * 3.0
+    + (s.localPermit - 4)   * 1.5
+    - (s.propTax - 1.1)     * 2.0
+    +  s.housingAct         * 1.8
+    + (s.localPermitState-3)* 1.2
+    - (s.vacancyRate < 4 ? (4 - s.vacancyRate) * 2 : 0)
+    + (s.fedLandPermit - 4) * 0.8;
+
+  // MPC on financial wealth ~3-4¢ per $1; housing wealth ~2-3¢ per $1
+  // Map to GDP: S&P ±10pts → ±0.25% GDP; housing ±10 afford pts → ±0.15% GDP
+  const spWealthEffect  = ((sp_pre   - 100) / 100) * 0.25;
+  const hsWealthEffect  = ((haff_pre - 50)  / 50)  * 0.15;
+  gdp = Math.max(-8, Math.min(10, gdp + spWealthEffect * 0.5 + hsWealthEffect * 0.3));
+
+  // ── TFP ─────────────────────────────────────────────────────────
+  let tfp = 1.2
+    + (s.rdSpend    - 3.1)  * 0.18
+    + (s.innovRate  - 1.5)  * 0.50
+    + (s.aiAdoption - 6)    * 0.12
+    + (s.vcFunding-170)/170 * 0.10
+    + (s.patentRate - 6)    * 0.05
+    - (s.regBurden  - 5)    * 0.03
+    + (s.highSkillImmig-5)  * 0.04
+    + (s.infraSpend-350)/350* 0.05;
+  tfp = Math.max(0, Math.min(5, tfp));
+
+  // ── FINAL OUTPUTS ────────────────────────────────────────────────
+  const housingAff = Math.max(3, Math.min(98, haff_pre));
+
+  let sp500 = Math.max(10, Math.min(300, sp_pre));
+  if (inRecession) sp500 = Math.max(10, sp500 * (1 + gdp * 0.04)); // recession amplifies drawdown
+
+  let conf = 55
+    + (gdp  - 2.5) * 6
+    - (s.unemp - 4)* 4
+    - (cpi  - 2.5) * 3
+    - (mortg - 6.9)* 2
+    + (s.policyCert - 4) * 2
+    - (s.polarization-5) * 1.5;
+  if (inRecession) conf -= Math.abs(gdp) * 6;  // [5] confidence collapses in recessions
+  conf = Math.max(10, Math.min(100, conf));
+
+  // [1] Effective deficit feeds into the displayed metric too
+  const defAdj   = Math.max(-3, Math.min(25, effectiveDeficit - (gdp - 2.5) * 0.28 + s.govSpend * 0.05));
+  const dollarAdj= Math.max(70, Math.min(145, s.dxy + (s.ffr - 4.5) * 3 - (effectiveDeficit - 6) * 0.5 + (tenyr - 4.2) * 2));
+
+  // ── FINANCIAL STABILITY INDEX (100 = fully stable) ──────────────
+  const fsi = Math.max(5, Math.min(100,
+    100
+    - hyStressRatio            * 42
+    - (s.commercialREStress-5) * 4.0
+    - Math.max(0, 10-s.stressTest) * 2.0
+    - Math.max(0, s.igSpreads-150) * 0.040
+    - (inRecession ? 18 : 0)
+    - Math.max(0, s.hySpreads-600) * 0.012
+    - (1 - s.cbIndependence/10)  * 6.0
+    - vigilantePremium           * 8.0
+  ));
+
+  // ── SIX-SECTOR BREAKDOWN (0-100) ─────────────────────────────────
+  const secHousing = clamp(50 - (mortg-6.9)*5.5 + (s.housingSupply-1.4)*12 - (s.pti-7)*4 + s.housingAct*2 - (s.zoning-7)*1.5);
+  const secMfg     = clamp(50 - (s.tariff-10)*0.9 - (s.oil-70)*0.08 + (s.privateCapex-17)*2 - (s.dxy-104)*0.25 - (s.shippingCost-4)*1.8 + (s.nearshoring-4)*2 + (gdp-2.5)*4);
+  const secServices= clamp(50 + (gdp-2.5)*8 - (s.unemp-4)*5 + (s.aiAdoption-6)*4 - (s.ffr-3.5)*2 + (s.policyCert-4)*2.5);
+  const secFinance = clamp(50 + (fsi-50)*0.6 - (s.igSpreads-100)*0.05 + (s.dollarReserve-8)*3 - (s.regBurden-5)*2 + (gdp-2.5)*5);
+  const secEnergy  = clamp(50 + (s.lngExport-6)*4 + (s.renewableShare-22)*0.8 - (s.oilConflict-5)*4 + (s.spr-55)*0.3 - (s.carbonPolicy-3)*2 + (gdp-2.5)*2);
+  const secTech    = clamp(50 + (s.aiAdoption-6)*6 + (s.rdSpend-3.1)*8 + (s.vcFunding-170)/170*15 + (s.innovRate-1.5)*10 + (s.highSkillImmig-5)*3 - (s.capGainsTax-20)*0.5);
+
+  return {
+    gdp, cpi, tfp, tenyr, twoyr, fiveyr, thirtyr, mortg, yldSprd,
+    housingAff, sp500, conf, defAdj, dollarAdj,
+    // New diagnostic outputs
+    inRecession,
+    effectiveDeficit,
+    interestCostPctGDP: +interestCostPctGDP.toFixed(2),
+    debtServiceExcess:  +debtServiceExcess.toFixed(2),
+    vigilantePremium:   +vigilantePremium.toFixed(2),
+    wagePriceSpiral:    +wagePriceSpiral.toFixed(2),
+    hyStressRatio:      +hyStressRatio.toFixed(2),
+    fsi:                +fsi.toFixed(1),
+    taylorFFR:          +taylorFFR.toFixed(2),
+    fisMultScale:       +fisMultScale.toFixed(2),
+    rowGrowth:          +rowGrowth.toFixed(2),
+    rowSpillback:       +rowSpillback.toFixed(3),
+    creditImpulseEffect:+creditImpulseEffect.toFixed(3),
+    sectorOutputs: { Housing:secHousing, Manufacturing:secMfg, Services:secServices, Finance:secFinance, Energy:secEnergy, Technology:secTech },
+    sectors: {
+      Growth:    clamp(50 + (gdp - 2.5) * 15),
+      Prices:    clamp(100 - Math.max(0, cpi - 1) * 14),
+      Labor:     clamp(100 - (s.unemp - 2) * 9),
+      Housing:   housingAff,
+      Innovation:clamp(50 + (tfp - 1.2) * 30 + (s.aiAdoption - 6) * 3),
+      Trade:     clamp(60 - (s.tariff - 10) * 0.8 + (s.fdiInflows - 6) * 4),
+      Politics:  clamp(50 + (s.policyCert - 4) * 5 - (s.polarization - 5) * 3 + (s.ruleOfLaw - 7) * 4),
+    }
+  };
+}
+
+function clamp(v, lo=5, hi=98) { return Math.max(lo, Math.min(hi, v)); }
+
+// ── UI HELPERS ───────────────────────────────────────────────────
+const BASELINES = { gdp:2.5, cpi:2.5, tfp:1.2, tenyr:4.2, twoyr:4.8, mortg:6.9, housingAff:50, sp500:100, conf:55, defAdj:6.5, dollarAdj:104, fsi:80, interestCostPctGDP:3.5, rowGrowth:2.8 };
+
+function render() {
+  const m = compute();
+  renderMetrics(m);
+  if (chartsVisible) renderCharts(m);
+  renderSensitivity(m);
+}
+
+function renderMetrics(m) {
+  const bar = document.getElementById('mbar');
+
+  // ── Helper: build one metric cell ────────────────────────────────
+  function cell(d) {
+    const v = m[d.key];
+    if (v === undefined) return '';
+    const base = BASELINES[d.key];
+    const diff = base !== undefined ? v - base : 0;
+    const good = base !== undefined && diff * d.dir > 0.05;
+    const bad  = base !== undefined && diff * d.dir < -0.05;
+    const dStr = base !== undefined
+      ? `${diff >= 0 ? '+' : ''}${Math.abs(diff) < 1 ? diff.toFixed(2) : diff.toFixed(1)} vs base`
+      : '';
+    const cls = good ? 'pos' : bad ? 'neg' : 'neu';
+    let valCls = '';
+    if (d.key === 'gdp')        valCls = v < 0 ? 'bad' : v < 1.5 ? 'warn' : '';
+    if (d.key === 'cpi')        valCls = v > 5 ? 'bad' : v > 3.5 ? 'warn' : '';
+    if (d.key === 'yldSprd')    valCls = v < 0 ? 'bad' : '';
+    if (d.key === 'housingAff') valCls = v < 30 ? 'bad' : v < 45 ? 'warn' : '';
+    if (d.key === 'interestCostPctGDP') valCls = v > 4.5 ? 'bad' : v > 3.5 ? 'warn' : '';
+    if (d.key === 'fsi')        valCls = v < 50 ? 'bad' : v < 70 ? 'warn' : 'good';
+    if (d.key === 'defAdj')     valCls = v > 10 ? 'bad' : v > 7 ? 'warn' : '';
+    return `<div class="mc">
+      <div class="mc-val ${valCls}">${d.fmt(v)}</div>
+      <div class="mc-lbl">${d.lbl}</div>
+      ${dStr ? `<div class="mc-delta ${cls}">${dStr}</div>` : ''}
+    </div>`;
+  }
+
+  // ── Primary row: 8 most critical metrics ─────────────────────────
+  const primary = [
+    { key:'gdp',        lbl:'GDP Growth',      fmt:v=>`${v.toFixed(1)}%`,       dir:1  },
+    { key:'cpi',        lbl:'CPI Inflation',   fmt:v=>`${v.toFixed(1)}%`,       dir:-1 },
+    { key:'tenyr',      lbl:'10yr Treasury',   fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
+    { key:'mortg',      lbl:'30yr Mortgage',   fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
+    { key:'housingAff', lbl:'Housing Afford.', fmt:v=>`${Math.round(v)}/100`,   dir:1  },
+    { key:'sp500',      lbl:'S&P 500',         fmt:v=>`${Math.round(v)}`,       dir:1  },
+    { key:'conf',       lbl:'Consumer Conf.',  fmt:v=>`${Math.round(v)}`,       dir:1  },
+    { key:'fsi',        lbl:'Fin. Stability',  fmt:v=>`${Math.round(v)}/100`,   dir:1  },
+  ];
+
+  // ── Secondary row: 7 supporting metrics ──────────────────────────
+  const secondary = [
+    { key:'twoyr',      lbl:'2yr Treasury',    fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
+    { key:'yldSprd',    lbl:'2-10 Spread',     fmt:v=>`${v.toFixed(2)}%`,       dir:1  },
+    { key:'tfp',        lbl:'TFP Growth',      fmt:v=>`${v.toFixed(2)}%`,       dir:1  },
+    { key:'defAdj',     lbl:'Eff. Deficit',    fmt:v=>`${v.toFixed(1)}%`,       dir:-1 },
+    { key:'interestCostPctGDP', lbl:'Debt Svc % GDP', fmt:v=>`${v.toFixed(1)}%`, dir:-1 },
+    { key:'dollarAdj',  lbl:'DXY',             fmt:v=>`${Math.round(v)}`,       dir:1  },
+    { key:'rowGrowth',  lbl:'Global Growth',   fmt:v=>`${v.toFixed(1)}%`,       dir:1  },
+  ];
+
+  // ── Regime / Taylor badge for primary row slot 8 (replaces FSI when alert) ──
+  let regimeBadge = '';
+  if (m.inRecession) {
+    regimeBadge = `<div class="mc" style="background:var(--neg-dim);border-left:3px solid var(--neg);">
+      <div class="mc-val bad" style="font-size:18px">RECESSION</div>
+      <div class="mc-lbl" style="color:var(--neg);margin-top:3px">⚠ REGIME</div>
+      <div class="mc-delta neg">Amplification active</div>
+    </div>`;
+  } else if (m.vigilantePremium > 0.3) {
+    regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
+      <div class="mc-val warn" style="font-size:18px">DEBT SPIRAL</div>
+      <div class="mc-lbl" style="color:var(--warn);margin-top:3px">⚠ REGIME</div>
+      <div class="mc-delta neg">+${m.vigilantePremium.toFixed(2)}% premium</div>
+    </div>`;
+  } else if (m.wagePriceSpiral > 0.05) {
+    regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
+      <div class="mc-val warn" style="font-size:18px">WAGE SPIRAL</div>
+      <div class="mc-lbl" style="color:var(--warn);margin-top:3px">⚠ REGIME</div>
+      <div class="mc-delta neg">+${m.wagePriceSpiral.toFixed(2)}% CPI</div>
+    </div>`;
+  }
+
+  const trBadge = taylorRuleOn
+    ? `<div class="mc" style="background:var(--accent-dim);border-left:3px solid var(--accent);">
+        <div class="mc-val" style="font-size:20px;color:var(--accent)">${m.taylorFFR ? m.taylorFFR.toFixed(2) : '—'}%</div>
+        <div class="mc-lbl" style="color:var(--accent);margin-top:3px">⚡ TAYLOR RULE</div>
+        <div class="mc-delta neu">Endogenous FFR</div>
+      </div>`
+    : '';
+
+  // Primary row: regime badge (if any) occupies slot 1; then 7 primary metrics (or 8 if no badge)
+  const primaryCells = (regimeBadge || trBadge)
+    ? (regimeBadge || trBadge) + primary.slice(0, 7).map(cell).join('')
+    : primary.map(cell).join('');
+
+  bar.innerHTML =
+    `<div class="mbar-row mbar-primary">${primaryCells}</div>` +
+    `<div class="mbar-row mbar-secondary">${secondary.map(cell).join('')}</div>`;
+}
+
+// ── BUILD SECTIONS ───────────────────────────────────────────────
+function buildSidebar() {
+  const inp = document.getElementById('nav-inputs');
+  inp.innerHTML = CATEGORIES.map(c =>
+    `<button class="nav-item${c.id==='monetary'?' active':''}" onclick="showSection('${c.id}',this)">
+      <span class="nav-icon">${c.icon}</span>${c.label}${c.warn?'<span class="nav-warn">★</span>':''}
+    </button>`).join('');
+  const ana = document.getElementById('nav-analysis');
+  ana.innerHTML = ANALYSIS_SECTIONS.map(s =>
+    `<button class="nav-item" onclick="showSection('${s.id}',this)">
+      <span class="nav-icon">${s.icon}</span>${s.label}
+    </button>`).join('');
+}
+
+function buildContent() {
+  const el = document.getElementById('content');
+  let html = '';
+  for (const cat of CATEGORIES) {
+    html += `<div class="section${cat.id==='monetary'?' active':''}" id="sec-${cat.id}">
+      <div class="sec-hdr">
+        <div class="sec-title">${cat.label}</div>
+        <div class="sec-desc">${cat.desc}</div>
+        ${cat.warn ? `<div class="sec-warn">${cat.warn}</div>` : ''}
+      </div>
+      <div class="slider-grid">
+        ${cat.sliders.map(sl => buildSlider(sl)).join('')}
+      </div>
+    </div>`;
+  }
+  // Events section
+  html += buildEventsSection();
+  // Charts section
+  html += `<div class="section" id="sec-charts">
+    <div class="sec-hdr"><div class="sec-title">Charts &amp; Analysis</div><div class="sec-desc">Live economic projections, yield curve, sector health, and inflation decomposition.</div></div>
+    <div class="charts-grid">
+      <div class="chart-panel wide">
+        <div class="chart-title">GDP Growth Projection — 12-Month Forward</div>
+        <div class="chart-sub">Projected monthly GDP growth path based on current settings vs. baseline 2.5% trend</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="gdpChart" role="img" aria-label="GDP growth projection chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">Live Yield Curve</div>
+        <div class="chart-sub">Fed Funds → 30yr Treasury → 30yr Mortgage</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="yldChart" role="img" aria-label="Yield curve chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">Sector Health Radar</div>
+        <div class="chart-sub">Composite score across 7 economic dimensions (0–100)</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="radarChart" role="img" aria-label="Sector health radar chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">CPI Inflation Decomposition</div>
+        <div class="chart-sub">Contribution of each driver to headline inflation vs. 2.5% baseline</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="cpiChart" role="img" aria-label="CPI inflation decomposition chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">Six-Sector Health Breakdown</div>
+        <div class="chart-sub">Current output health score by sector (0–100). Housing, manufacturing, services, finance, energy, technology.</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="sectorChart" role="img" aria-label="Sector health chart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">Political Economy Impact on GDP</div>
+        <div class="chart-sub">Δ GDP contribution from political economy factors vs. neutral baseline</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="polChart" role="img" aria-label="Political economy impact chart"></canvas></div>
+      </div>
+    </div>
+  </div>`;
+  // Scenarios
+  html += `<div class="section" id="sec-scenarios">
+    <div class="sec-hdr"><div class="sec-title">Scenario Comparison</div><div class="sec-desc">Save up to 3 named scenarios and compare outputs side by side.</div></div>
+    <div class="sc-grid" id="sc-grid"></div>
+    <div class="annotation">Scenarios are saved to browser localStorage. Use Export JSON to preserve them externally.</div>
+  </div>`;
+  // Sensitivity
+  // ── CALIBRATION SECTION ──
+  html += `<div class="section" id="sec-calibrate">
+    <div class="sec-hdr">
+      <div class="sec-title">2026 Q2 — Real Data Calibration</div>
+      <div class="sec-desc">Enter actual observed values for key indicators. The simulator will map them to sliders and show where the model diverges from reality (calibration gap).</div>
+    </div>
+    <div class="annotation">💡 Tip: start from a preset, then fine-tune with your own data. The calibration gap tells you which structural factors the model may be mis-weighting.</div>
+    <div class="cal-grp-title">Preset: Load Estimated Q2 2026 Values</div>
+    <div style="display:flex;gap:7px;margin-bottom:14px;">
+      <button class="btn primary" style="flex:1" onclick="loadQ2Preset()">📊 Load Q2 2026 Estimates</button>
+      <button class="btn" style="flex:1" onclick="clearCalibration()">Clear Fields</button>
+    </div>
+    <div class="cal-grp-title">Observed Data Inputs</div>
+    <div class="cal-grid">
+      <div class="cal-field">
+        <div class="cal-lbl">Real GDP Growth (annualized)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-gdp" type="number" step="0.1" placeholder="2.1"><span class="cal-unit">%</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">CPI Inflation (YoY)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-cpi" type="number" step="0.1" placeholder="3.0"><span class="cal-unit">%</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">Fed Funds Rate (upper bound)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-ffr" type="number" step="0.25" placeholder="4.25"><span class="cal-unit">%</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">10yr Treasury Yield</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-tenyr" type="number" step="0.05" placeholder="4.35"><span class="cal-unit">%</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">Unemployment Rate (U-3)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-unemp" type="number" step="0.1" placeholder="4.2"><span class="cal-unit">%</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">WTI Crude Oil ($/bbl)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-oil" type="number" step="1" placeholder="69"><span class="cal-unit">$</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">DXY Dollar Index</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-dxy" type="number" step="0.5" placeholder="103"><span class="cal-unit">index</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">Housing Starts (M units/yr)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-housing" type="number" step="0.05" placeholder="1.35"><span class="cal-unit">M</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">Natural Gas ($/MMBtu)</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-natgas" type="number" step="0.1" placeholder="3.2"><span class="cal-unit">$</span></div>
+      </div>
+      <div class="cal-field">
+        <div class="cal-lbl">30yr Mortgage Rate</div>
+        <div class="cal-row"><input class="cal-inp" id="cal-mortg" type="number" step="0.05" placeholder="6.75"><span class="cal-unit">%</span></div>
+      </div>
+    </div>
+    <div class="cal-actions">
+      <button class="btn primary" onclick="applyCalibration()">↗ Apply to Simulator Sliders</button>
+      <button class="btn" onclick="runCalibrationCheck()">⊡ Show Calibration Gap</button>
+    </div>
+    <div id="cal-results" class="cal-results" style="display:none"></div>
+    <div class="cal-note">
+      <strong style="color:var(--text)">How it works:</strong><br>
+      <em>Apply:</em> Directly observable values (FFR, oil, unemployment, etc.) are mapped to their sliders. Model-implied values (CPI, yields) are shown in the gap report.<br>
+      <em>Gap report:</em> Shows actual vs model-implied for each metric. Large gaps suggest the model needs structural adjustments — look for systematic mis-pricings in pol-econ or credit variables.
+    </div>
+  </div>`;
+
+  html += `<div class="section" id="sec-history">
+    <div class="sec-hdr">
+      <div class="sec-title">Historical Scenario Validation</div>
+      <div class="sec-desc">Load slider configurations calibrated to major historical episodes. See how the model performs vs. known outcomes — and use as a starting point for counterfactual analysis.</div>
+    </div>
+    <div class="annotation">&#9432; After loading, check the Sensitivity Analysis and Charts panels to see which factors drove each episode. Then use Events &amp; Shocks to layer on counterfactuals.</div>
+    <div class="hist-grid" id="hist-grid"></div>
+    <div class="sec-warn" style="margin-top:0">&#9888; Slider ranges are calibrated for contemporary analysis. Some historical extremes (e.g. Volcker-era 20% FFR) are capped at slider bounds — the directional story is still accurate.</div>
+  </div>`;
+
+  html += `<div class="section" id="sec-sensitivity">
+    <div class="sec-hdr"><div class="sec-title">Sensitivity Analysis</div><div class="sec-desc">Which sliders have the largest impact on GDP growth under current settings? Ranked by absolute marginal effect.</div></div>
+    <div class="sec-warn" style="margin-bottom:12px;">⚠ Values show Δ GDP per unit change in each input at current settings. Political economy effects are often among the largest but are typically underweighted in models.</div>
+    <div class="sens-grid" id="sens-grid"></div>
+  </div>`;
+  el.innerHTML = html;
+}
+
+function getSliderDef(id) {
+  for (const cat of CATEGORIES) {
+    const sl = cat.sliders.find(s => s.id === id);
+    if (sl) return sl;
+  }
+  return null;
+}
+
+function buildSlider(sl) {
+  const v = vals[sl.id];
+  return `<div class="slider-card">
+    <div class="sl-top">
+      <div class="sl-label">${sl.label}</div>
+      <div class="sl-val" id="v-${sl.id}">${sl.fmt(v)}</div>
+    </div>
+    <div class="sl-desc">${sl.desc}</div>
+    <input type="range" min="${sl.min}" max="${sl.max}" step="${sl.step}" value="${v}" id="r-${sl.id}"
+      oninput="onSlider('${sl.id}', this.value)">
+    <div class="sl-range"><span>${sl.fmt(sl.min)}</span><span>${sl.fmt(sl.max)}</span></div>
+  </div>`;
+}
+
+function onSlider(id, rawVal) {
+  const v = parseFloat(rawVal);
+  vals[id] = v;
+  const sl = getSliderDef(id);
+  if (sl) {
+    const vEl = document.getElementById('v-' + id);
+    if (vEl) vEl.textContent = sl.fmt(v);
+  }
+  render();
+}
+
+function buildEventsSection() {
+  const pos = EVENTS.filter(e => e.pos);
+  const neg = EVENTS.filter(e => !e.pos);
+  return `<div class="section" id="sec-events">
+    <div class="sec-hdr">
+      <div class="sec-title">Events &amp; Shock Injections</div>
+      <div class="sec-desc">Toggle preset scenarios or inject a custom event. Multiple events stack.</div>
+    </div>
+    <div class="ev-custom">
+      <input id="ev-custom-txt" placeholder="Describe a custom event (e.g. Semiconductor tariff waiver)..." type="text" onkeydown="if(event.key==='Enter')addCustomEvent()">
+      <select id="ev-custom-impact">
+        <option value="2">Strongly positive</option>
+        <option value="1" selected>Mildly positive</option>
+        <option value="-1">Mildly negative</option>
+        <option value="-2">Strongly negative</option>
+      </select>
+      <button class="btn primary" onclick="addCustomEvent()">Inject ↗</button>
+    </div>
+    <div class="sec-title" style="font-size:13px;margin-bottom:8px;color:var(--pos);">▲ Positive Scenarios</div>
+    <div class="ev-grid" style="margin-bottom:14px">
+      ${pos.map(e => buildEventCard(e)).join('')}
+    </div>
+    <div class="sec-title" style="font-size:13px;margin-bottom:8px;color:var(--neg);">▼ Negative Shocks</div>
+    <div class="ev-grid">
+      ${neg.map(e => buildEventCard(e)).join('')}
+    </div>
+  </div>`;
+}
+
+function buildEventCard(e) {
+  return `<div class="ev-card ${e.pos?'pos-ev':'neg-ev'}" id="ec-${e.id}" onclick="toggleEvent('${e.id}')">
+    <div class="ev-title">${e.label}</div>
+    <div class="ev-cat">${e.cat}</div>
+    <div class="ev-chips">${e.chips.map(c=>`<span class="ev-chip ${e.pos?'pos':'neg'}">${c}</span>`).join('')}</div>
+  </div>`;
+}
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
+  else if (id === 'scenarios') { renderScenarios(); }
+  else if (id === 'sensitivity') { sensitivityVisible = true; renderSensitivity(compute(), true); }
+  else { chartsVisible = false; if (id !== 'sensitivity') sensitivityVisible = false; }
+}
+
+// ── EVENTS ───────────────────────────────────────────────────────
+let customEventCount = 0;
+
+function toggleEvent(id) {
+  const card = document.getElementById('ec-' + id);
+  if (activeEventIds[id]) {
+    delete activeEventIds[id];
+    card.classList.remove('active');
+  } else {
+    activeEventIds[id] = true;
+    card.classList.add('active');
+  }
+  render();
+  renderEventLog();
+}
+
+function addCustomEvent() {
+  const txt  = document.getElementById('ev-custom-txt').value.trim();
+  const imp  = parseInt(document.getElementById('ev-custom-impact').value);
+  if (!txt) return;
+  const id   = 'custom_' + (++customEventCount);
+  const pos  = imp > 0;
+  const ev   = {
+    id, label: txt, cat:'Custom', pos,
+    chips: [imp === 2 ? 'GDP +0.6%' : imp === 1 ? 'GDP +0.25%' : imp === -1 ? 'GDP -0.25%' : 'GDP -0.6%'],
+    d: { gdpA: imp * 0.25, cpiA: imp * -0.05, spA: imp * 3 }
+  };
+  EVENTS.push(ev);
+  activeEventIds[id] = true;
+  // Add card to appropriate grid
+  const grids = document.querySelectorAll('.ev-grid');
+  const targetGrid = pos ? grids[0] : grids[1];
+  if (targetGrid) {
+    const div = document.createElement('div');
+    div.innerHTML = buildEventCard(ev);
+    const newCard = div.firstChild;
+    newCard.classList.add('active');
+    targetGrid.appendChild(newCard);
+  }
+  document.getElementById('ev-custom-txt').value = '';
+  render();
+  renderEventLog();
+}
+
+function renderEventLog() {
+  const log  = document.getElementById('elog');
+  const ids  = Object.keys(activeEventIds);
+  if (!ids.length) {
+    log.innerHTML = '<span class="elog-empty">No events active — inject scenarios via the Events panel</span>';
+    return;
+  }
+  const label = '<span class="elog-label">ACTIVE EVENTS:</span>';
+  const chips = ids.map(id => {
+    const ev = EVENTS.find(e => e.id === id);
+    if (!ev) return '';
+    return `<span class="elog-chip ${ev.pos ? 'pos' : 'neg'}">${ev.label}<span class="elog-x" onclick="toggleEvent('${id}')">✕</span></span>`;
+  }).join('');
+  log.innerHTML = label + chips;
+}
+
+// ── SCENARIOS ────────────────────────────────────────────────────
+let scenarios = JSON.parse(localStorage.getItem('macroscope_scenarios') || '[]');
+
+function saveScenario() {
+  const name = document.getElementById('sc-name').value.trim() || 'Unnamed';
+  const m    = compute();
+  const sc   = {
+    name, date: new Date().toLocaleString(),
+    vals: {...vals}, activeEventIds: {...activeEventIds},
+    out: { gdp: m.gdp, cpi: m.cpi, tenyr: m.tenyr, mortg: m.mortg, housingAff: m.housingAff, sp500: m.sp500, conf: m.conf }
+  };
+  if (scenarios.length >= 3) scenarios.shift();
+  scenarios.push(sc);
+  localStorage.setItem('macroscope_scenarios', JSON.stringify(scenarios));
+  const scBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.textContent.trim().startsWith('Scenarios'));
+  showSection('scenarios', scBtn || null);
+  renderScenarios();
+}
+
+function renderScenarios() {
+  const grid = document.getElementById('sc-grid');
+  if (!grid) return;
+  const slots = [0,1,2].map(i => {
+    const sc = scenarios[i];
+    if (!sc) return `<div class="sc-slot"><div class="sc-empty">Empty slot</div></div>`;
+    return `<div class="sc-slot filled">
+      <div class="sc-name">${sc.name}</div>
+      <div class="sc-date">${sc.date}</div>
+      <div class="sc-metrics">
+        <div class="sc-m">GDP <span>${sc.out.gdp.toFixed(1)}%</span></div>
+        <div class="sc-m">CPI <span>${sc.out.cpi.toFixed(1)}%</span></div>
+        <div class="sc-m">10yr <span>${sc.out.tenyr.toFixed(2)}%</span></div>
+        <div class="sc-m">Mortg <span>${sc.out.mortg.toFixed(2)}%</span></div>
+        <div class="sc-m">Housing <span>${Math.round(sc.out.housingAff)}/100</span></div>
+        <div class="sc-m">S&amp;P <span>${Math.round(sc.out.sp500)}</span></div>
+        <div class="sc-m">Conf <span>${Math.round(sc.out.conf)}</span></div>
+      </div>
+      <div class="sc-actions">
+        <button class="sc-btn" onclick="loadScenario(${i})">Load</button>
+        <button class="sc-btn danger" onclick="deleteScenario(${i})">Delete</button>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML = slots.join('');
+}
+
+function loadScenario(i) {
+  const sc = scenarios[i];
+  if (!sc) return;
+  vals = {...DEFAULTS, ...sc.vals};
+  activeEventIds = {...(sc.activeEventIds || {})};
+  // Update all range inputs
+  for (const [k, v] of Object.entries(vals)) {
+    const el = document.getElementById('r-' + k);
+    if (el) el.value = v;
+    // Update displayed value
+    const sl2 = getSliderDef(k);
+    if (sl2) {
+      const vEl = document.getElementById("v-" + k);
+      if (vEl) vEl.textContent = sl2.fmt(v);
+    }
+  }
+  // Reset event cards
+  document.querySelectorAll('.ev-card').forEach(card => card.classList.remove('active'));
+  for (const id of Object.keys(activeEventIds)) {
+    const card = document.getElementById('ec-' + id);
+    if (card) card.classList.add('active');
+  }
+  render();
+  renderEventLog();
+  document.getElementById('sc-name').value = sc.name;
+}
+
+function deleteScenario(i) {
+  scenarios.splice(i, 1);
+  localStorage.setItem('macroscope_scenarios', JSON.stringify(scenarios));
+  renderScenarios();
+}
+
+// ── SENSITIVITY ANALYSIS ─────────────────────────────────────────
+let sensitivityVisible = false;
+function renderSensitivity(m, force) {
+  if (!sensitivityVisible && !force) return;
+  const grid = document.getElementById('sens-grid');
+  if (!grid) return;
+  const base  = m.gdp;
+  const items = [];
+  for (const cat of CATEGORIES) {
+    for (const sl of cat.sliders) {
+      const orig = vals[sl.id];
+      const step = (sl.max - sl.min) * 0.1;
+      vals[sl.id] = Math.min(sl.max, orig + step);
+      const up   = compute().gdp;
+      vals[sl.id] = Math.max(sl.min, orig - step);
+      const dn   = compute().gdp;
+      vals[sl.id] = orig;
+      const sens = Math.abs(up - dn) / (2 * step) * 1; // per-unit sensitivity
+      items.push({ label: sl.label, cat: cat.label, sens, pos: (up - dn) > 0 });
+    }
+  }
+  items.sort((a, b) => b.sens - a.sens);
+  const top   = items.slice(0, 20);
+  const maxS  = top[0]?.sens || 1;
+  grid.innerHTML = top.map((it, i) => {
+    const pct = Math.round((it.sens / maxS) * 100);
+    const col = it.pos ? 'var(--pos)' : 'var(--neg)';
+    return `<div class="sens-row">
+      <div class="sens-lbl">${i+1}. ${it.label} <span style="font-size:10px;color:var(--muted)">(${it.cat})</span></div>
+      <div class="sens-track"><div class="sens-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="sens-v" style="color:${col}">${it.sens.toFixed(3)} Δ</div>
+    </div>`;
+  }).join('');
+}
+
+// ── CHARTS ───────────────────────────────────────────────────────
+let chartsVisible = false;
+let chartObjs = {};
+
+function destroyChart(id) {
+  if (chartObjs[id]) { chartObjs[id].destroy(); delete chartObjs[id]; }
+}
+
+function renderCharts(m) {
+  renderGdpChart(m);
+  renderYieldChart(m);
+  renderRadarChart(m);
+  renderCpiChart(m);
+  renderSectorChart(m);
+  renderPolChart(m);
+}
+
+function renderGdpChart(m) {
+  // [6+MONTE CARLO] GDP fan chart: Monte Carlo uncertainty quantification
+  // Each frame runs 220 simulations perturbing the 8 most uncertain inputs,
+  // producing empirically-grounded 10th–90th percentile confidence intervals.
+  destroyChart('gdp');
+
+  const axisLabels = timeHorizon === 10
+    ? ['Now','Yr 1','Yr 2','Yr 3','Yr 4','Yr 5','Yr 6','Yr 7','Yr 8','Yr 9','Yr 10','Yr 11']
+    : timeHorizon === 3
+    ? ['Now','Q2','Q3','Q4','Y2Q1','Y2Q2','Y2Q3','Y2Q4','Y3Q1','Y3Q2','Y3Q3','Y3Q4']
+    : ['Now','M+1','M+2','M+3','M+4','M+5','M+6','M+7','M+8','M+9','M+10','M+11'];
+  const months = axisLabels;
+  const base = m.gdp;
+
+  // Run Monte Carlo for current-period uncertainty spread
+  const mc = runMonteCarlo(220);
+  const spread90 = Math.max(0.3, (mc.p90 - mc.p10) / 2);
+  const spread50 = Math.max(0.15, (mc.p75 - mc.p25) / 2);
+
+  const tfpDelta   = (m.tfp - 1.2) / 12;
+  const compRate   = timeHorizon === 10 ? 0.040 : timeHorizon === 3 ? 0.025 : 0.008;
+
+  const trend = months.map((_, i) => {
+    const cyclical   = (base - 2.5) * Math.exp(-i * 0.12);
+    const tfpCompound = tfpDelta * i * (0.35 + compRate * 5);
+    const cyc = Math.sin(i * 0.6) * 0.06;
+    return +(2.5 + cyclical * 0.5 + tfpCompound + cyc).toFixed(2);
+  });
+
+  // Fan bands: spread grows with horizon (epistemic uncertainty compounds)
+  const p90hi = trend.map((v, i) => +(v + spread90 * (1 + i * 0.07)).toFixed(2));
+  const p90lo = trend.map((v, i) => +(v - spread90 * (1 + i * 0.07)).toFixed(2));
+  const p50hi = trend.map((v, i) => +(v + spread50 * (1 + i * 0.03)).toFixed(2));
+  const p50lo = trend.map((v, i) => +(v - spread50 * (1 + i * 0.03)).toFixed(2));
+  const tfpPath = months.map((_, i) => +(2.5 + tfpDelta * i * (0.35 + compRate * 5)).toFixed(2));
+
+    chartObjs.gdp = new Chart(document.getElementById('gdpChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        { label:'90th Pct',     data:p90hi, borderWidth:0, pointRadius:0, fill:'+1', backgroundColor:'rgba(0,212,122,0.05)' },
+        { label:'IQR High',     data:p50hi, borderWidth:0, pointRadius:0, fill:'+1', backgroundColor:'rgba(0,212,122,0.10)' },
+        { label:'Projected GDP',data:trend, borderColor:'#00d47a', backgroundColor:'transparent', tension:0.4, pointRadius:3, borderWidth:2, fill:false },
+        { label:'IQR Low',      data:p50lo, borderWidth:0, pointRadius:0, fill:'+1', backgroundColor:'rgba(0,212,122,0.10)' },
+        { label:'10th Pct',     data:p90lo, borderWidth:0, pointRadius:0, fill:false, backgroundColor:'transparent' },
+        { label:'TFP Path',     data:tfpPath, borderColor:'rgba(240,160,48,0.55)', borderDash:[3,3], borderWidth:1.5, pointRadius:0, fill:false },
+        { label:'Baseline 2.5%',data:months.map(()=>2.5), borderColor:'rgba(255,255,255,0.18)', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ display:true, labels:{ color:'#4a6080', font:{ family:"'Space Mono',monospace", size:9 }, boxWidth:20, padding:10,
+          filter: item => !['90th Pct','10th Pct','IQR High','IQR Low'].includes(item.label) }
+        }
+      },
+      scales:{
+        y:{ min:Math.min(...p90lo)-0.3, max:Math.max(...p90hi)+0.3,
+            grid:{color:'rgba(255,255,255,0.05)'},
+            ticks:{color:'#4a6080',callback:v=>`${v}%`,font:{family:"'Space Mono',monospace",size:10}} },
+        x:{ grid:{display:false}, ticks:{color:'#4a6080',font:{family:"'Space Mono',monospace",size:10}} }
+      }
+    }
+  });
+}
+
+function renderYieldChart(m) {
+  destroyChart('yld');
+  const labels = ['Fed Funds','3-mo','2yr','5yr','10yr','30yr','Mortgage'];
+  const three_mo = Math.max(0.1, m.twoyr - 0.3);
+  const data    = [vals.ffr, three_mo, m.twoyr, m.fiveyr, m.tenyr, m.thirtyr, m.mortg];
+  chartObjs.yld = new Chart(document.getElementById('yldChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Current', data, borderColor:'#4a9eff', backgroundColor:'rgba(74,158,255,0.07)', tension:0.3, pointBackgroundColor: data.map(v => v > 7 ? '#ff4055' : v > 5.5 ? '#ffd44a' : '#4a9eff'), pointRadius:5, borderWidth:2, fill:true },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{ label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%` } }
+      },
+      scales:{
+        y:{ min:0, grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#4a6080',callback:v=>`${v.toFixed(1)}%`,font:{family:"'Space Mono',monospace",size:10}} },
+        x:{ grid:{display:false}, ticks:{color:'#4a6080',font:{family:"'Space Mono',monospace",size:10},maxRotation:25} }
+      }
+    }
+  });
+}
+
+function renderRadarChart(m) {
+  destroyChart('radar');
+  const secs = m.sectors;
+  chartObjs.radar = new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: Object.keys(secs),
+      datasets: [
+        { label:'Current', data:Object.values(secs), borderColor:'#f0a030', backgroundColor:'rgba(240,160,48,0.08)', pointBackgroundColor:'#f0a030', borderWidth:2, pointRadius:4 },
+        { label:'Baseline', data:[50,80,75,50,50,60,50], borderColor:'rgba(255,255,255,0.15)', backgroundColor:'transparent', borderDash:[4,4], borderWidth:1, pointRadius:0 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{ r:{ min:0, max:100, ticks:{stepSize:25,color:'#3a5470',font:{family:"'Space Mono',monospace",size:9}}, pointLabels:{color:'#7a9abf',font:{family:"'Barlow',sans-serif",size:11}}, grid:{color:'rgba(255,255,255,0.06)'}, angleLines:{color:'rgba(255,255,255,0.06)'} } }
+    }
+  });
+}
+
+function renderCpiChart(m) {
+  destroyChart('cpi');
+  const s = vals;
+  const drivers = [
+    { lbl:'Oil prices',        v: (s.oil - 70) * 0.016 },
+    { lbl:'Tariffs',           v: (s.tariff - 10) * 0.022 },
+    { lbl:'Gov\'t deficit',    v: (s.deficit - 4) * 0.038 },
+    { lbl:'Fed rate policy',   v: -(s.ffr - 3) * 0.18 },
+    { lbl:'Innovation (TFP)',  v: -(s.innovRate-1.5) * 0.15 },
+    { lbl:'Shipping costs',    v: (s.shippingCost-4) * 0.035 },
+    { lbl:'QE stimulus',       v: s.qePace > 0 ? s.qePace * 0.007 : 0 },
+    { lbl:'Natural gas',       v: (s.natgas-3.5) * 0.04 },
+    { lbl:'Gov\'t spending',   v: s.govSpend * 0.025 },
+    { lbl:'Wage floors',       v: (s.minWage-7.25)*0.012 + (s.unionMem-10)*0.018 },
+  ].filter(d => Math.abs(d.v) > 0.02).sort((a,b)=>Math.abs(b.v)-Math.abs(a.v)).slice(0,8);
+  chartObjs.cpi = new Chart(document.getElementById('cpiChart'), {
+    type:'bar',
+    data:{
+      labels: drivers.map(d=>d.lbl),
+      datasets:[{ label:'CPI Contribution', data:drivers.map(d=>+d.v.toFixed(3)), backgroundColor:drivers.map(d=>d.v>0?'rgba(255,64,85,0.7)':'rgba(0,212,122,0.7)'), borderColor:drivers.map(d=>d.v>0?'#ff4055':'#00d47a'), borderWidth:1 }]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#4a6080',callback:v=>`${v>0?'+':''}${v.toFixed(2)}%`,font:{family:"'Space Mono',monospace",size:9}} },
+        y:{ grid:{display:false}, ticks:{color:'#7a9abf',font:{family:"'Barlow',sans-serif",size:10}} }
+      }
+    }
+  });
+}
+
+function renderSectorChart(m) {
+  destroyChart('sector');
+  if (!m.sectorOutputs) return;
+  const so = m.sectorOutputs;
+  const labels = Object.keys(so);
+  const data   = Object.values(so);
+  const colors = data.map(v => v >= 60 ? 'rgba(0,212,122,0.75)' : v >= 40 ? 'rgba(255,212,74,0.75)' : 'rgba(255,64,85,0.75)');
+  const borders= data.map(v => v >= 60 ? '#00d47a' : v >= 40 ? '#ffd44a' : '#ff4055');
+  chartObjs.sector = new Chart(document.getElementById('sectorChart'), {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'Sector Health', data, backgroundColor:colors, borderColor:borders, borderWidth:1.5, borderRadius:3 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{ label: ctx => `${ctx.label}: ${ctx.raw.toFixed(0)}/100` } }
+      },
+      scales:{
+        y:{ min:0, max:100, grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#4a6080',callback:v=>`${v}`,font:{family:"'Space Mono',monospace",size:9}} },
+        x:{ grid:{display:false}, ticks:{color:'#7a9abf',font:{family:"'Barlow',sans-serif",size:10}} }
+      }
+    }
+  });
+}
+
+function renderPolChart(m) {
+  destroyChart('pol');
+  const s = vals;
+  const factors = [
+    { lbl:'Policy Certainty',      v: (s.policyCert-4)*0.072 },
+    { lbl:'Rule of Law',           v: (s.ruleOfLaw-7)*0.042 },
+    { lbl:'CB Independence',       v: (s.cbIndependence-7)*0.048 },
+    { lbl:'Gov\'t Effectiveness',  v: (s.govEffective-5)*0.030 },
+    { lbl:'Social Capital',        v: (s.socialCapital-5)*0.025 },
+    { lbl:'Electoral Stability',   v: (s.electoralStab-7)*0.020 },
+    { lbl:'Polarization (drag)',   v: -(s.polarization-5)*0.022 },
+    { lbl:'Reg. Capture',          v: -(s.regCapture-5)*0.018 },
+  ].sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
+  chartObjs.pol = new Chart(document.getElementById('polChart'), {
+    type:'bar',
+    data:{
+      labels: factors.map(d=>d.lbl),
+      datasets:[{ label:'Δ GDP', data:factors.map(d=>+d.v.toFixed(3)), backgroundColor:factors.map(d=>d.v>0?'rgba(240,160,48,0.7)':'rgba(255,64,85,0.6)'), borderColor:factors.map(d=>d.v>0?'#f0a030':'#ff4055'), borderWidth:1 }]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#4a6080',callback:v=>`${v>=0?'+':''}${v.toFixed(3)}%`,font:{family:"'Space Mono',monospace",size:9}} },
+        y:{ grid:{display:false}, ticks:{color:'#7a9abf',font:{family:"'Barlow',sans-serif",size:10}} }
+      }
+    }
+  });
+}
+
+// ── EXPORT / RESET ───────────────────────────────────────────────
+function exportJSON() {
+  const m    = compute();
+  const data = { metadata:{ name:document.getElementById('sc-name').value, timestamp:new Date().toISOString(), version:'MACROSCOPE v1.0' }, inputs:vals, activeEvents:Object.keys(activeEventIds), outputs:{ gdp:m.gdp, cpi:m.cpi, tfp:m.tfp, tenyr:m.tenyr, twoyr:m.twoyr, thirtyr:m.thirtyr, mortgage:m.mortg, yieldSpread:m.yldSprd, housingAffordability:m.housingAff, sp500:m.sp500, consumerConfidence:m.conf, deficitPctGDP:m.defAdj, dollar:m.dollarAdj } };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = `macroscope_${document.getElementById('sc-name').value.replace(/\s+/g,'_')}_${Date.now()}.json`;
+  a.click();
+}
+
+function resetAll() {
+  vals = {...DEFAULTS};
+  activeEventIds = {};
+  for (const cat of CATEGORIES) {
+    for (const sl of cat.sliders) {
+      const el = document.getElementById('r-' + sl.id);
+      if (el) el.value = DEFAULTS[sl.id];
+      const vEl = document.getElementById('v-' + sl.id);
+      if (vEl) vEl.textContent = sl.fmt(DEFAULTS[sl.id]);
+    }
+  }
+  document.querySelectorAll('.ev-card').forEach(c => c.classList.remove('active'));
+  render();
+  renderEventLog();
+}
+
+
+// ── PDF UPLOAD & AI ANALYSIS ─────────────────────────────────────
+let pendingPdfChanges = [];
+
+function openPdfModal() {
+  document.getElementById('pdf-modal-overlay').classList.add('open');
+  resetPdfModal();
+}
+function closePdfModal() {
+  document.getElementById('pdf-modal-overlay').classList.remove('open');
+}
+function resetPdfModal() {
+  pendingPdfChanges = [];
+  document.getElementById('pdf-drop-zone').classList.remove('drag-over');
+  document.getElementById('pdf-status').style.display = 'none';
+  document.getElementById('pdf-results').style.display = 'none';
+  document.getElementById('pdf-error').style.display = 'none';
+  document.getElementById('ps-fill').style.width = '0%';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('pdf-drop-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === 'application/pdf') processPdfFile(file);
+  else showPdfError('Please drop a PDF file.');
+}
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processPdfFile(file);
+}
+
+function showPdfError(msg) {
+  document.getElementById('pdf-status').style.display = 'none';
+  document.getElementById('pdf-results').style.display = 'none';
+  const el = document.getElementById('pdf-error');
+  el.style.display = 'block';
+  el.textContent = '⚠ ' + msg;
+}
+
+function animateProgress(targetPct, duration) {
+  const fill = document.getElementById('ps-fill');
+  const start = parseFloat(fill.style.width) || 0;
+  const startTime = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - startTime) / duration);
+    fill.style.width = (start + (targetPct - start) * t) + '%';
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+async function processPdfFile(file) {
+  resetPdfModal();
+  // Show progress
+  const status = document.getElementById('pdf-status');
+  status.style.display = 'block';
+  document.getElementById('ps-filename').textContent = file.name;
+  animateProgress(30, 600);
+
+  // Convert PDF to base64
+  const base64 = await new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result.split(',')[1]);
+    reader.onerror = () => rej(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+
+  animateProgress(55, 800);
+
+  // Build slider reference for prompt
+  const sliderRef = CATEGORIES.flatMap(cat =>
+    cat.sliders.map(sl => `  ${sl.id} (${sl.label}): min=${sl.min}, max=${sl.max}, current=${vals[sl.id]}`)
+  ).join('\n');
+
+  const systemPrompt = `You are an expert macroeconomist analyzing news articles and their implications for a U.S. economic outlook simulator.
+
+The simulator has these sliders (id: label, min-max, current value):
+${sliderRef}
+
+You must respond with ONLY valid JSON, no markdown, no explanation outside the JSON.`;
+
+  const userPrompt = `Analyze this document. Identify the key economic news and implications, then recommend specific slider adjustments for the simulator.
+
+Return ONLY this JSON structure (no markdown fences):
+{
+  "headline": "One sentence summary of the article",
+  "summary": "2-3 sentence economic interpretation of what this means for the US economy",
+  "changes": [
+    {
+      "id": "slider_id",
+      "newValue": number,
+      "reason": "Brief explanation of why this slider should change based on the article"
+    }
+  ]
+}
+
+Rules:
+- Only include sliders where the article gives clear, direct evidence for a change
+- newValue must be within the slider's min-max range
+- Be precise: if the article says oil is at $95, set oil=95 exactly
+- Focus on the most important 3-10 sliders, not every slider
+- Changes should reflect what the article describes, not what you wish would happen`;
+
+  try {
+    animateProgress(70, 1200);
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'document',
+              source: { type: 'base64', media_type: 'application/pdf', data: base64 }
+            },
+            { type: 'text', text: userPrompt }
+          ]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${response.status}`);
+    }
+
+    animateProgress(90, 400);
+
+    const data = await response.json();
+    const rawText = data.content?.find(b => b.type === 'text')?.text || '';
+
+    // Strip any accidental markdown fences
+    const cleaned = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      throw new Error('Could not parse AI response. Raw: ' + rawText.slice(0, 200));
+    }
+
+    animateProgress(100, 200);
+    setTimeout(() => renderPdfResults(parsed), 300);
+
+  } catch (err) {
+    showPdfError(err.message || 'Unknown error calling the API.');
+  }
+}
+
+function renderPdfResults(parsed) {
+  document.getElementById('pdf-status').style.display = 'none';
+  document.getElementById('pdf-results').style.display = 'block';
+
+  // Summary box
+  const box = document.getElementById('pr-summary-box');
+  box.innerHTML = `<strong>${parsed.headline || 'Article Analysis'}</strong>${parsed.summary || ''}`;
+
+  // Build change rows
+  const list = document.getElementById('pr-changes-list');
+  const changes = (parsed.changes || []).filter(c => {
+    const sl = getSliderDef(c.id);
+    return sl && typeof c.newValue === 'number' && !isNaN(c.newValue);
+  });
+
+  if (!changes.length) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">No specific slider changes identified in this article.</div>';
+    document.getElementById('pr-apply-btn').style.display = 'none';
+    pendingPdfChanges = [];
+    return;
+  }
+
+  pendingPdfChanges = changes;
+  document.getElementById('pr-apply-btn').style.display = 'block';
+
+  list.innerHTML = changes.map(c => {
+    const sl = getSliderDef(c.id);
+    if (!sl) return '';
+    const oldVal = vals[c.id];
+    const newVal = Math.max(sl.min, Math.min(sl.max, c.newValue));
+    const up = newVal > oldVal;
+    const dir = newVal !== oldVal ? (up ? 'up' : 'dn') : '';
+    return `<div class="pr-change ${dir}">
+      <div class="prc-arrow ${dir}">${newVal > oldVal ? '▲' : newVal < oldVal ? '▼' : '—'}</div>
+      <div class="prc-name">${sl.label}</div>
+      <div class="prc-old">${sl.fmt(oldVal)}</div>
+      <div style="color:var(--muted);font-size:11px;">→</div>
+      <div class="prc-new ${dir}">${sl.fmt(newVal)}</div>
+      <div class="prc-reason" style="width:100%;padding-top:4px;border-top:1px solid var(--border);margin-top:4px">${c.reason || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function applyPdfChanges() {
+  if (!pendingPdfChanges.length) return;
+  for (const c of pendingPdfChanges) {
+    const sl = getSliderDef(c.id);
+    if (!sl) continue;
+    const newVal = Math.max(sl.min, Math.min(sl.max, c.newValue));
+    vals[c.id] = newVal;
+    const rangeEl = document.getElementById('r-' + c.id);
+    if (rangeEl) rangeEl.value = newVal;
+    const valEl = document.getElementById('v-' + c.id);
+    if (valEl) valEl.textContent = sl.fmt(newVal);
+  }
+  render();
+  closePdfModal();
+
+  // Flash the metrics bar to show changes applied
+  const mbar = document.getElementById('mbar');
+  mbar.style.transition = 'opacity 0.15s';
+  mbar.style.opacity = '0.3';
+  setTimeout(() => { mbar.style.opacity = '1'; }, 200);
+}
+
+
+// ── 2026 Q2 CALIBRATION ──────────────────────────────────────────
+// Estimated Q2 2026 baseline values (based on trend extrapolation to mid-2026)
+// Users should override with actual released data when available
+const Q2_2026_ESTIMATES = {
+  gdp:    2.1,   // Annualized real GDP growth — moderate expansion
+  cpi:    3.0,   // YoY CPI — sticky services, easing goods
+  ffr:    4.25,  // FOMC cut 25bp in Q1 2026; on hold Q2
+  tenyr:  4.35,  // Term premium rising; modest fiscal concerns
+  unemp:  4.2,   // Slight softening from peak employment
+  oil:    69,    // WTI — supply/demand roughly balanced, Iran risk eased
+  dxy:    103,   // Dollar modestly softer vs 2025 peak
+  housing:1.35,  // Starts still below trend; tight supply continuing
+  natgas: 3.2,   // Normalizing from 2024-25 volatility
+  mortg:  6.75,  // Mortgage spread compression; still affordability-challenged
+};
+
+const CAL_FIELDS = [
+  { id:'cal-gdp',     sliders:null,          label:'GDP Growth',      unit:'%',     fmt:v=>v.toFixed(1)+'%' },
+  { id:'cal-cpi',     sliders:null,          label:'CPI Inflation',   unit:'%',     fmt:v=>v.toFixed(1)+'%' },
+  { id:'cal-ffr',     sliders:['ffr','ioer'],label:'Fed Funds Rate',  unit:'%',     fmt:v=>v.toFixed(2)+'%', applyFn: v => ({ ffr: v, ioer: Math.max(0, v - 0.1) }) },
+  { id:'cal-tenyr',   sliders:null,          label:'10yr Treasury',   unit:'%',     fmt:v=>v.toFixed(2)+'%' },
+  { id:'cal-unemp',   sliders:['unemp'],     label:'Unemployment',    unit:'%',     fmt:v=>v.toFixed(1)+'%', applyFn: v => ({ unemp: v }) },
+  { id:'cal-oil',     sliders:['oil'],       label:'WTI Oil',         unit:'$/bbl', fmt:v=>'$'+v.toFixed(0), applyFn: v => ({ oil: v }) },
+  { id:'cal-dxy',     sliders:['dxy'],       label:'DXY Dollar',      unit:'index', fmt:v=>v.toFixed(1),     applyFn: v => ({ dxy: v }) },
+  { id:'cal-housing', sliders:['housingSupply'],label:'Housing Starts',unit:'M',    fmt:v=>v.toFixed(2)+'M', applyFn: v => ({ housingSupply: Math.max(0.5, Math.min(3.0, v)) }) },
+  { id:'cal-natgas',  sliders:['natgas'],    label:'Natural Gas',     unit:'$/MMBtu',fmt:v=>'$'+v.toFixed(1),applyFn: v => ({ natgas: v }) },
+  { id:'cal-mortg',   sliders:null,          label:'30yr Mortgage',   unit:'%',     fmt:v=>v.toFixed(2)+'%' },
+];
+
+function loadQ2Preset() {
+  const p = Q2_2026_ESTIMATES;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('cal-gdp',     p.gdp);
+  set('cal-cpi',     p.cpi);
+  set('cal-ffr',     p.ffr);
+  set('cal-tenyr',   p.tenyr);
+  set('cal-unemp',   p.unemp);
+  set('cal-oil',     p.oil);
+  set('cal-dxy',     p.dxy);
+  set('cal-housing', p.housing);
+  set('cal-natgas',  p.natgas);
+  set('cal-mortg',   p.mortg);
+}
+
+function clearCalibration() {
+  CAL_FIELDS.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el) el.value = '';
+  });
+  document.getElementById('cal-results').style.display = 'none';
+}
+
+function getCalVal(id) {
+  const el = document.getElementById(id);
+  if (!el || el.value === '') return null;
+  return parseFloat(el.value);
+}
+
+function applyCalibration() {
+  let applied = 0;
+  for (const f of CAL_FIELDS) {
+    const v = getCalVal(f.id);
+    if (v === null || !f.applyFn) continue;
+    const updates = f.applyFn(v);
+    for (const [k, nv] of Object.entries(updates)) {
+      const sl = getSliderDef(k);
+      if (!sl) continue;
+      const clamped = Math.max(sl.min, Math.min(sl.max, nv));
+      vals[k] = clamped;
+      const rangeEl = document.getElementById('r-' + k);
+      if (rangeEl) rangeEl.value = clamped;
+      const valEl = document.getElementById('v-' + k);
+      if (valEl) valEl.textContent = sl.fmt(clamped);
+      applied++;
+    }
+  }
+
+  // Try to back-solve 10yr yield via foreignDemand + termPremium adjustment
+  const tenyrObs = getCalVal('cal-tenyr');
+  if (tenyrObs !== null) {
+    const m = compute();
+    const tenyrGap = tenyrObs - m.tenyr; // observed minus model-implied
+    // Adjust foreignDemand down/up to match (each unit ≈ 0.07% on 10yr)
+    const demAdj = Math.round(-tenyrGap / 0.07);
+    const newDemand = Math.max(1, Math.min(10, vals.foreignDemand + demAdj));
+    vals.foreignDemand = newDemand;
+    const r = document.getElementById('r-foreignDemand');
+    if (r) r.value = newDemand;
+    const v2 = document.getElementById('v-foreignDemand');
+    const sl = getSliderDef('foreignDemand');
+    if (v2 && sl) v2.textContent = sl.fmt(newDemand);
+    applied++;
+  }
+
+  render();
+
+  // Flash metrics bar
+  const mbar = document.getElementById('mbar');
+  if (mbar) {
+    mbar.style.transition = 'opacity 0.15s';
+    mbar.style.opacity = '0.3';
+    setTimeout(() => { mbar.style.opacity = '1'; }, 220);
+  }
+
+  runCalibrationCheck();
+  const notice = document.createElement('div');
+  notice.className = 'annotation';
+  notice.style.marginTop = '10px';
+  notice.textContent = `✓ Applied ${applied} observable values to simulator sliders. Calibration gap report below.`;
+  const res = document.getElementById('cal-results');
+  if (res && res.firstChild) res.insertBefore(notice, res.firstChild);
+  setTimeout(() => notice.remove(), 4000);
+}
+
+function runCalibrationCheck() {
+  const m = compute();
+  const results = document.getElementById('cal-results');
+  if (!results) return;
+  results.style.display = 'block';
+
+  const checks = [
+    { lbl:'GDP Growth',       obs: getCalVal('cal-gdp'),     model: m.gdp,      unit:'%',     fmt: v => v.toFixed(1)+'%' },
+    { lbl:'CPI Inflation',    obs: getCalVal('cal-cpi'),     model: m.cpi,      unit:'%',     fmt: v => v.toFixed(1)+'%' },
+    { lbl:'10yr Treasury',    obs: getCalVal('cal-tenyr'),   model: m.tenyr,    unit:'%',     fmt: v => v.toFixed(2)+'%' },
+    { lbl:'30yr Mortgage',    obs: getCalVal('cal-mortg'),   model: m.mortg,    unit:'%',     fmt: v => v.toFixed(2)+'%' },
+    { lbl:'Effective Deficit',obs: null,                     model: m.effectiveDeficit, unit:'% GDP', fmt: v => v.toFixed(1)+'%' },
+    { lbl:'Housing Afford.',  obs: null,                     model: m.housingAff,unit:'/100', fmt: v => Math.round(v)+'/100' },
+    { lbl:'Consumer Conf.',   obs: null,                     model: m.conf,     unit:'',      fmt: v => Math.round(v) },
+    { lbl:'S&P 500 Index',    obs: null,                     model: m.sp500,    unit:'(base=100)', fmt: v => Math.round(v) },
+    { lbl:'Debt Svc % GDP',   obs: null,                     model: m.interestCostPctGDP, unit:'%', fmt: v => v.toFixed(1)+'%' },
+  ];
+
+  const rows = checks.map(c => {
+    if (c.obs === null) {
+      // Model-only output
+      return `<div class="cal-row-item">
+        <div class="cri-lbl">\${c.lbl}</div>
+        <div class="cri-actual" style="color:var(--muted)">—</div>
+        <div class="cri-model">\${c.fmt(c.model)}</div>
+        <div class="cri-gap neu">model only</div>
+      </div>`;
+    }
+    const gap = c.obs - c.model;
+    const pct = Math.abs(gap) / Math.max(0.01, Math.abs(c.model));
+    const cls = pct < 0.05 ? 'ok' : pct < 0.15 ? 'warn' : 'miss';
+    const gapCls = gap > 0.01 ? 'pos' : gap < -0.01 ? 'neg' : 'neu';
+    const gapStr = (gap > 0 ? '+' : '') + (Math.abs(gap) < 5 ? gap.toFixed(2) : gap.toFixed(1));
+    return `<div class="cal-row-item \${cls}">
+      <div class="cri-lbl">\${c.lbl}</div>
+      <div class="cri-actual">\${c.fmt(c.obs)}</div>
+      <div class="cri-model">\${c.fmt(c.model)}</div>
+      <div class="cri-gap \${gapCls}">\${gapStr}</div>
+    </div>`;
+  }).join('');
+
+  const header = `<div class="cal-results-title">
+    <span style="display:inline-flex;gap:20px;font-family:var(--font-mono);font-size:9px;color:var(--muted);width:100%;justify-content:space-between;padding:0 11px;box-sizing:border-box;">
+      <span>INDICATOR</span><span style="display:flex;gap:48px"><span>ACTUAL</span><span>MODEL</span><span>GAP</span></span>
+    </span>
+  </div>`;
+
+  const legend = `<div style="display:flex;gap:10px;margin-top:8px;font-family:var(--font-mono);font-size:9px;color:var(--muted);">
+    <span style="color:var(--pos)">■</span> <5% gap &nbsp;
+    <span style="color:var(--warn)">■</span> 5-15% gap &nbsp;
+    <span style="color:var(--neg)">■</span> >15% gap
+  </div>`;
+
+  results.innerHTML = header + rows + legend;
+}
+
+
+// ── HISTORICAL GRID BUILDER ───────────────────────────────────────
+function buildHistoricalGrid() {
+  const grid = document.getElementById('hist-grid');
+  if (!grid) return;
+  grid.innerHTML = Object.entries(HISTORICAL_PRESETS).map(([id, p]) => {
+    const tags = p.stats.map(s => `<span class="hist-tag ${s.c}">${s.t}</span>`).join('');
+    return `<div class="hist-card ${p.type}" onclick="loadHistoricalPreset('${id}')">
+      <div class="hist-name">${p.name}</div>
+      <div class="hist-period">${p.period}</div>
+      <div class="hist-desc">${p.desc}</div>
+      <div class="hist-stats">${tags}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildSidebar();
+buildContent();
+renderMetrics(compute());
+renderSensitivity(compute());
+buildHistoricalGrid();
+</script>
+</body>
+</html>
