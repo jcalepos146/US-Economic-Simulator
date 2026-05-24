@@ -43,7 +43,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 button,input,select{font-family:inherit;}
 
 /* === LAYOUT === */
-#app{display:grid;grid-template-rows:48px 104px 1fr;height:100vh;overflow:hidden;}
+#app{display:grid;grid-template-rows:48px 120px 1fr;height:100vh;overflow:hidden;}
 
 /* === HEADER === */
 #hdr{display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);}
@@ -66,16 +66,16 @@ button,input,select{font-family:inherit;}
 .mbar-primary{grid-template-columns:repeat(8,1fr);flex:1.15;border-bottom:1px solid var(--border);}
 /* Secondary row: 7 smaller tiles */
 .mbar-secondary{grid-template-columns:repeat(7,1fr);flex:0.85;}
-.mc{padding:10px 12px 6px;border-right:1px solid var(--border);min-width:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;}
+.mc{padding:7px 12px 5px;border-right:1px solid var(--border);min-width:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;}
 .mc:last-child{border-right:none;}
 /* Primary tile typography */
-.mbar-primary .mc-lbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px;}
-.mbar-primary .mc-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--text);line-height:1.05;margin-top:0;}
-.mbar-primary .mc-delta{font-family:var(--font-mono);font-size:9.5px;margin-top:2px;white-space:nowrap;}
+.mbar-primary .mc-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0;margin-bottom:3px;}
+.mbar-primary .mc-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--text);line-height:1.0;margin-top:0;}
+.mbar-primary .mc-delta{font-family:var(--font-mono);font-size:9px;margin-top:3px;white-space:nowrap;color:var(--muted);}
 /* Secondary tile typography */
-.mbar-secondary .mc-lbl{font-family:var(--font-mono);font-size:8px;letter-spacing:0.7px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mbar-secondary .mc-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--text);line-height:1.1;margin-top:1px;}
-.mbar-secondary .mc-delta{font-family:var(--font-mono);font-size:8.5px;margin-top:1px;white-space:nowrap;}
+.mbar-secondary .mc-lbl{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.7px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0;margin-bottom:2px;}
+.mbar-secondary .mc-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--text);line-height:1.0;margin-top:0;}
+.mbar-secondary .mc-delta{font-family:var(--font-mono);font-size:8px;margin-top:2px;white-space:nowrap;}
 /* Shared colour classes */
 .mc-val.good{color:var(--pos);}
 .mc-val.bad{color:var(--neg);}
@@ -291,6 +291,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .fsi-bar-wrap{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:2px;}
 .fsi-bar{height:100%;border-radius:3px;transition:width 0.4s;}
 
+
+/* === COUNTRY SELECTOR === */
+.country-wrap{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:4px 10px;}
+.country-flag{font-size:17px;line-height:1;}
+.country-select{background:transparent;border:none;color:var(--text);font-family:var(--font-mono);font-size:11px;cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;padding-right:4px;}
+.country-select option{background:#0b1422;color:var(--text);}
+.country-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+/* === COUNTRY COMPARISON === */
+.cc-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cc-table th{text-align:left;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);padding:6px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.cc-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:12px;color:var(--text-dim);white-space:nowrap;}
+.cc-table tr:hover td{background:var(--surface2);}
+.cc-table td:first-child{font-size:13px;color:var(--text);font-weight:600;font-family:var(--font-cond);letter-spacing:0.3px;}
+.cc-val-good{color:var(--pos);}
+.cc-val-bad{color:var(--neg);}
+.cc-val-warn{color:var(--warn);}
+.cc-current td{background:var(--accent-dim) !important;}
+.cc-current td:first-child{color:var(--accent);}
+.cc-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cc-note{font-size:10.5px;color:var(--muted);font-family:var(--font-mono);line-height:1.5;margin-top:10px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);}
 </style>
 </head>
 <body>
@@ -306,6 +326,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <input id="sc-name" class="hdr-input" type="text" value="Baseline 2026" placeholder="Scenario name">
       <button class="btn primary" onclick="saveScenario()">Save Scenario</button>
       <button class="btn" onclick="exportJSON()">Export JSON</button>
+      <div class="country-wrap" title="Switch economy">
+        <span id="country-flag">&#127482;&#127480;</span>
+        <select class="country-select" id="country-select" onchange="switchCountry(this.value)">
+          <option value="us">United States</option>
+          <option value="eu">Eurozone</option>
+          <option value="cn">China</option>
+          <option value="uk">United Kingdom</option>
+          <option value="jp">Japan</option>
+          <option value="em">Emerging Markets</option>
+        </select>
+      </div>
       <button id="tr-toggle" class="btn tr-btn" onclick="toggleTaylorRule()" title="Auto-sets FFR via Taylor Rule: FFR = 2 + 1.5×(π−2) + 0.5×(4−u)">&#9889; Taylor Rule: OFF</button>
       <button class="btn upload-btn" onclick="openPdfModal()">&#128196; Upload Article PDF</button>
       <button class="btn" onclick="resetAll()">Reset All</button>
@@ -562,6 +593,7 @@ const ANALYSIS_SECTIONS = [
   { id:'sensitivity', label:'Sensitivity Analysis', icon:'◧' },
   { id:'calibrate',   label:'2026 Q2 Calibration', icon:'◎' },
   { id:'history',     label:'Historical Scenarios', icon:'◑' },
+  { id:'compare',     label:'Country Compare', icon:'◈' },
 ];
 
 // ── PRESET EVENTS ────────────────────────────────────────────────
@@ -732,8 +764,277 @@ const EVENTS = [
   {id:'demographic_cliff',  label:'Demographic cliff accelerates — full Boomer labor market exit', cat:'Labor',    pos:false,
    chips:['LFP -2.5%','Skills gap +2','GDP -0.3%','CPI +0.2%'],
    d:{lfp:-2.5, skillsGap:2, autoDisplace:1, gdpA:-0.30, cpiA:0.20}},
+
+  // ── EUROZONE EVENTS ─────────────────────────────────────────────
+  {id:'ecb_qe_emergency',   label:'ECB emergency QE (PEPP-style, €1T)',              cat:'EU – Monetary',   pos:true,
+   chips:['QE +80B/mo','10yr -0.5%','GDP +0.4%'],   d:{qePace:80, gdpA:0.40, cpiA:0.20}},
+  {id:'eu_sovereign_crisis',label:'Eurozone sovereign crisis — BTP/Bund spread blows',cat:'EU – Bonds',     pos:false,
+   chips:['Demand -3','Spreads +300bps','GDP -0.6%'],d:{foreignDemand:-3, igSpreads:150, hySpreads:300, gdpA:-0.60, spA:-12}},
+  {id:'german_debt_brake',  label:'Germany removes constitutional debt brake',              cat:'EU – Fiscal',    pos:true,
+   chips:['Deficit +2%','Spend +4%','GDP +0.5%'],   d:{deficit:2, govSpend:4, privateCapex:1, gdpA:0.50}},
+  {id:'eu_ai_act_strict',   label:'EU AI Act — most restrictive provisions enforced', cat:'EU – Regulation',pos:false,
+   chips:['AI -2','Innov -0.3%','GDP -0.2%'],       d:{aiAdoption:-2, innovRate:-0.3, gdpA:-0.20}},
+  {id:'eu_energy_union',    label:'EU Energy Union completed — shared grid + LNG',   cat:'EU – Energy',    pos:true,
+   chips:['Energy geo -2','Elec -1','GDP +0.3%'],   d:{energyGeopolitics:-2, electricCost:-1, renewableShare:5, gdpA:0.30, cpiA:-0.10}},
+  // ── CHINA EVENTS ─────────────────────────────────────────────────
+  {id:'pboc_major_stimulus',label:'PBoC + NDRC mega-stimulus — ¥10T package',   cat:'CN – Monetary',  pos:true,
+   chips:['QE +50B/mo','Spend +4%','GDP +0.8%'],    d:{qePace:50, govSpend:4, creditImpulse:2, gdpA:0.80, cpiA:0.30}},
+  {id:'china_prop_collapse',label:'China property sector collapse — Evergrande cascade',cat:'CN – Housing', pos:false,
+   chips:['CRE stress +3','Credit -3pp','GDP -1.2%'],d:{commercialREStress:3, creditImpulse:-3, hySpreads:300, housingSupply:-0.5, gdpA:-1.20, spA:-15}},
+  {id:'china_ai_leap',      label:'China AI breakthrough — frontier model parity',   cat:'CN – Innovation',pos:true,
+   chips:['AI +3','TFP +0.5%','GDP +0.5%'],         d:{aiAdoption:3, innovRate:0.5, vcFunding:50, gdpA:0.50}},
+  {id:'china_deflation',    label:'China deflation trap — Japan-1990s style',         cat:'CN – Macro',    pos:false,
+   chips:['CPI -1%','Credit -2pp','GDP -0.8%'],     d:{creditImpulse:-2.5, pti:-2, gdpA:-0.80, cpiA:-1.0}},
+  // ── UK EVENTS ────────────────────────────────────────────────────
+  {id:'boe_emergency_cut',  label:'BoE emergency rate cuts — 75bp in one meeting',   cat:'UK – Monetary',  pos:true,
+   chips:['Rate -0.75%','Mortg -0.5%','GDP +0.3%'], d:{ffr:-0.75, gdpA:0.30}},
+  {id:'uk_minibudget2',     label:'UK mini-budget crisis 2.0 — unfunded tax cuts',   cat:'UK – Fiscal',    pos:false,
+   chips:['Demand -2','Deficit +3%','GDP -0.5%'],   d:{foreignDemand:-2, deficit:3, policyCert:-2, gdpA:-0.50, spA:-8}},
+  {id:'uk_eu_reset',        label:'UK-EU trade reset — Single Market partial re-entry',cat:'UK – Trade',   pos:true,
+   chips:['Tariff -4%','FDI +2','GDP +0.5%'],       d:{tariff:-4, fdiInflows:2, gdpA:0.50, cpiA:-0.15}},
+  {id:'uk_greenbelt',       label:'UK Green Belt reform — major housing liberalisation',cat:'UK – Housing', pos:true,
+   chips:['Supply +0.2M','Zoning -3','GDP +0.2%'],  d:{housingSupply:0.2, zoning:-3, housingAct:3, gdpA:0.20}},
+  // ── JAPAN EVENTS ─────────────────────────────────────────────────
+  {id:'boj_ycc_abandon',    label:'BoJ fully abandons YCC — 10yr yield freed',       cat:'JP – Monetary',  pos:false,
+   chips:['YCC -5','10yr +0.8%','GDP -0.3%'],       d:{ycc:-5, termPremium:40, foreignDemand:-1, gdpA:-0.30, spA:-6}},
+  {id:'japan_fiscal_crisis',label:'Japan fiscal credibility crisis — JGB selloff',   cat:'JP – Bonds',    pos:false,
+   chips:['Demand -3','Term +100bps','GDP -0.7%'],  d:{foreignDemand:-3, termPremium:100, gdpA:-0.70, spA:-10}},
+  {id:'japan_defense_surge',label:'Japan defense buildup to 2% GDP (NATO-equivalent)',    cat:'JP – Fiscal',   pos:true,
+   chips:['Defense +0.5%','Tech spillover','GDP +0.2%'],d:{defenseSpend:0.5, innovRate:0.1, gdpA:0.20}},
+  {id:'japan_immig_reform', label:'Japan major immigration reform — skilled worker surge',cat:'JP – Labor',pos:true,
+   chips:['LFP +1%','Hi-skill +2','GDP +0.3%'],     d:{lfp:1, highSkillImmig:2, stemGrowth:1, gdpA:0.30}},
+  // ── EMERGING MARKET EVENTS ────────────────────────────────────────
+  {id:'em_fed_contagion',   label:'Fed tightening EM contagion — capital flight',    cat:'EM – Global',    pos:false,
+   chips:['HY +300bps','FDI -2','GDP -0.7%'],       d:{hySpreads:300, fdiInflows:-2, creditImpulse:-2, dollarReserve:-1, gdpA:-0.70}},
+  {id:'commodity_supercycle',label:'Commodity super-cycle — EM export boom',         cat:'EM – Trade',     pos:true,
+   chips:['Oil +$20','FDI +2','GDP +0.6%'],         d:{oil:20, fdiInflows:2, tradeBalance:1.5, gdpA:0.60}},
+  {id:'em_infra_boom',      label:'EM infrastructure decade — World Bank + DFI push',cat:'EM – CAPEX',    pos:true,
+   chips:['CAPEX +2%','Infra +$150B','GDP +0.5%'],  d:{privateCapex:2, infraSpend:150, permitSpeed:2, gdpA:0.50}},
+  {id:'em_debt_crisis',     label:'EM sovereign debt crisis — cascade default risk', cat:'EM – Bonds',    pos:false,
+   chips:['RoL -1','FDI -2','HY +400bps','GDP -0.8%'],d:{ruleOfLaw:-1, fdiInflows:-2, hySpreads:400, creditImpulse:-2.5, gdpA:-0.80}},
+
 ];
 
+
+
+// ── MULTI-COUNTRY SUPPORT ─────────────────────────────────────────
+let currentCountry = 'us';
+let currentSection = 'monetary';
+
+const COUNTRY_CONFIGS = {
+  us: {
+    name:'United States', flag:'\ud83c\uddfa\ud83c\uddf8', emoji:'US', currency:'USD',
+    gdpSize:'$28T', color:'#4a9eff',
+    description:'World largest economy. Reserve currency issuer. Deep capital markets, high innovation, structural fiscal deficit.',
+    neutralFFR:3.5, debtToGDP:1.22, gdpBase:2.5, cpiBase:2.5, tenyrBase:4.2, mortgBase:6.9,
+    defaults:{},
+    labelMap:{ ffr:'Fed Funds Rate', cbIndependence:'Fed Independence', dxy:'DXY Dollar Index', lngExport:'LNG Export Capacity' },
+    adj:{ mon:1.00, fis:1.00, tax:1.00, innov:1.00, capex:1.00, polEcon:1.00, trade:1.00, labor:1.00, dxyLag:1.00 },
+    baselines:{ gdp:2.5, cpi:2.5, tenyr:4.2, mortg:6.9, housingAff:50, sp500:100, conf:55, defAdj:6.5, dollarAdj:104, fsi:80, twoyr:4.8, yldSprd:-0.6, tfp:1.2, interestCostPctGDP:3.5, rowGrowth:2.8 },
+    q2:{ gdp:2.1, cpi:3.0, ffr:4.25, tenyr:4.35, unemp:4.2, oil:69, dxy:103, housing:1.35, natgas:3.2, mortg:6.75 }
+  },
+  eu: {
+    name:'Eurozone', flag:'\ud83c\uddea\ud83c\uddfa', emoji:'EU', currency:'EUR',
+    gdpSize:'\u20ac15T', color:'#00d47a',
+    description:'Currency union without fiscal union. High trade openness (45% of GDP). Energy import-dependent. ECB independent but politically constrained.',
+    neutralFFR:2.5, debtToGDP:0.92, gdpBase:1.2, cpiBase:2.2, tenyrBase:2.8, mortgBase:4.0,
+    defaults:{ ffr:3.25, qePace:-10, deficit:3.5, corpTax:22, incomeTax:48, govSpend:2.5,
+               regBurden:8, unemp:6.0, unionMem:22, tariff:5, renewableShare:40,
+               lngExport:2, oil:80, natgas:12, carbonPolicy:7, innovRate:1.2, aiAdoption:5,
+               housingSupply:1.0, zoning:8, polarization:7, cbIndependence:8,
+               stressTest:8, chinaDecoupling:5, privateCapex:15, shippingCost:5,
+               energyGeopolitics:7, electricCost:7, ioer:3.15 },
+    labelMap:{ ffr:'ECB Deposit Rate', cbIndependence:'ECB Independence', dxy:'EUR Strength (trade-wtd)', lngExport:'LNG Import Dependence', warshrules:'Rules-Based ECB Adherence' },
+    adj:{ mon:0.78, fis:0.90, tax:1.15, innov:0.82, capex:0.88, polEcon:1.25, trade:1.45, labor:0.85, dxyLag:0.65 },
+    baselines:{ gdp:1.2, cpi:2.2, tenyr:2.8, mortg:4.0, housingAff:42, sp500:100, conf:48, defAdj:3.5, dollarAdj:104, fsi:75, twoyr:3.0, yldSprd:-0.2, tfp:0.9, interestCostPctGDP:2.5, rowGrowth:2.8 },
+    q2:{ gdp:1.0, cpi:2.3, ffr:3.25, tenyr:2.85, unemp:5.9, oil:80, dxy:1.08, housing:1.0, natgas:12, mortg:4.4 }
+  },
+  cn: {
+    name:'China', flag:'\ud83c\udde8\ud83c\uddf3', emoji:'CN', currency:'CNY',
+    gdpSize:'$18T', color:'#ff4055',
+    description:'State-directed investment-led growth model. Property sector stress (25% of activity). Tech decoupling from West. Demographic headwinds.',
+    neutralFFR:3.0, debtToGDP:0.87, gdpBase:4.5, cpiBase:1.8, tenyrBase:2.4, mortgBase:4.0,
+    defaults:{ ffr:3.1, qePace:20, deficit:7.0, corpTax:25, incomeTax:45, govSpend:6,
+               regBurden:7, unemp:5.5, unionMem:8, tariff:8, oil:85, natgas:6,
+               innovRate:1.8, rdSpend:2.4, aiAdoption:7, vcFunding:120,
+               housingSupply:2.8, privateCapex:22, commercialREStress:8, pti:8, zoning:5,
+               cbIndependence:3, ruleOfLaw:4, govEffective:7, polarization:2,
+               policyCert:6, electoralStab:8, chinaDecoupling:7, termPremium:10,
+               foreignDemand:5, renewableShare:35, lngExport:3, creditImpulse:-1,
+               socialCapital:6, regCapture:6, mediaQuality:3, ioer:3.0 },
+    labelMap:{ ffr:'PBoC LPR (1yr)', cbIndependence:'PBoC Independence', dxy:'USD/CNY Strength', warshrules:'PBoC Rules-Based Adherence', lngExport:'LNG Export Capacity' },
+    adj:{ mon:0.62, fis:1.55, tax:0.72, innov:1.25, capex:1.85, polEcon:0.52, trade:1.65, labor:0.80, dxyLag:0.90 },
+    baselines:{ gdp:4.5, cpi:1.8, tenyr:2.4, mortg:4.0, housingAff:38, sp500:100, conf:52, defAdj:7.0, dollarAdj:104, fsi:65, twoyr:2.2, yldSprd:0.2, tfp:1.5, interestCostPctGDP:2.0, rowGrowth:2.8 },
+    q2:{ gdp:4.2, cpi:1.5, ffr:3.1, tenyr:2.4, unemp:5.5, oil:85, dxy:7.25, housing:null, natgas:6, mortg:3.9 }
+  },
+  uk: {
+    name:'United Kingdom', flag:'\ud83c\uddec\ud83c\udde7', emoji:'UK', currency:'GBP',
+    gdpSize:'\u00a32.3T', color:'#ffd44a',
+    description:'Post-Brexit adjustment. Extremely supply-constrained housing (green belt). Services-dominated (80% of GDP). BoE independence intact.',
+    neutralFFR:3.0, debtToGDP:1.00, gdpBase:1.0, cpiBase:2.8, tenyrBase:4.4, mortgBase:5.5,
+    defaults:{ ffr:4.75, qePace:-15, deficit:4.5, corpTax:25, incomeTax:45, govSpend:2,
+               regBurden:6, unemp:4.5, unionMem:22, tariff:8, housingSupply:0.5,
+               zoning:9, oil:75, natgas:10, innovRate:1.3, rdSpend:2.8, aiAdoption:6,
+               polarization:7, cbIndependence:8, chinaDecoupling:7,
+               renewableShare:35, lngExport:4, privateCapex:15, pti:9,
+               fedLandPermit:6, permitSpeed:4, electricCost:7, ioer:4.65 },
+    labelMap:{ ffr:'BoE Bank Rate', cbIndependence:'BoE Independence', dxy:'GBP Trade-Wtd Strength', fedPermit:'UK Planning Permission Speed', fedLandPermit:'Greenbelt Reform Progress' },
+    adj:{ mon:1.02, fis:0.78, tax:1.08, innov:0.90, capex:0.88, polEcon:1.12, trade:1.52, labor:0.95, dxyLag:0.72 },
+    baselines:{ gdp:1.0, cpi:2.8, tenyr:4.4, mortg:5.5, housingAff:32, sp500:100, conf:46, defAdj:4.5, dollarAdj:104, fsi:72, twoyr:4.5, yldSprd:-0.1, tfp:0.9, interestCostPctGDP:3.0, rowGrowth:2.8 },
+    q2:{ gdp:0.9, cpi:2.8, ffr:4.75, tenyr:4.5, unemp:4.4, oil:75, dxy:1.27, housing:0.5, natgas:10, mortg:5.4 }
+  },
+  jp: {
+    name:'Japan', flag:'\ud83c\uddef\ud83c\uddf5', emoji:'JP', currency:'JPY',
+    gdpSize:'\u00a5600T', color:'#f0a030',
+    description:'ZLB trap, demographics dominate. Debt/GDP 260%. YCC partially unwound 2024. Yen carry trade systemic risk. Innovation lag vs. 1980s peak.',
+    neutralFFR:0.25, debtToGDP:2.60, gdpBase:1.0, cpiBase:2.0, tenyrBase:1.5, mortgBase:2.0,
+    defaults:{ ffr:0.5, qePace:15, deficit:7.5, corpTax:30, incomeTax:55, govSpend:3,
+               ycc:5, termPremium:-30, regBurden:7, unemp:2.6, lfp:63, unionMem:17,
+               oil:85, natgas:15, innovRate:1.0, rdSpend:3.3, aiAdoption:4,
+               housingSupply:0.8, renewableShare:22, tariff:5, privateCapex:16,
+               socialCapital:8, polarization:3, cbIndependence:6, ruleOfLaw:8,
+               govEffective:6, foreignDemand:9, chinaDecoupling:6,
+               electricCost:6, energyGeopolitics:6, ioer:0.4 },
+    labelMap:{ ffr:'BoJ Policy Rate', cbIndependence:'BoJ Independence', ycc:'YCC Cap Intensity', dxy:'USD/JPY Sensitivity', warshrules:'BoJ Rules-Based Adherence' },
+    adj:{ mon:0.22, fis:0.60, tax:0.80, innov:0.88, capex:0.72, polEcon:0.90, trade:1.22, labor:0.60, dxyLag:1.20 },
+    baselines:{ gdp:1.0, cpi:2.0, tenyr:1.5, mortg:2.0, housingAff:55, sp500:100, conf:44, defAdj:7.5, dollarAdj:104, fsi:70, twoyr:0.8, yldSprd:0.7, tfp:0.8, interestCostPctGDP:5.5, rowGrowth:2.8 },
+    q2:{ gdp:0.8, cpi:2.0, ffr:0.5, tenyr:1.5, unemp:2.5, oil:85, dxy:150, housing:0.8, natgas:15, mortg:2.0 }
+  },
+  em: {
+    name:'Emerging Markets', flag:'\ud83c\udf10', emoji:'EM', currency:'USD-linked',
+    gdpSize:'~$25T', color:'#4a9eff',
+    description:'Composite: India, Brazil, Mexico, Indonesia. Dollar-sensitive debt. Commodity cycle driven. Demographics positive but institutional gaps.',
+    neutralFFR:5.0, debtToGDP:0.65, gdpBase:4.0, cpiBase:4.5, tenyrBase:8.0, mortgBase:12.0,
+    defaults:{ ffr:6.5, qePace:0, deficit:5.0, corpTax:28, incomeTax:40, govSpend:3,
+               regBurden:7, unemp:7.0, lfp:60, unionMem:18, tariff:12, oil:80,
+               natgas:8, innovRate:0.8, rdSpend:1.2, aiAdoption:4, vcFunding:80,
+               housingSupply:1.0, zoning:6, privateCapex:15, ruleOfLaw:5,
+               govEffective:5, socialCapital:5, polarization:7, cbIndependence:5,
+               electoralStab:5, regCapture:7, dollarReserve:4, conflictIndex:6,
+               foreignDemand:5, termPremium:80, chinaDecoupling:5, creditImpulse:0 },
+    labelMap:{ ffr:'EM Avg. Policy Rate', cbIndependence:'EM CB Independence', dxy:'DXY (inverse driver)', warshrules:'CB Rules Adherence' },
+    adj:{ mon:1.30, fis:1.22, tax:0.70, innov:0.52, capex:1.42, polEcon:2.02, trade:1.52, labor:1.12, dxyLag:1.80 },
+    baselines:{ gdp:4.0, cpi:4.5, tenyr:8.0, mortg:12.0, housingAff:35, sp500:100, conf:50, defAdj:5.0, dollarAdj:104, fsi:60, twoyr:7.5, yldSprd:0.5, tfp:1.0, interestCostPctGDP:2.8, rowGrowth:2.8 },
+    q2:{ gdp:3.8, cpi:4.5, ffr:6.5, tenyr:8.0, unemp:7.0, oil:80, dxy:103, housing:null, natgas:8, mortg:12 }
+  }
+};
+
+function getCountryLabel(id) {
+  const cc = COUNTRY_CONFIGS[currentCountry];
+  return (cc && cc.labelMap && cc.labelMap[id]) ? cc.labelMap[id] : null;
+}
+
+function getCountryAdjustments(country) {
+  return (COUNTRY_CONFIGS[country] || COUNTRY_CONFIGS.us).adj;
+}
+
+function switchCountry(id) {
+  if (!COUNTRY_CONFIGS[id]) return;
+  currentCountry = id;
+  const cc = COUNTRY_CONFIGS[id];
+
+  // Update flag display
+  const flagEl = document.getElementById('country-flag');
+  if (flagEl) flagEl.textContent = cc.flag;
+  document.getElementById('country-select').value = id;
+
+  // Apply country defaults over global DEFAULTS
+  vals = Object.assign({}, DEFAULTS, cc.defaults);
+  activeEventIds = {};
+
+  // Update BASELINES to country's baselines
+  Object.assign(BASELINES, COUNTRY_CONFIGS.us.baselines); // reset
+  Object.assign(BASELINES, cc.baselines);                 // apply country
+
+  // Rebuild content (updates labels + slider positions)
+  buildContent();
+
+  // Restore section
+  const btn = Array.from(document.querySelectorAll('.nav-item'))
+    .find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + currentSection + "'"));
+  showSection(currentSection, btn || null);
+
+  // Clear events
+  document.querySelectorAll('.ev-card').forEach(c => c.classList.remove('active'));
+  renderEventLog();
+  render();
+
+  // Country description toast
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:52px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-lg);padding:10px 18px;font-size:12px;color:var(--text-dim);z-index:999;max-width:480px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.5);';
+  toast.innerHTML = '<strong style="color:var(--text)">' + cc.flag + ' ' + cc.name + '</strong> &mdash; ' + cc.description;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.style.transition='opacity 0.4s', 2200);
+  setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(),400); }, 2600);
+}
+
+// Country-specific comparison runner
+function runCountryComparison() {
+  const savedVals = Object.assign({}, vals);
+  const savedCountry = currentCountry;
+  const savedTR = taylorRuleOn;
+  taylorRuleOn = false;
+
+  const rows = [];
+  for (const [id, cc] of Object.entries(COUNTRY_CONFIGS)) {
+    currentCountry = id;
+    Object.assign(BASELINES, cc.baselines);
+    vals = Object.assign({}, DEFAULTS, cc.defaults);
+    const m = compute();
+    rows.push({ id, cc, m });
+  }
+
+  // Restore
+  currentCountry = savedCountry;
+  vals = savedVals;
+  taylorRuleOn = savedTR;
+  Object.assign(BASELINES, COUNTRY_CONFIGS[savedCountry].baselines);
+
+  return rows;
+}
+
+function renderCountryComparison() {
+  const panel = document.getElementById('cc-table-wrap');
+  if (!panel) return;
+  panel.innerHTML = '<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Running comparison\u2026</div>';
+
+  // Defer so UI updates
+  setTimeout(() => {
+    const rows = runCountryComparison();
+
+    const cols = [
+      { lbl:'GDP\u00a0%',    fn: m => m.gdp.toFixed(1)+'%',  dir:1,  thresh:[0,1.5] },
+      { lbl:'CPI\u00a0%',    fn: m => m.cpi.toFixed(1)+'%',  dir:-1, thresh:[3.5,6] },
+      { lbl:'10yr Yld',  fn: m => m.tenyr.toFixed(2)+'%',dir:-1, thresh:[5,7] },
+      { lbl:'Mortgage',  fn: m => m.mortg.toFixed(2)+'%',dir:-1, thresh:[6,9] },
+      { lbl:'Hsg Aff.',  fn: m => Math.round(m.housingAff)+'/100', dir:1, thresh:[40,25] },
+      { lbl:'FSI',       fn: m => Math.round(m.fsi)+'/100',  dir:1,  thresh:[70,50] },
+      { lbl:'Deficit%',  fn: m => m.defAdj.toFixed(1)+'%',   dir:-1, thresh:[5,8] },
+      { lbl:'Debt Svc%', fn: m => m.interestCostPctGDP.toFixed(1)+'%', dir:-1, thresh:[3.5,5] },
+      { lbl:'TFP%',      fn: m => m.tfp.toFixed(2)+'%',      dir:1,  thresh:[1.0,0.5] },
+    ];
+
+    const ths = '<th>Economy</th>' + cols.map(c => '<th>' + c.lbl + '</th>').join('');
+
+    const trs = rows.map(({ id, cc, m }) => {
+      const isCurrent = id === currentCountry;
+      const tds = cols.map(c => {
+        const raw = parseFloat(c.fn(m));
+        let cls = '';
+        if (c.dir === 1) {
+          cls = raw < c.thresh[1] ? 'cc-val-bad' : raw < c.thresh[0] ? 'cc-val-warn' : 'cc-val-good';
+        } else {
+          cls = raw > c.thresh[1] ? 'cc-val-bad' : raw > c.thresh[0] ? 'cc-val-warn' : 'cc-val-good';
+        }
+        return '<td class="' + cls + '">' + c.fn(m) + '</td>';
+      }).join('');
+      const flag = cc.flag;
+      return '<tr class="' + (isCurrent ? 'cc-current' : '') + '"><td>' + flag + ' ' + cc.name + '</td>' + tds + '</tr>';
+    }).join('');
+
+    panel.innerHTML = '<table class="cc-table"><thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table>';
+  }, 30);
+}
 
 // ── TAYLOR RULE ────────────────────────────────────────────────────
 let taylorRuleOn = false;
@@ -825,6 +1126,55 @@ const HISTORICAL_PRESETS = {
            innovRate:2.2, rdSpend:2.5, aiAdoption:2, vcFunding:100, patentRate:7,
            policyCert:8, polarization:4, ruleOfLaw:9, creditImpulse:2.0,
            socialCapital:7, cbIndependence:9, privateCapex:19 }
+  },
+
+  eu_sovereign_2012: {
+    name:'2010\u201312 Eurozone Debt Crisis', period:'Jun 2012 Peak', type:'recession',
+    desc:'Greek, Irish, Portuguese, Spanish and Italian sovereign spreads blew out. ECB "whatever it takes" ultimately resolved it but at enormous austerity cost.',
+    stats:[{t:'GDP -0.6%',c:'neg'},{t:'BTP/Bund 500bps',c:'neg'},{t:'Unemp 12%',c:'neg'},{t:'ECB rescue',c:'neu'}],
+    vals:{ ffr:0.75, deficit:6.5, unemp:11, hySpreads:800, igSpreads:400, foreignDemand:4,
+           govSpend:-2, pti:10, commercialREStress:9, creditImpulse:-3, polarization:8,
+           cbIndependence:7, ruleOfLaw:6, policyCert:2, termPremium:100 }
+  },
+  eu_energy_2022: {
+    name:'2022 EU Energy Crisis', period:'Aug\u2013Dec 2022', type:'crisis',
+    desc:'Russian gas cutoff after Ukraine invasion. European natural gas surged 10x. Deindustrialisation risk, emergency price caps, demand destruction.',
+    stats:[{t:'Gas +900%',c:'neg'},{t:'CPI 10%+',c:'neg'},{t:'GDP -0.5%',c:'neg'},{t:'Emergency caps',c:'neu'}],
+    vals:{ natgas:18, oil:110, oilConflict:9, energyGeopolitics:9, deficit:5, govSpend:5,
+           electricCost:10, lngExport:2, renewableShare:38, hySpreads:500, creditImpulse:-1.5,
+           conflictIndex:8, chinaDecoupling:5 }
+  },
+  cn_stock_crash_2015: {
+    name:'2015\u201316 China Growth Scare', period:'Aug 2015 Crash', type:'crisis',
+    desc:'China stock market lost 40%. Capital outflows, yuan devaluation fears, manufacturing PMI collapse. Global risk-off contagion.',
+    stats:[{t:'S&P -12%',c:'neg'},{t:'Yuan -4%',c:'neg'},{t:'FDI \u221215%',c:'neg'},{t:'PBoC cuts',c:'neu'}],
+    vals:{ ffr:2.5, hySpreads:600, igSpreads:250, creditImpulse:-3, chinaDecoupling:5,
+           commercialREStress:7, govSpend:4, qePace:30, unemp:6, pti:7, polarization:3,
+           cbIndependence:3, ruleOfLaw:4 }
+  },
+  uk_truss_2022: {
+    name:'2022 UK Mini-Budget Crisis', period:'Sep\u2013Oct 2022', type:'crisis',
+    desc:'Kwasi Kwarteng\u2019s unfunded \u00a345B tax cut triggered gilt crisis. BoE emergency intervention. PM Truss resigned in 45 days. Institutional credibility hit.',
+    stats:[{t:'Gilt yield +150bps',c:'neg'},{t:'GBP -8%',c:'neg'},{t:'BoE QE emergency',c:'neg'},{t:'PM resigned',c:'neg'}],
+    vals:{ ffr:3.5, deficit:7, corpTax:19, foreignDemand:3, termPremium:80, hySpreads:500,
+           govSpend:5, cbIndependence:5, ruleOfLaw:6, policyCert:2, polarization:8,
+           creditImpulse:-1.5, electoralStab:4 }
+  },
+  jp_bubble_1990: {
+    name:'1990 Japan Bubble Collapse', period:'1990\u201393 Unwinding', type:'recession',
+    desc:'BoJ overtightening burst the Nikkei and land price bubble. \u201CLost Decade\u201D began. Banks insolvent, deflation trap, policy paralysis.',
+    stats:[{t:'Nikkei -48%',c:'neg'},{t:'Land -50%',c:'neg'},{t:'GDP \u22122%',c:'neg'},{t:'30yr stagnation',c:'neg'}],
+    vals:{ ffr:6, deficit:3, unemp:4, hySpreads:300, igSpreads:150, commercialREStress:10,
+           pti:14, housingSupply:0.6, creditImpulse:-4, cbIndependence:5, innovRate:1.5,
+           privateCapex:18, socialCapital:8, ycc:0, termPremium:50 }
+  },
+  em_taper_tantrum_2013: {
+    name:'2013 Taper Tantrum (EM)', period:'May\u2013Sep 2013', type:'crisis',
+    desc:'Bernanke hint at QE tapering triggered massive EM capital outflows. \u201CFragile Five\u201D currencies collapsed. Commodity exporters hit hardest.',
+    stats:[{t:'EM FX \u221215%',c:'neg'},{t:'FDI \u221220%',c:'neg'},{t:'HY +300bps',c:'neg'},{t:'Reserves fell',c:'neg'}],
+    vals:{ ffr:0.25, qePace:-10, hySpreads:650, igSpreads:300, foreignDemand:4,
+           fdiInflows:3, dollarReserve:4, termPremium:60, creditImpulse:-2.5,
+           oil:90, commoditySupercycle:0, chinaDecoupling:3, unemp:8, conflictIndex:6 }
   },
   stagflation1974: {
     name:'1974\u201375 Stagflation', period:'Oil Shock Recession', type:'crisis',
@@ -958,14 +1308,23 @@ function compute() {
 
   // Horizon-weighted coefficients for all GDP categories
   const W = getHorizonWeights(timeHorizon);
+  // Apply country-specific coefficient adjustments on top of horizon weights
+  const _CC = getCountryAdjustments(currentCountry);
+  Object.keys(_CC).forEach(k => { if (W[k] !== undefined) W[k] = +(W[k] * _CC[k]).toFixed(4); });
+  const _CFG = COUNTRY_CONFIGS[currentCountry] || COUNTRY_CONFIGS.us;
+  const _neutralFFR = _CFG.neutralFFR || 3.5;
+  const _gdpBase    = _CFG.gdpBase    || 2.5;
+  const _cpiBase    = _CFG.cpiBase    || 2.5;
+  const _tenyrBase  = _CFG.tenyrBase  || 4.2;
+
 
   // ── [TAYLOR RULE] Endogenous Fed reaction function ───────────────
   // Bernanke-Taylor rule: FFR = r* + pi + 1.5*(pi-pi*) + 0.5*(y-y*)
   // where r*=2, pi*=2, y-y* approximated via (4-unemp)*1.8 (Okun)
   let taylorFFR = s.ffr;
   if (taylorRuleOn) {
-    const cpi0 = 2.5 + (s.oil-70)*0.016 + (s.tariff-10)*0.022
-               + (s.deficit-4)*0.038 - (s.ffr-3)*0.18 + s.govSpend*0.025
+    const cpi0 = _cpiBase + (s.oil-70)*0.016 + (s.tariff-10)*0.022
+               + (s.deficit-4)*0.038 - (s.ffr-_neutralFFR)*0.18 + s.govSpend*0.025
                + (s.oilConflict-5)*0.025;
     taylorFFR = Math.max(0, Math.min(10, 2 + 1.5*(cpi0-2) + 0.5*(4-s.unemp)));
     s.ffr = taylorFFR;
@@ -976,7 +1335,7 @@ function compute() {
   }
 
   // ── PASS 1: Preliminary CPI (needed to compute yields) ──────────
-  let cpi = 2.5
+  let cpi = _cpiBase
     + (s.oil       - 70)   * 0.016
     + (s.natgas    - 3.5)  * 0.04
     + (s.tariff    - 10)   * 0.022
@@ -1007,7 +1366,7 @@ function compute() {
   // ── [1] DEBT SERVICE FEEDBACK LOOP ─────────────────────────────
   // US debt ~$34T, GDP ~$28T → debt/GDP ≈ 122%
   // Weighted avg maturity ~6yr: effective avg rate = 65% locked at ~3.2% + 35% rolling
-  const DEBT_TO_GDP = 1.22;
+  const DEBT_TO_GDP = _CFG.debtToGDP || 1.22;
   const avgDebtRate = 0.35 * (4.2 + (s.ffr - 4.5) * 0.45 + Math.max(0, cpi - 2.5) * 0.28)
                     + 0.65 * 3.2; // approximate preliminary tenyr
   const interestCostPctGDP = DEBT_TO_GDP * avgDebtRate;
@@ -1019,7 +1378,7 @@ function compute() {
   const vigilantePremium = effectiveDeficit > 8 ? (effectiveDeficit - 8) * 0.09 : 0;
 
   // ── YIELDS (using effective deficit) ───────────────────────────
-  let tenyr = 4.2
+  let tenyr = _tenyrBase
     + (s.ffr         - 4.5) * 0.45
     + (effectiveDeficit - 6) * 0.055   // [1] effective deficit (includes interest cost)
     - (s.foreignDemand - 6) * 0.07
@@ -1079,10 +1438,10 @@ function compute() {
   ));
 
   // ── PASS 2: GDP core ─────────────────────────────────────────────
-  let gdp = 2.5
+  let gdp = _gdpBase
     // Monetary
-    - (s.ffr   - 3.5) * 0.28 * W.mon
-    + ffrConvexHit * W.mon                       // [2] convex FFR overshoot
+    - (s.ffr   - _neutralFFR) * 0.28 * W.mon
+    + ffrConvexHit * W.mon  // ffrOvershoot already above neutral                       // [2] convex FFR overshoot
     + (s.qePace > 0 ? s.qePace * 0.006 : s.qePace * 0.004) * W.mon
     - inversionPenalty * W.mon                   // [2] yield curve inversion
     // Fiscal — use effectiveDeficit for crowding-out [1]
@@ -1281,6 +1640,7 @@ function clamp(v, lo=5, hi=98) { return Math.max(lo, Math.min(hi, v)); }
 
 // ── UI HELPERS ───────────────────────────────────────────────────
 const BASELINES = { gdp:2.5, cpi:2.5, tfp:1.2, tenyr:4.2, twoyr:4.8, mortg:6.9, housingAff:50, sp500:100, conf:55, defAdj:6.5, dollarAdj:104, fsi:80, interestCostPctGDP:3.5, rowGrowth:2.8 };
+// BASELINES is mutated by switchCountry() to reflect current country
 
 function render() {
   const m = compute();
@@ -1313,8 +1673,8 @@ function renderMetrics(m) {
     if (d.key === 'fsi')        valCls = v < 50 ? 'bad' : v < 70 ? 'warn' : 'good';
     if (d.key === 'defAdj')     valCls = v > 10 ? 'bad' : v > 7 ? 'warn' : '';
     return `<div class="mc">
-      <div class="mc-val ${valCls}">${d.fmt(v)}</div>
       <div class="mc-lbl">${d.lbl}</div>
+      <div class="mc-val ${valCls}">${d.fmt(v)}</div>
       ${dStr ? `<div class="mc-delta ${cls}">${dStr}</div>` : ''}
     </div>`;
   }
@@ -1346,28 +1706,28 @@ function renderMetrics(m) {
   let regimeBadge = '';
   if (m.inRecession) {
     regimeBadge = `<div class="mc" style="background:var(--neg-dim);border-left:3px solid var(--neg);">
+      <div class="mc-lbl" style="color:var(--neg);margin-bottom:3px">⚠ REGIME</div>
       <div class="mc-val bad" style="font-size:18px">RECESSION</div>
-      <div class="mc-lbl" style="color:var(--neg);margin-top:3px">⚠ REGIME</div>
       <div class="mc-delta neg">Amplification active</div>
     </div>`;
   } else if (m.vigilantePremium > 0.3) {
     regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
+      <div class="mc-lbl" style="color:var(--warn);margin-bottom:3px">⚠ REGIME</div>
       <div class="mc-val warn" style="font-size:18px">DEBT SPIRAL</div>
-      <div class="mc-lbl" style="color:var(--warn);margin-top:3px">⚠ REGIME</div>
       <div class="mc-delta neg">+${m.vigilantePremium.toFixed(2)}% premium</div>
     </div>`;
   } else if (m.wagePriceSpiral > 0.05) {
     regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
+      <div class="mc-lbl" style="color:var(--warn);margin-bottom:3px">⚠ REGIME</div>
       <div class="mc-val warn" style="font-size:18px">WAGE SPIRAL</div>
-      <div class="mc-lbl" style="color:var(--warn);margin-top:3px">⚠ REGIME</div>
       <div class="mc-delta neg">+${m.wagePriceSpiral.toFixed(2)}% CPI</div>
     </div>`;
   }
 
   const trBadge = taylorRuleOn
     ? `<div class="mc" style="background:var(--accent-dim);border-left:3px solid var(--accent);">
+        <div class="mc-lbl" style="color:var(--accent);margin-bottom:3px">⚡ TAYLOR RULE</div>
         <div class="mc-val" style="font-size:20px;color:var(--accent)">${m.taylorFFR ? m.taylorFFR.toFixed(2) : '—'}%</div>
-        <div class="mc-lbl" style="color:var(--accent);margin-top:3px">⚡ TAYLOR RULE</div>
         <div class="mc-delta neu">Endogenous FFR</div>
       </div>`
     : '';
@@ -1523,6 +1883,27 @@ function buildContent() {
     </div>
   </div>`;
 
+  html += `<div class="section" id="sec-compare">
+    <div class="sec-hdr">
+      <div class="sec-title">Country Comparison</div>
+      <div class="sec-desc">Side-by-side key outputs for all six economies at their default 2026 settings. Current country highlighted. Switch economies from the header dropdown.</div>
+    </div>
+    <div class="annotation">&#9432; Each country uses its own calibrated baseline values. GDP and CPI figures reflect each country's trend growth — not deviations from a common baseline.</div>
+    <div class="cc-section-hdr">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">All outputs use country-specific defaults &amp; coefficient adjustments</div>
+      <button class="btn primary" onclick="renderCountryComparison()">&#8635; Refresh</button>
+    </div>
+    <div id="cc-table-wrap"><div style="color:var(--muted);font-family:var(--font-mono);font-size:11px">Click Refresh or switch to this tab to load comparison\u2026</div></div>
+    <div class="cc-note">
+      <strong style="color:var(--text)">Reading the table:</strong>
+      Green = healthy relative to each economy's own norms &nbsp;&bull;&nbsp; Amber = caution &nbsp;&bull;&nbsp; Red = stress.
+      All values are model-implied from current slider settings for each economy. The highlighted row is your currently active economy.
+      <br><br>
+      <strong style="color:var(--text)">Key structural differences:</strong>
+      Japan carries 260% debt/GDP (highest debt service burden). The Eurozone lacks fiscal union (lower fiscal multiplier). China's investment/GDP (~43%) is nearly 2.5x the US. EM economies have 2x the institutional quality sensitivity on GDP.
+    </div>
+  </div>`;
+
   html += `<div class="section" id="sec-history">
     <div class="sec-hdr">
       <div class="sec-title">Historical Scenario Validation</div>
@@ -1551,9 +1932,10 @@ function getSliderDef(id) {
 
 function buildSlider(sl) {
   const v = vals[sl.id];
+  const label = getCountryLabel(sl.id) || sl.label;
   return `<div class="slider-card">
     <div class="sl-top">
-      <div class="sl-label">${sl.label}</div>
+      <div class="sl-label">${label}</div>
       <div class="sl-val" id="v-${sl.id}">${sl.fmt(v)}</div>
     </div>
     <div class="sl-desc">${sl.desc}</div>
@@ -1612,12 +1994,14 @@ function buildEventCard(e) {
 }
 
 function showSection(id, btn) {
+  currentSection = id;
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const sec = document.getElementById('sec-' + id);
   if (sec) sec.classList.add('active');
   if (btn) btn.classList.add('active');
   if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
+  else if (id === 'compare') { setTimeout(renderCountryComparison, 0); }
   else if (id === 'scenarios') { renderScenarios(); }
   else if (id === 'sensitivity') { sensitivityVisible = true; renderSensitivity(compute(), true); }
   else { chartsVisible = false; if (id !== 'sensitivity') sensitivityVisible = false; }
@@ -2290,7 +2674,7 @@ const CAL_FIELDS = [
 ];
 
 function loadQ2Preset() {
-  const p = Q2_2026_ESTIMATES;
+  const p = (COUNTRY_CONFIGS[currentCountry] && COUNTRY_CONFIGS[currentCountry].q2) || Q2_2026_ESTIMATES;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
   set('cal-gdp',     p.gdp);
   set('cal-cpi',     p.cpi);
