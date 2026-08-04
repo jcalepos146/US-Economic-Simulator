@@ -138,6 +138,77 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .ev-chip.pos{background:var(--pos-dim);color:var(--pos);}
 .ev-chip.neg{background:var(--neg-dim);color:var(--neg);}
 
+
+/* === SHOCK ENGINE v4.2 === */
+.shock-toolbar{display:grid;grid-template-columns:minmax(260px,1.4fr) repeat(3,minmax(120px,.55fr));gap:9px;margin-bottom:12px;}
+.shock-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;min-width:0;}
+.shock-panel-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.15px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.shock-time-row{display:flex;align-items:center;gap:10px;}
+.shock-time-row input[type=range]{flex:1;}
+.shock-time-value{font-family:var(--font-mono);font-weight:700;color:var(--accent);font-size:15px;min-width:72px;text-align:right;}
+.shock-kpi{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.shock-kpi-sub{font-size:9.5px;color:var(--muted);font-family:var(--font-mono);margin-top:5px;}
+.shock-workbench{display:grid;grid-template-columns:minmax(320px,.92fr) minmax(380px,1.08fr);gap:12px;margin-bottom:15px;}
+.shock-inspector,.shock-attribution{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 14px;min-height:210px;}
+.shock-empty{display:flex;align-items:center;justify-content:center;text-align:center;min-height:170px;color:var(--muted);font-family:var(--font-mono);font-size:10.5px;line-height:1.6;border:1px dashed var(--border);border-radius:var(--r);padding:18px;}
+.si-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+.si-name{font-family:var(--font-cond);font-size:16px;font-weight:700;color:var(--text);line-height:1.2;}
+.si-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.shock-badge{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);background:var(--surface2);}
+.shock-badge.temporary{color:var(--warn);border-color:rgba(255,212,74,.28);background:var(--warn-dim);}
+.shock-badge.persistent{color:var(--info);border-color:rgba(74,158,255,.28);background:var(--info-dim);}
+.shock-badge.structural{color:var(--pos);border-color:rgba(0,212,122,.28);background:var(--pos-dim);}
+.si-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.si-field{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 9px;}
+.si-field.wide{grid-column:1/-1;}
+.si-label{font-family:var(--font-mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:5px;display:flex;justify-content:space-between;gap:8px;}
+.si-label strong{color:var(--accent);font-size:10px;}
+.si-field select,.si-field input[type=number]{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-mono);font-size:11px;}
+.si-actions{display:flex;gap:6px;margin-top:9px;}
+.si-actions .btn{flex:1;}
+.shock-channel-table{width:100%;border-collapse:collapse;margin-top:10px;font-family:var(--font-mono);font-size:9.5px;}
+.shock-channel-table th{text-align:left;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.6px;padding:5px 6px;border-bottom:1px solid var(--border);}
+.shock-channel-table td{padding:6px;border-bottom:1px solid var(--border);color:var(--text-dim);vertical-align:top;}
+.shock-channel-table td:last-child{text-align:right;color:var(--text);font-weight:700;}
+.shock-channel-note{font-size:8.5px;color:var(--muted);margin-top:2px;line-height:1.35;}
+.attr-output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 11px;}
+.attr-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px;text-align:center;}
+.attr-output-lbl{font-family:var(--font-mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;}
+.attr-output-val{font-family:var(--font-mono);font-size:15px;font-weight:700;margin-top:3px;color:var(--text);}
+.attr-output-val.pos{color:var(--pos);}.attr-output-val.neg{color:var(--neg);}
+.attr-event{border-top:1px solid var(--border);padding:8px 0;}
+.attr-event:first-of-type{border-top:none;}
+.attr-event-head{display:flex;justify-content:space-between;gap:9px;font-size:11px;color:var(--text);}
+.attr-event-head span:last-child{font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);white-space:nowrap;}
+.attr-event-sub{font-family:var(--font-mono);font-size:8.5px;color:var(--muted);margin-top:3px;line-height:1.45;}
+.attr-overlap{margin-top:8px;padding:7px 9px;border:1px solid rgba(255,212,74,.18);background:var(--warn-dim);border-radius:var(--r);font-family:var(--font-mono);font-size:9px;color:var(--warn);}
+.ev-card{position:relative;}
+.ev-card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.ev-card .shock-badge{flex-shrink:0;}
+.ev-timing{font-family:var(--font-mono);font-size:8.5px;color:var(--muted);margin-top:4px;}
+.ev-live{display:none;margin-top:7px;padding-top:6px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:9px;color:var(--accent);justify-content:space-between;gap:6px;align-items:center;}
+.ev-card.active .ev-live{display:flex;}
+.ev-config-btn{border:1px solid var(--accent-border);background:var(--accent-dim);color:var(--accent);font-family:var(--font-mono);font-size:8.5px;padding:2px 6px;border-radius:3px;cursor:pointer;}
+.ev-config-btn:hover{background:rgba(240,160,48,.18);}
+.custom-builder{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:13px;overflow:hidden;}
+.custom-builder summary{cursor:pointer;padding:11px 14px;font-family:var(--font-cond);font-size:13px;font-weight:700;color:var(--text);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+.custom-builder summary::-webkit-details-marker{display:none;}
+.custom-builder summary::after{content:'＋';font-family:var(--font-mono);color:var(--accent);}
+.custom-builder[open] summary::after{content:'−';}
+.custom-builder-body{padding:0 14px 14px;border-top:1px solid var(--border);}
+.custom-core-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:7px;margin-top:12px;}
+.custom-core-grid input,.custom-core-grid select,.custom-channel-row input,.custom-channel-row select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:10.5px;padding:7px 8px;border-radius:var(--r);outline:none;width:100%;}
+.custom-core-grid input:focus,.custom-core-grid select:focus,.custom-channel-row input:focus,.custom-channel-row select:focus{border-color:var(--accent);}
+.custom-channel-head,.custom-channel-row{display:grid;grid-template-columns:1.4fr .65fr .6fr .6fr;gap:7px;align-items:center;}
+.custom-channel-head{font-family:var(--font-mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:12px 0 5px;padding:0 3px;}
+.custom-channel-row{margin-bottom:6px;}
+.custom-builder-note{font-size:9.5px;color:var(--muted);line-height:1.45;margin:9px 0;font-family:var(--font-mono);}
+.shock-library-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 8px;}
+.shock-library-head input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:10px;padding:6px 9px;border-radius:var(--r);width:240px;outline:none;}
+.shock-library-head input:focus{border-color:var(--accent);}
+@media(max-width:1050px){.shock-toolbar{grid-template-columns:1fr 1fr}.shock-workbench{grid-template-columns:1fr}.custom-core-grid{grid-template-columns:1fr 1fr}.custom-channel-head,.custom-channel-row{grid-template-columns:1fr .7fr .65fr .65fr}}
+@media(max-width:620px){.shock-toolbar{grid-template-columns:1fr}.si-controls{grid-template-columns:1fr}.custom-core-grid{grid-template-columns:1fr}.custom-channel-head{display:none}.custom-channel-row{grid-template-columns:1fr 1fr}.custom-channel-row select:first-child{grid-column:1/-1}.attr-output-grid{grid-template-columns:1fr}.shock-library-head{align-items:stretch;flex-direction:column}.shock-library-head input{width:100%}}
+
 /* === EVENT LOG === */
 #elog{background:var(--surface);border-top:1px solid var(--border);padding:0 14px;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;font-size:10.5px;}
 .elog-empty{color:var(--muted);font-family:var(--font-mono);}
@@ -506,7 +577,7 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
 <div id="boot-screen" role="status" aria-live="polite" aria-label="MACROSCOPE initialization">
   <div class="boot-shell">
     <div class="boot-brand">MACRO<span>SCOPE</span></div>
-    <div class="boot-build">U.S. ECONOMIC OUTLOOK TERMINAL // STATIC BUILD 4.0</div>
+    <div class="boot-build">U.S. ECONOMIC OUTLOOK TERMINAL // STATIC BUILD 4.2</div>
     <div class="boot-log" id="boot-log"></div>
     <div class="boot-ready" id="boot-ready" style="display:none">SYSTEM READY <span class="boot-cursor"></span></div>
     <div class="boot-skip">CLICK OR PRESS ANY KEY TO CONTINUE</div>
@@ -582,7 +653,7 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
     <!-- CONTENT -->
     <div id="content-wrap">
       <main id="content"></main>
-      <div id="elog"><span class="elog-empty">No events active — inject scenarios via the Events panel</span></div>
+      <div id="elog"><span class="elog-empty">No shocks active — build a scenario in Events &amp; Shocks</span></div>
     </div>
 
   </div>
@@ -659,7 +730,11 @@ const DEFAULTS = {
   conflictIndex:6, natoCommit:6, chinaMilRisk:6, energyGeopolitics:5, dollarReserve:8, cyberRisk:6, allyRelations:6
 };
 let vals = {...DEFAULTS};
+// Active shock state is keyed by event id. Values are structured configs rather
+// than booleans, but legacy true/false states remain backward compatible.
 let activeEventIds = {};
+let selectedShockId = null;
+let shockProjectionMonth = 3;
 
 // ── CATEGORIES ───────────────────────────────────────────────────
 const CATEGORIES = [
@@ -1044,8 +1119,327 @@ const EVENTS = [
   {id:'em_debt_crisis',     label:'EM sovereign debt crisis — cascade default risk', cat:'EM – Bonds',    pos:false,
    chips:['RoL -1','FDI -2','HY +400bps','GDP -0.8%'],d:{ruleOfLaw:-1, fdiInflows:-2, hySpreads:400, creditImpulse:-2.5, gdpA:-0.80}},
 
+
 ];
 
+// ═══════════════════════════════════════════════════════════════════
+//  SHOCK ENGINE v4.2 — magnitude, timing, persistence, interactions
+// ═══════════════════════════════════════════════════════════════════
+const SHOCK_TYPE_DEFAULTS = {
+  temporary:  { durationMonths:9,   peakMonth:2,  decayRate:0.28, confidence:0.72 },
+  persistent: { durationMonths:36,  peakMonth:4,  decayRate:0.08, confidence:0.76 },
+  structural: { durationMonths:120, peakMonth:12, decayRate:0.00, confidence:0.70 }
+};
+
+const SHOCK_TARGET_LABELS = {
+  gdpA:'GDP direct effect', cpiA:'CPI direct effect', spA:'S&P proxy effect',
+  ffr:'Policy rate', qePace:'QE / QT pace', oil:'WTI oil', natgas:'Natural gas',
+  tariff:'Average tariff', shippingCost:'Shipping stress', portEff:'Port efficiency',
+  unemp:'Unemployment', lfp:'Labor-force participation', highSkillImmig:'High-skill immigration',
+  innovRate:'TFP benchmark', aiAdoption:'AI adoption', rdSpend:'R&D spending', stemGrowth:'STEM workforce growth',
+  privateCapex:'Private CAPEX', infraSpend:'Infrastructure spending', housingSupply:'Housing supply', zoning:'Zoning restrictiveness',
+  deficit:'Federal deficit', govSpend:'Government spending growth', corpTax:'Corporate tax',
+  igSpreads:'IG credit spreads', hySpreads:'HY credit spreads', creditImpulse:'Credit impulse', termPremium:'Term premium',
+  foreignDemand:'Foreign Treasury demand', dxy:'Dollar index', policyCert:'Policy certainty', ruleOfLaw:'Rule of law',
+  cbIndependence:'Central-bank independence', conflictIndex:'Conflict index', chinaMilRisk:'China military risk',
+  energyGeopolitics:'Energy geopolitics', commercialREStress:'Commercial real-estate stress', renewableShare:'Renewable share',
+  gridReliability:'Grid reliability', fdiInflows:'FDI inflows', nearshoring:'Nearshoring progress'
+};
+
+const CUSTOM_SHOCK_TARGETS = [
+  'gdpA','cpiA','spA','ffr','oil','natgas','tariff','shippingCost','unemp','lfp',
+  'innovRate','aiAdoption','privateCapex','housingSupply','deficit','govSpend',
+  'igSpreads','hySpreads','creditImpulse','termPremium','foreignDemand','dxy',
+  'policyCert','ruleOfLaw','conflictIndex','commercialREStress','gridReliability','nearshoring'
+];
+
+function escapeHtml(v) {
+  return String(v ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+
+function inferShockType(ev) {
+  if (ev.shockType) return ev.shockType;
+  const t = (ev.id + ' ' + ev.label + ' ' + ev.cat).toLowerCase();
+  if (/reform|act signed|tax cut|green card|zoning|self-sufficiency|partnership|governance|overhaul|completion|ratified|adopts|launched|permanent|productivity boom|demographic|immigration reform|visa expansion|talent exodus/.test(t)) return 'structural';
+  if (/strike|conflict|crisis|collapse|pandemic|shutdown|cyber|hurricane|shock|failure|attack|escalation|freeze|default|ceasefire|spr release/.test(t)) return 'temporary';
+  return 'persistent';
+}
+
+function inferShockGroup(ev, target) {
+  const cat = String(ev.cat || '').toLowerCase();
+  if (['igSpreads','hySpreads','creditImpulse','commercialREStress','foreignDemand','termPremium'].includes(target) || /bond/.test(cat)) return 'creditStress';
+  if (['oil','natgas','electricCost','renewableShare','spr','oilConflict','lngExport'].includes(target) || /energy/.test(cat)) return 'energySupply';
+  if (['shippingCost','portEff','tariff','chinaDecoupling','nearshoring','tradeBalance','fdiInflows'].includes(target) || /trade|infra/.test(cat)) return 'supplyChain';
+  if (['ffr','qePace','guidanceTone','ioer','ycc','cbIndependence'].includes(target) || /monetary/.test(cat)) return 'monetaryImpulse';
+  if (['deficit','govSpend','corpTax','incomeTax','capGainsTax','infraSpend','permitSpeed','fedPermit'].includes(target) || /fiscal|state/.test(cat)) return 'fiscalImpulse';
+  if (['innovRate','rdSpend','aiAdoption','vcFunding','stemGrowth','privateCapex','gridReliability'].includes(target) || /innovation|capex/.test(cat)) return 'productivity';
+  if (['housingSupply','zoning','pti','vacancyRate','housingAct'].includes(target) || /housing/.test(cat)) return 'housingSupply';
+  if (['unemp','lfp','highSkillImmig','skillsGap','autoDisplace','unionMem','minWage'].includes(target) || /labor/.test(cat)) return 'laborSupply';
+  if (['ruleOfLaw','policyCert','electoralStab','polarization','socialCapital','regCapture'].includes(target) || /pol\. econ/.test(cat)) return 'institutional';
+  if (/geopolit|global/.test(cat) || ['conflictIndex','chinaMilRisk','energyGeopolitics','cyberRisk','allyRelations'].includes(target)) return 'geopolitical';
+  return 'general';
+}
+
+function defaultChannelTiming(target, type) {
+  if (target === 'spA') return {lagMonths:0, peakMonth:1};
+  if (target === 'cpiA') return {lagMonths:1, peakMonth:type === 'structural' ? 9 : 3};
+  if (target === 'gdpA') return {lagMonths:type === 'temporary' ? 1 : 2, peakMonth:type === 'structural' ? 12 : type === 'persistent' ? 6 : 3};
+  if (['ffr','qePace','oil','natgas','dxy','igSpreads','hySpreads','termPremium','foreignDemand','creditImpulse','policyCert'].includes(target)) return {lagMonths:0, peakMonth:1};
+  return {lagMonths:type === 'structural' ? 2 : 1, peakMonth:type === 'structural' ? 10 : 3};
+}
+
+function enrichEventDefinition(ev) {
+  const type = inferShockType(ev);
+  const defaults = SHOCK_TYPE_DEFAULTS[type];
+  ev.shockType = type;
+  ev.durationMonths = Number.isFinite(ev.durationMonths) ? ev.durationMonths : defaults.durationMonths;
+  ev.peakMonth = Number.isFinite(ev.peakMonth) ? ev.peakMonth : defaults.peakMonth;
+  ev.decayRate = Number.isFinite(ev.decayRate) ? ev.decayRate : defaults.decayRate;
+  ev.confidence = Number.isFinite(ev.confidence) ? ev.confidence : defaults.confidence;
+  if (!Array.isArray(ev.channels)) {
+    ev.channels = Object.entries(ev.d || {}).map(([target, effect]) => {
+      const timing = defaultChannelTiming(target, type);
+      return {target, effect:+effect, group:inferShockGroup(ev, target), ...timing};
+    });
+  } else {
+    ev.channels = ev.channels.map(ch => ({
+      group:inferShockGroup(ev, ch.target),
+      ...defaultChannelTiming(ch.target, type),
+      ...ch,
+      effect:+ch.effect
+    }));
+  }
+  const hasEndogenousInput = ev.channels.some(ch => !['gdpA','cpiA','spA'].includes(ch.target));
+  ev.channels = ev.channels.map(ch => ({
+    ...ch,
+    // If a preset already changes a causal input, direct output channels are
+    // interpreted as residual effects rather than counted again in full.
+    residualWeight:Number.isFinite(ch.residualWeight) ? ch.residualWeight : (hasEndogenousInput && ['gdpA','cpiA','spA'].includes(ch.target) ? .65 : 1)
+  }));
+  return ev;
+}
+EVENTS.forEach(enrichEventDefinition);
+
+function findShock(id) { return EVENTS.find(e => e.id === id); }
+
+function defaultShockConfig(ev) {
+  return {
+    magnitude:1,
+    onsetMonth:0,
+    durationMonths:ev.durationMonths,
+    peakMonth:ev.peakMonth,
+    decayRate:ev.decayRate,
+    shockType:ev.shockType,
+    confidence:ev.confidence
+  };
+}
+
+function normalizeActiveShockConfig(id, raw) {
+  const ev = findShock(id);
+  if (!ev) return null;
+  const base = defaultShockConfig(ev);
+  if (!raw || raw === true) return base;
+  return {
+    ...base,
+    ...raw,
+    magnitude:Math.max(0, Math.min(3, +(raw.magnitude ?? base.magnitude))),
+    onsetMonth:Math.max(0, Math.min(60, +(raw.onsetMonth ?? base.onsetMonth))),
+    durationMonths:Math.max(1, Math.min(240, +(raw.durationMonths ?? base.durationMonths))),
+    peakMonth:Math.max(1, Math.min(120, +(raw.peakMonth ?? base.peakMonth))),
+    decayRate:Math.max(0, Math.min(1, +(raw.decayRate ?? base.decayRate))),
+    confidence:Math.max(.05, Math.min(1, +(raw.confidence ?? base.confidence)))
+  };
+}
+
+function normalizeAllActiveShocks() {
+  for (const id of Object.keys(activeEventIds)) {
+    const cfg = normalizeActiveShockConfig(id, activeEventIds[id]);
+    if (cfg) activeEventIds[id] = cfg; else delete activeEventIds[id];
+  }
+}
+
+function shockPathFactor(ev, cfg, channel, month=shockProjectionMonth) {
+  const start = cfg.onsetMonth + (channel.lagMonths || 0);
+  const elapsed = month - start;
+  if (elapsed < 0) return 0;
+  const type = cfg.shockType || ev.shockType;
+  const peak = Math.max(1, channel.peakMonth || cfg.peakMonth || ev.peakMonth || 1);
+  const duration = Math.max(1, cfg.durationMonths || ev.durationMonths || 12);
+  if (elapsed < peak) return Math.max(0, Math.min(1, (elapsed + 1) / peak));
+  if (type === 'structural') return 1;
+  if (type === 'persistent') {
+    if (elapsed <= duration) return 1;
+    return Math.exp(-(cfg.decayRate || .08) * (elapsed - duration));
+  }
+  if (elapsed >= duration) return 0;
+  return Math.exp(-(cfg.decayRate || .28) * (elapsed - peak));
+}
+
+function shockInteraction(ev, channel, s) {
+  let multiplier = 1;
+  const reasons = [];
+  const group = channel.group || inferShockGroup(ev, channel.target);
+  if (group === 'energySupply' && channel.target === 'cpiA') {
+    const labor = 1 + Math.max(0, 4.2 - s.unemp) * .07;
+    const dollar = 1 + Math.max(0, 104 - s.dxy) * .008;
+    multiplier *= labor * dollar;
+    if (labor > 1.01) reasons.push('tight labor amplifies pass-through');
+    if (dollar > 1.01) reasons.push('weaker dollar amplifies import prices');
+  }
+  if (group === 'fiscalImpulse' && channel.target === 'gdpA') {
+    const slack = 1 + Math.max(0, s.unemp - 4.2) * .10;
+    const crowd = Math.max(.62, 1 - Math.max(0, s.ffr - 3) * .055);
+    multiplier *= slack * crowd;
+    if (slack > 1.01) reasons.push('economic slack raises fiscal multiplier');
+    if (crowd < .99) reasons.push('high rates crowd out fiscal impact');
+  }
+  if (group === 'creditStress' && ['gdpA','spA'].includes(channel.target)) {
+    const stress = 1 + Math.max(0, s.hySpreads - 500) / 1800 + Math.max(0, s.commercialREStress - 6) * .05;
+    multiplier *= Math.min(1.55, stress);
+    if (stress > 1.03) reasons.push('existing credit stress amplifies losses');
+  }
+  if (group === 'monetaryImpulse' && channel.target === 'gdpA') {
+    const seizure = s.hySpreads > 800 ? .72 : 1;
+    const housing = 1 + Math.max(0, 45 - (100 - (s.pti - 3.5) * 8)) * .003;
+    multiplier *= seizure * Math.min(1.18, housing);
+    if (seizure < 1) reasons.push('credit seizure weakens rate transmission');
+    if (housing > 1.02) reasons.push('rate-sensitive housing amplifies transmission');
+  }
+  if (group === 'supplyChain' && ['gdpA','cpiA'].includes(channel.target)) {
+    const congestion = 1 + Math.max(0, s.shippingCost - 4) * .05 + Math.max(0, 6 - s.portEff) * .04;
+    multiplier *= Math.min(1.45, congestion);
+    if (congestion > 1.02) reasons.push('existing logistics stress compounds shock');
+  }
+  if (group === 'productivity' && channel.target === 'gdpA') {
+    const capacity = Math.max(.65, Math.min(1.25, .75 + s.stemGrowth * .04 + s.gridReliability * .025));
+    multiplier *= capacity;
+    if (capacity < .95) reasons.push('skills/grid constraints limit productivity gains');
+    if (capacity > 1.05) reasons.push('skills and grid capacity reinforce gains');
+  }
+  if (group === 'housingSupply' && ['gdpA','cpiA'].includes(channel.target)) {
+    const shortage = 1 + Math.max(0, s.pti - 6) * .035 + Math.max(0, 6 - s.vacancyRate) * .02;
+    multiplier *= Math.min(1.35, shortage);
+    if (shortage > 1.03) reasons.push('housing shortage magnifies reform impact');
+  }
+  return {multiplier, reasons};
+}
+
+const OVERLAP_WEIGHTS = [1, .55, .30, .18, .10, .06];
+
+function resolveActiveShocks(baseVals) {
+  normalizeAllActiveShocks();
+  const contributions = [];
+  for (const [id, rawCfg] of Object.entries(activeEventIds)) {
+    const ev = findShock(id);
+    if (!ev) continue;
+    const cfg = normalizeActiveShockConfig(id, rawCfg);
+    for (const channel of ev.channels) {
+      const timingFactor = shockPathFactor(ev, cfg, channel);
+      if (timingFactor <= 0) continue;
+      const interaction = shockInteraction(ev, channel, baseVals);
+      const raw = channel.effect * cfg.magnitude * timingFactor * interaction.multiplier * (channel.residualWeight ?? 1);
+      if (Math.abs(raw) < 1e-9) continue;
+      contributions.push({
+        eventId:id, eventLabel:ev.label, eventPos:ev.pos, category:ev.cat,
+        shockType:cfg.shockType, confidence:cfg.confidence,
+        target:channel.target, group:channel.group, baseEffect:channel.effect,
+        residualWeight:channel.residualWeight ?? 1,
+        timingFactor, interactionMultiplier:interaction.multiplier,
+        interactionReasons:interaction.reasons, raw, adjusted:raw, overlapWeight:1
+      });
+    }
+  }
+
+  // Diminishing marginal effects for shocks hitting the same target and direction.
+  // Opposing shocks are combined separately, so a positive offset is not unfairly
+  // discounted merely because a negative shock is also active.
+  const buckets = new Map();
+  for (const c of contributions) {
+    const key = c.target + '|' + (c.raw >= 0 ? 'pos' : 'neg');
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(c);
+  }
+  let rawAbsolute = 0, adjustedAbsolute = 0;
+  for (const list of buckets.values()) {
+    list.sort((a,b) => Math.abs(b.raw) - Math.abs(a.raw));
+    list.forEach((c, i) => {
+      c.overlapWeight = OVERLAP_WEIGHTS[Math.min(i, OVERLAP_WEIGHTS.length - 1)];
+      c.adjusted = c.raw * c.overlapWeight;
+      rawAbsolute += Math.abs(c.raw);
+      adjustedAbsolute += Math.abs(c.adjusted);
+    });
+  }
+
+  const effects = {};
+  for (const c of contributions) effects[c.target] = (effects[c.target] || 0) + c.adjusted;
+  const inputEffects = {}, outputEffects = {gdpA:0,cpiA:0,spA:0};
+  for (const [target, effect] of Object.entries(effects)) {
+    if (target in outputEffects) outputEffects[target] = effect;
+    else inputEffects[target] = effect;
+  }
+
+  const eventSummaries = Object.keys(activeEventIds).map(id => {
+    const ev = findShock(id); const cfg = normalizeActiveShockConfig(id, activeEventIds[id]);
+    const parts = contributions.filter(c => c.eventId === id);
+    const output = {gdpA:0,cpiA:0,spA:0};
+    parts.forEach(c => { if (c.target in output) output[c.target] += c.adjusted; });
+    const activeChannels = parts.length;
+    const timing = activeChannels ? Math.max(...parts.map(c => c.timingFactor)) : 0;
+    return {id, label:ev?.label || id, pos:ev?.pos, category:ev?.cat, config:cfg, output, activeChannels, timing};
+  });
+
+  return {
+    month:shockProjectionMonth, effects, inputEffects, outputEffects, contributions, eventSummaries,
+    overlapReduction:Math.max(0, rawAbsolute - adjustedAbsolute), rawAbsolute, adjustedAbsolute
+  };
+}
+
+function applyShockInputEffects(s, inputEffects) {
+  for (const [target, effect] of Object.entries(inputEffects)) {
+    if (s[target] === undefined) continue;
+    const sl = getSliderDef(target);
+    let value = s[target] + effect;
+    if (sl) value = Math.max(sl.min, Math.min(sl.max, value));
+    s[target] = +value.toFixed(4);
+  }
+}
+
+function shockTargetLabel(target) {
+  return SHOCK_TARGET_LABELS[target] || getSliderDef(target)?.label || target;
+}
+
+function formatSigned(n, decimals=2, suffix='') {
+  const v = Math.abs(n) < 1e-9 ? 0 : n;
+  return `${v > 0 ? '+' : ''}${v.toFixed(decimals)}${suffix}`;
+}
+
+function formatShockEffect(target, value) {
+  if (target === 'gdpA' || target === 'cpiA') return formatSigned(value, 2, 'pp');
+  if (target === 'spA') return formatSigned(value, 1, '%');
+  if (['igSpreads','hySpreads','termPremium'].includes(target)) return formatSigned(value, 0, 'bps');
+  if (target === 'oil') return `${value > 0 ? '+' : ''}$${value.toFixed(0)}`;
+  if (['ffr','unemp','lfp','innovRate','rdSpend','privateCapex','deficit','govSpend','tariff','housingSupply'].includes(target)) return formatSigned(value, 2);
+  return formatSigned(value, Math.abs(value) >= 10 ? 0 : 2);
+}
+
+function serializeCustomEvents() {
+  return EVENTS.filter(e => e.id.startsWith('custom_')).map(e => ({
+    id:e.id,label:e.label,cat:e.cat,pos:e.pos,chips:e.chips,shockType:e.shockType,
+    durationMonths:e.durationMonths,peakMonth:e.peakMonth,decayRate:e.decayRate,confidence:e.confidence,
+    channels:e.channels.map(ch => ({...ch}))
+  }));
+}
+
+function restoreCustomEvents(defs) {
+  if (!Array.isArray(defs)) return;
+  defs.forEach(raw => {
+    if (!raw?.id || findShock(raw.id)) return;
+    const ev = enrichEventDefinition({...raw, d:Object.fromEntries((raw.channels||[]).map(ch => [ch.target, ch.effect]))});
+    EVENTS.push(ev);
+    const n = +(String(ev.id).split('_').pop()) || 0;
+    customEventCount = Math.max(customEventCount, n);
+  });
+}
 
 
 // ── MULTI-COUNTRY SUPPORT ─────────────────────────────────────────
@@ -1173,6 +1567,8 @@ function switchCountry(id) {
   // Apply country defaults over global DEFAULTS
   vals = Object.assign({}, DEFAULTS, cc.defaults);
   activeEventIds = {};
+  selectedShockId = null;
+  shockProjectionMonth = 3;
 
   // Update BASELINES to country's baselines
   Object.assign(BASELINES, COUNTRY_CONFIGS.us.baselines); // reset
@@ -1427,6 +1823,8 @@ function loadHistoricalPreset(id) {
   // Reset to defaults first, then overlay preset values
   vals = Object.assign({}, DEFAULTS, preset.vals);
   activeEventIds = {};
+  selectedShockId = null;
+  shockProjectionMonth = 3;
   // Update all slider UI
   for (const cat of CATEGORIES) {
     for (const sl of cat.sliders) {
@@ -1529,20 +1927,13 @@ function polEconGdpImpact(s) {
 }
 
 function compute() {
-  // ── Merge event deltas ──────────────────────────────────────────
+  // ── Resolve structured scenario shocks ───────────────────────────
   const s = {...vals};
-  let gdpA = 0, cpiA = 0, spA = 0;
-  for (const eid of Object.keys(activeEventIds)) {
-    const ev = EVENTS.find(e => e.id === eid);
-    if (!ev) continue;
-    for (const [k, v] of Object.entries(ev.d)) {
-      if (k === 'gdpA') { gdpA += v; continue; }
-      if (k === 'cpiA') { cpiA += v; continue; }
-      if (k === 'spA')  { spA  += v; continue; }
-      if (k === 'gddA') { gdpA += v; continue; }
-      if (s[k] !== undefined) s[k] = +(s[k] + v).toFixed(3);
-    }
-  }
+  const shockState = resolveActiveShocks(s);
+  applyShockInputEffects(s, shockState.inputEffects);
+  const gdpA = shockState.outputEffects.gdpA || 0;
+  const cpiA = shockState.outputEffects.cpiA || 0;
+  const spA  = shockState.outputEffects.spA  || 0;
 
   // Horizon-weighted coefficients for all GDP categories
   const W = getHorizonWeights(timeHorizon);
@@ -1887,6 +2278,7 @@ function compute() {
     rowGrowth:          +rowGrowth.toFixed(2),
     rowSpillback:       +rowSpillback.toFixed(3),
     creditImpulseEffect:+creditImpulseEffect.toFixed(3),
+    shockReport:shockState,
     gdpContributions: {
       baseline:_gdpBase,
       Monetary:gdpMonetary,
@@ -1929,6 +2321,7 @@ function render() {
   const m = compute();
   renderMetrics(m);          // cheap — always immediate
   renderOverview(m);         // dashboard narrative + releases + diagnostics
+  renderShockWorkbench(m);   // active shock inspector + attribution (self-guards)
   scheduleHeavyRender();     // charts + sensitivity (Monte Carlo) debounced
   scheduleURLUpdate();       // keep shareable hash current
 }
@@ -2141,7 +2534,7 @@ function buildContent() {
   let html = `<div class="section active" id="sec-overview">
     <div class="ov-shell">
       <div class="ov-statusbar">
-        <div class="ov-status-left"><span class="ov-pill live">LIVE BASELINE</span><span class="ov-pill">MODEL v4.1</span><span class="ov-pill">${(COUNTRY_CONFIGS[currentCountry]||COUNTRY_CONFIGS.us).name}</span></div>
+        <div class="ov-status-left"><span class="ov-pill live">LIVE BASELINE</span><span class="ov-pill">MODEL v4.2</span><span class="ov-pill">${(COUNTRY_CONFIGS[currentCountry]||COUNTRY_CONFIGS.us).name}</span></div>
         <div class="ov-status-right"><span class="ov-pill" id="ov-data-status">CALENDAR PENDING</span><span class="ov-pill" id="ov-horizon-status">${timeHorizon}YR HORIZON</span></div>
       </div>
       <div class="ov-regime neutral" id="ov-regime"></div>
@@ -2412,40 +2805,82 @@ function onSlider(id, rawVal) {
   render();
 }
 
+function customTargetOptions(selected='') {
+  return CUSTOM_SHOCK_TARGETS.map(id => `<option value="${id}"${id===selected?' selected':''}>${escapeHtml(shockTargetLabel(id))}</option>`).join('');
+}
+
 function buildEventsSection() {
   const pos = EVENTS.filter(e => e.pos);
   const neg = EVENTS.filter(e => !e.pos);
+  const customRows = [0,1,2].map((_,i) => `<div class="custom-channel-row">
+    <select id="custom-target-${i}">${customTargetOptions(i===0?'gdpA':i===1?'cpiA':'spA')}</select>
+    <input id="custom-effect-${i}" type="number" step="0.05" value="${i===0?'0.25':i===1?'0':'3'}" aria-label="Channel effect">
+    <input id="custom-lag-${i}" type="number" min="0" max="60" step="1" value="${i===2?'0':'1'}" aria-label="Lag months">
+    <input id="custom-peak-${i}" type="number" min="1" max="120" step="1" value="${i===2?'1':'3'}" aria-label="Peak month">
+  </div>`).join('');
   return `<div class="section" id="sec-events">
     <div class="sec-hdr">
-      <div class="sec-title">Events &amp; Shock Injections</div>
-      <div class="sec-desc">Toggle preset scenarios or inject a custom event. Multiple events stack.</div>
+      <div class="sec-title">Events &amp; Structured Shock Engine</div>
+      <div class="sec-desc">Build time-dependent scenarios with magnitude, persistence, transmission lags, interaction effects, and overlap controls. Metrics show the state at the selected month after shock onset.</div>
     </div>
-    <div class="ev-custom">
-      <input id="ev-custom-txt" placeholder="Describe a custom event (e.g. Semiconductor tariff waiver)..." type="text" onkeydown="if(event.key==='Enter')addCustomEvent()">
-      <select id="ev-custom-impact">
-        <option value="2">Strongly positive</option>
-        <option value="1" selected>Mildly positive</option>
-        <option value="-1">Mildly negative</option>
-        <option value="-2">Strongly negative</option>
-      </select>
-      <button class="btn primary" onclick="addCustomEvent()">Inject ↗</button>
+
+    <div class="shock-toolbar">
+      <div class="shock-panel">
+        <div class="shock-panel-title">Scenario evaluation point</div>
+        <div class="shock-time-row">
+          <input id="shock-month-range" type="range" min="0" max="120" step="1" value="${shockProjectionMonth}" oninput="setShockProjectionMonth(this.value)">
+          <div class="shock-time-value" id="shock-month-value">Month ${shockProjectionMonth}</div>
+        </div>
+        <div class="shock-kpi-sub">Move through the shock path to see delayed, peak, and decaying effects.</div>
+      </div>
+      <div class="shock-panel"><div class="shock-panel-title">Active shocks</div><div class="shock-kpi" id="shock-active-count">0</div><div class="shock-kpi-sub">Scenario layers</div></div>
+      <div class="shock-panel"><div class="shock-panel-title">Active channels</div><div class="shock-kpi" id="shock-channel-count">0</div><div class="shock-kpi-sub">Transmitting now</div></div>
+      <div class="shock-panel"><div class="shock-panel-title">Overlap control</div><div class="shock-kpi" id="shock-overlap-kpi">0%</div><div class="shock-kpi-sub">Raw impact removed</div></div>
     </div>
+
+    <div class="shock-workbench">
+      <div class="shock-inspector" id="shock-inspector"></div>
+      <div class="shock-attribution" id="shock-attribution"></div>
+    </div>
+
+    <details class="custom-builder">
+      <summary>Create a custom structured shock <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted);font-weight:400">No AI or backend required</span></summary>
+      <div class="custom-builder-body">
+        <div class="custom-core-grid">
+          <input id="custom-shock-name" placeholder="Shock name — e.g. Semiconductor export embargo">
+          <select id="custom-shock-category"><option>Energy</option><option>Monetary</option><option>Fiscal</option><option>Trade</option><option>Housing</option><option>Labor</option><option>Innovation</option><option>Bonds</option><option>Geopolitical</option><option>Custom</option></select>
+          <select id="custom-shock-type"><option value="temporary">Temporary</option><option value="persistent" selected>Persistent</option><option value="structural">Structural</option></select>
+          <input id="custom-shock-duration" type="number" min="1" max="240" value="24" title="Duration in months" placeholder="Duration">
+        </div>
+        <div class="custom-core-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">
+          <input id="custom-shock-magnitude" type="number" min="0.05" max="3" step="0.05" value="1" title="Initial magnitude multiplier">
+          <input id="custom-shock-confidence" type="number" min="5" max="100" step="5" value="75" title="Impact confidence percent">
+          <input id="custom-shock-peak" type="number" min="1" max="120" step="1" value="4" title="Default peak month">
+          <input id="custom-shock-decay" type="number" min="0" max="1" step="0.01" value="0.08" title="Monthly decay rate">
+        </div>
+        <div class="custom-channel-head"><span>Target metric / input</span><span>Full effect</span><span>Lag</span><span>Peak</span></div>
+        ${customRows}
+        <div class="custom-builder-note">Effects are signed changes at 100% magnitude. GDP and CPI use percentage points; S&amp;P uses percent; spreads use basis points. Lag and peak are measured in months.</div>
+        <button class="btn primary" onclick="addCustomEvent()">Inject structured shock ↗</button>
+      </div>
+    </details>
+
+    <div class="shock-library-head"><div class="sec-title" style="font-size:13px">Preset shock library</div><input id="shock-filter" placeholder="Filter shocks…" oninput="filterShockCards(this.value)"></div>
     <div class="sec-title" style="font-size:13px;margin-bottom:8px;color:var(--pos);">▲ Positive Scenarios</div>
-    <div class="ev-grid" style="margin-bottom:14px">
-      ${pos.map(e => buildEventCard(e)).join('')}
-    </div>
+    <div class="ev-grid" id="positive-shock-grid" style="margin-bottom:14px">${pos.map(e => buildEventCard(e)).join('')}</div>
     <div class="sec-title" style="font-size:13px;margin-bottom:8px;color:var(--neg);">▼ Negative Shocks</div>
-    <div class="ev-grid">
-      ${neg.map(e => buildEventCard(e)).join('')}
-    </div>
+    <div class="ev-grid" id="negative-shock-grid">${neg.map(e => buildEventCard(e)).join('')}</div>
   </div>`;
 }
 
 function buildEventCard(e) {
-  return `<div class="ev-card ${e.pos?'pos-ev':'neg-ev'}" id="ec-${e.id}" onclick="toggleEvent('${e.id}')">
-    <div class="ev-title">${e.label}</div>
-    <div class="ev-cat">${e.cat}</div>
-    <div class="ev-chips">${e.chips.map(c=>`<span class="ev-chip ${e.pos?'pos':'neg'}">${c}</span>`).join('')}</div>
+  const cfg = activeEventIds[e.id] ? normalizeActiveShockConfig(e.id, activeEventIds[e.id]) : null;
+  const mag = cfg ? Math.round(cfg.magnitude * 100) : 100;
+  return `<div class="ev-card ${e.pos?'pos-ev':'neg-ev'}${cfg?' active':''}" id="ec-${e.id}" data-search="${escapeHtml((e.label+' '+e.cat+' '+e.shockType).toLowerCase())}" onclick="toggleEvent('${e.id}')">
+    <div class="ev-card-top"><div class="ev-title">${escapeHtml(e.label)}</div><span class="shock-badge ${e.shockType}">${e.shockType}</span></div>
+    <div class="ev-cat">${escapeHtml(e.cat)} · ${e.durationMonths}mo · peak M${e.peakMonth} · ${Math.round(e.confidence*100)}% confidence</div>
+    <div class="ev-chips">${(e.chips||[]).map(c=>`<span class="ev-chip ${e.pos?'pos':'neg'}">${escapeHtml(c)}</span>`).join('')}</div>
+    <div class="ev-live" id="ev-live-${e.id}"><span>${mag}% magnitude · Month ${shockProjectionMonth}</span><button class="ev-config-btn" onclick="event.stopPropagation();selectShock('${e.id}')">Configure</button></div>
   </div>`;
 }
 
@@ -2459,72 +2894,212 @@ function showSection(id, btn) {
   if (id === 'overview') { chartsVisible = false; sensitivityVisible = false; renderOverview(compute()); }
   else if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
   else if (id === 'calendar') { loadEconomicCalendar(); }
+  else if (id === 'events') { renderShockWorkbench(compute()); }
   else if (id === 'compare') { setTimeout(renderCountryComparison, 0); }
   else if (id === 'scenarios') { renderScenarios(); }
   else if (id === 'sensitivity') { sensitivityVisible = true; renderSensitivity(compute(), true); }
   else { chartsVisible = false; if (id !== 'sensitivity') sensitivityVisible = false; }
 }
 
-// ── EVENTS ───────────────────────────────────────────────────────
+// ── EVENTS & STRUCTURED SHOCKS ───────────────────────────────────
 let customEventCount = 0;
+
+function setShockProjectionMonth(raw) {
+  shockProjectionMonth = Math.max(0, Math.min(120, +raw || 0));
+  const label = document.getElementById('shock-month-value'); if (label) label.textContent = `Month ${shockProjectionMonth}`;
+  render();
+  renderEventLog();
+  commitChange();
+}
 
 function toggleEvent(id) {
   const card = document.getElementById('ec-' + id);
+  const ev = findShock(id);
+  if (!ev) return;
   if (activeEventIds[id]) {
     delete activeEventIds[id];
-    card.classList.remove('active');
+    if (selectedShockId === id) selectedShockId = Object.keys(activeEventIds)[0] || null;
+    if (card) card.classList.remove('active');
   } else {
-    activeEventIds[id] = true;
-    card.classList.add('active');
+    activeEventIds[id] = defaultShockConfig(ev);
+    selectedShockId = id;
+    if (card) card.classList.add('active');
   }
+  refreshShockCards();
   render();
   renderEventLog();
   commitChange();
+}
+
+function selectShock(id) {
+  if (!activeEventIds[id]) activeEventIds[id] = defaultShockConfig(findShock(id));
+  selectedShockId = id;
+  refreshShockCards();
+  renderShockWorkbench(compute());
+  renderEventLog();
+}
+
+function updateShockConfig(id, field, raw) {
+  const ev = findShock(id); if (!ev) return;
+  const cfg = normalizeActiveShockConfig(id, activeEventIds[id]);
+  let value = raw;
+  if (field !== 'shockType') value = +raw;
+  cfg[field] = value;
+  if (field === 'shockType') {
+    const d = SHOCK_TYPE_DEFAULTS[value] || SHOCK_TYPE_DEFAULTS.persistent;
+    cfg.durationMonths = d.durationMonths; cfg.peakMonth = d.peakMonth; cfg.decayRate = d.decayRate;
+  }
+  activeEventIds[id] = normalizeActiveShockConfig(id, cfg);
+  refreshShockCards();
+  render();
+  renderEventLog();
+  commitChange();
+}
+
+function resetShockConfig(id) {
+  const ev = findShock(id); if (!ev) return;
+  activeEventIds[id] = defaultShockConfig(ev);
+  render(); renderEventLog(); commitChange();
+}
+
+function clearAllShocks() {
+  activeEventIds = {}; selectedShockId = null;
+  refreshShockCards(); render(); renderEventLog(); commitChange();
+}
+
+function refreshShockCards() {
+  document.querySelectorAll('.ev-card').forEach(card => {
+    const id = card.id.replace(/^ec-/, '');
+    const cfg = activeEventIds[id] ? normalizeActiveShockConfig(id, activeEventIds[id]) : null;
+    card.classList.toggle('active', !!cfg);
+    const live = document.getElementById('ev-live-' + id);
+    if (live && cfg) {
+      const span = live.querySelector('span');
+      if (span) span.textContent = `${Math.round(cfg.magnitude*100)}% magnitude · Month ${shockProjectionMonth}`;
+    }
+  });
+}
+
+function renderShockWorkbench(m) {
+  const report = m?.shockReport || resolveActiveShocks(vals);
+  const countEl = document.getElementById('shock-active-count'); if (countEl) countEl.textContent = Object.keys(activeEventIds).length;
+  const chEl = document.getElementById('shock-channel-count'); if (chEl) chEl.textContent = report.contributions.length;
+  const overlapPct = report.rawAbsolute > 0 ? report.overlapReduction / report.rawAbsolute * 100 : 0;
+  const ovEl = document.getElementById('shock-overlap-kpi'); if (ovEl) ovEl.textContent = `${Math.round(overlapPct)}%`;
+  const range = document.getElementById('shock-month-range'); if (range) range.value = shockProjectionMonth;
+  const label = document.getElementById('shock-month-value'); if (label) label.textContent = `Month ${shockProjectionMonth}`;
+  renderShockInspector(report);
+  renderShockAttribution(report);
+  refreshShockCards();
+}
+
+function renderShockInspector(report) {
+  const host = document.getElementById('shock-inspector'); if (!host) return;
+  const ids = Object.keys(activeEventIds);
+  if (!ids.length) {
+    host.innerHTML = '<div class="shock-panel-title">Active shock inspector</div><div class="shock-empty">Activate a preset shock or create a custom one. The inspector will expose magnitude, timing, persistence, confidence, channel lags, interactions, and net effects.</div>';
+    return;
+  }
+  if (!selectedShockId || !activeEventIds[selectedShockId]) selectedShockId = ids[0];
+  const ev = findShock(selectedShockId); const cfg = normalizeActiveShockConfig(selectedShockId, activeEventIds[selectedShockId]);
+  const parts = report.contributions.filter(c => c.eventId === selectedShockId);
+  const rows = ev.channels.map(ch => {
+    const part = parts.find(c => c.target === ch.target);
+    const net = part ? formatShockEffect(ch.target, part.adjusted) : '—';
+    const residual = part && part.residualWeight < .999 ? `direct-output residual ×${part.residualWeight.toFixed(2)}` : '';
+    const interactionText = part?.interactionReasons?.length ? part.interactionReasons.join('; ') : 'No state interaction at this month';
+    const reason = [residual, interactionText].filter(Boolean).join('; ');
+    const overlap = part && part.overlapWeight < .999 ? ` · overlap ×${part.overlapWeight.toFixed(2)}` : '';
+    return `<tr><td>${escapeHtml(shockTargetLabel(ch.target))}<div class="shock-channel-note">${escapeHtml(ch.group)} · lag ${ch.lagMonths}mo · peak M${ch.peakMonth}</div></td><td>${formatShockEffect(ch.target,ch.effect)}</td><td>${part ? part.timingFactor.toFixed(2) : '0.00'}</td><td>${part ? part.interactionMultiplier.toFixed(2) : '—'}<div class="shock-channel-note">${escapeHtml(reason)}${overlap}</div></td><td>${net}</td></tr>`;
+  }).join('');
+  host.innerHTML = `<div class="shock-panel-title">Active shock inspector</div>
+    <div class="si-head"><div><div class="si-name">${escapeHtml(ev.label)}</div><div class="si-meta"><span class="shock-badge ${cfg.shockType}">${cfg.shockType}</span><span class="shock-badge">${escapeHtml(ev.cat)}</span><span class="shock-badge">${Math.round(cfg.confidence*100)}% confidence</span></div></div><button class="btn" onclick="toggleEvent('${ev.id}')">Remove</button></div>
+    <div class="si-controls">
+      <div class="si-field wide"><div class="si-label"><span>Magnitude</span><strong>${Math.round(cfg.magnitude*100)}%</strong></div><input type="range" min="0" max="2.5" step="0.05" value="${cfg.magnitude}" oninput="updateShockConfig('${ev.id}','magnitude',this.value)"></div>
+      <div class="si-field"><div class="si-label"><span>Shock class</span></div><select onchange="updateShockConfig('${ev.id}','shockType',this.value)"><option value="temporary"${cfg.shockType==='temporary'?' selected':''}>Temporary</option><option value="persistent"${cfg.shockType==='persistent'?' selected':''}>Persistent</option><option value="structural"${cfg.shockType==='structural'?' selected':''}>Structural</option></select></div>
+      <div class="si-field"><div class="si-label"><span>Confidence</span><strong>${Math.round(cfg.confidence*100)}%</strong></div><input type="range" min="0.05" max="1" step="0.05" value="${cfg.confidence}" oninput="updateShockConfig('${ev.id}','confidence',this.value)"></div>
+      <div class="si-field"><div class="si-label"><span>Onset month</span></div><input type="number" min="0" max="60" value="${cfg.onsetMonth}" onchange="updateShockConfig('${ev.id}','onsetMonth',this.value)"></div>
+      <div class="si-field"><div class="si-label"><span>Duration months</span></div><input type="number" min="1" max="240" value="${cfg.durationMonths}" onchange="updateShockConfig('${ev.id}','durationMonths',this.value)"></div>
+      <div class="si-field"><div class="si-label"><span>Peak month</span></div><input type="number" min="1" max="120" value="${cfg.peakMonth}" onchange="updateShockConfig('${ev.id}','peakMonth',this.value)"></div>
+      <div class="si-field"><div class="si-label"><span>Decay / month</span></div><input type="number" min="0" max="1" step="0.01" value="${cfg.decayRate}" onchange="updateShockConfig('${ev.id}','decayRate',this.value)"></div>
+    </div>
+    <div class="si-actions"><button class="btn" onclick="resetShockConfig('${ev.id}')">Reset shock</button><button class="btn" onclick="clearAllShocks()">Clear all</button></div>
+    <table class="shock-channel-table"><thead><tr><th>Channel</th><th>Full</th><th>Timing</th><th>Interaction</th><th>Net</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderShockAttribution(report) {
+  const host = document.getElementById('shock-attribution'); if (!host) return;
+  const out = report.outputEffects;
+  const outputCard = (label,target,value) => `<div class="attr-output"><div class="attr-output-lbl">${label}</div><div class="attr-output-val ${value>0?'pos':value<0?'neg':''}">${formatShockEffect(target,value)}</div></div>`;
+  if (!report.eventSummaries.length) {
+    host.innerHTML = '<div class="shock-panel-title">Shock attribution</div><div class="shock-empty">Net scenario transmission will appear here. Related shocks are automatically discounted using diminishing overlap weights rather than stacked one-for-one.</div>';
+    return;
+  }
+  const events = report.eventSummaries.map(s => {
+    const cfg=s.config; const parts=[];
+    if (Math.abs(s.output.gdpA)>.001) parts.push(`GDP ${formatShockEffect('gdpA',s.output.gdpA)}`);
+    if (Math.abs(s.output.cpiA)>.001) parts.push(`CPI ${formatShockEffect('cpiA',s.output.cpiA)}`);
+    if (Math.abs(s.output.spA)>.001) parts.push(`S&P ${formatShockEffect('spA',s.output.spA)}`);
+    const uncertainty = Math.round((1-cfg.confidence)*100);
+    return `<div class="attr-event"><div class="attr-event-head"><span>${escapeHtml(s.label)}</span><span>${Math.round(cfg.magnitude*100)}% · ${s.activeChannels} active channels</span></div><div class="attr-event-sub">${parts.join(' · ') || 'Direct input channels only'} · peak transmission ${(s.timing*100).toFixed(0)}% · impact uncertainty ±${uncertainty}%</div></div>`;
+  }).join('');
+  const overlapPct = report.rawAbsolute ? report.overlapReduction/report.rawAbsolute*100 : 0;
+  host.innerHTML = `<div class="shock-panel-title">Shock attribution · Month ${report.month}</div><div class="attr-output-grid">${outputCard('GDP direct','gdpA',out.gdpA)}${outputCard('CPI direct','cpiA',out.cpiA)}${outputCard('S&P proxy','spA',out.spA)}</div>${events}${report.overlapReduction>0.001?`<div class="attr-overlap">Overlap control removed ${overlapPct.toFixed(1)}% of gross same-channel impact. Largest shock receives full weight; additional same-direction shocks receive diminishing weights.</div>`:''}`;
 }
 
 function addCustomEvent() {
-  const txt  = document.getElementById('ev-custom-txt').value.trim();
-  const imp  = parseInt(document.getElementById('ev-custom-impact').value);
-  if (!txt) return;
-  const id   = 'custom_' + (++customEventCount);
-  const pos  = imp > 0;
-  const ev   = {
-    id, label: txt, cat:'Custom', pos,
-    chips: [imp === 2 ? 'GDP +0.6%' : imp === 1 ? 'GDP +0.25%' : imp === -1 ? 'GDP -0.25%' : 'GDP -0.6%'],
-    d: { gdpA: imp * 0.25, cpiA: imp * -0.05, spA: imp * 3 }
-  };
-  EVENTS.push(ev);
-  activeEventIds[id] = true;
-  // Add card to appropriate grid
-  const grids = document.querySelectorAll('.ev-grid');
-  const targetGrid = pos ? grids[0] : grids[1];
-  if (targetGrid) {
-    const div = document.createElement('div');
-    div.innerHTML = buildEventCard(ev);
-    const newCard = div.firstChild;
-    newCard.classList.add('active');
-    targetGrid.appendChild(newCard);
+  const name = document.getElementById('custom-shock-name')?.value.trim();
+  if (!name) { toast('Enter a custom shock name'); return; }
+  const type = document.getElementById('custom-shock-type').value;
+  const channels = [];
+  for (let i=0;i<3;i++) {
+    const target = document.getElementById(`custom-target-${i}`).value;
+    const effect = +document.getElementById(`custom-effect-${i}`).value;
+    if (!target || !Number.isFinite(effect) || Math.abs(effect)<1e-9) continue;
+    channels.push({target,effect,lagMonths:+document.getElementById(`custom-lag-${i}`).value||0,peakMonth:+document.getElementById(`custom-peak-${i}`).value||1});
   }
-  document.getElementById('ev-custom-txt').value = '';
-  render();
-  renderEventLog();
-  commitChange();
+  if (!channels.length) { toast('Add at least one non-zero channel'); return; }
+  const id = 'custom_' + (++customEventCount);
+  const gdp = channels.find(c=>c.target==='gdpA')?.effect || 0;
+  const cpi = channels.find(c=>c.target==='cpiA')?.effect || 0;
+  const sp = channels.find(c=>c.target==='spA')?.effect || 0;
+  const directional = gdp || sp/10 || -cpi;
+  const ev = enrichEventDefinition({
+    id,label:name,cat:document.getElementById('custom-shock-category').value,pos:directional>=0,
+    shockType:type,durationMonths:+document.getElementById('custom-shock-duration').value||SHOCK_TYPE_DEFAULTS[type].durationMonths,
+    peakMonth:+document.getElementById('custom-shock-peak').value||SHOCK_TYPE_DEFAULTS[type].peakMonth,
+    decayRate:+document.getElementById('custom-shock-decay').value||0,
+    confidence:(+document.getElementById('custom-shock-confidence').value||75)/100,
+    channels,
+    chips:channels.slice(0,3).map(c=>`${shockTargetLabel(c.target)} ${formatShockEffect(c.target,c.effect)}`)
+  });
+  EVENTS.push(ev);
+  activeEventIds[id] = {...defaultShockConfig(ev), magnitude:+document.getElementById('custom-shock-magnitude').value||1};
+  selectedShockId = id;
+  const grid = document.getElementById(ev.pos?'positive-shock-grid':'negative-shock-grid');
+  if (grid) grid.insertAdjacentHTML('beforeend', buildEventCard(ev));
+  document.getElementById('custom-shock-name').value='';
+  render(); renderEventLog(); commitChange();
+  toast('Structured shock injected');
+}
+
+function filterShockCards(query) {
+  const q=String(query||'').trim().toLowerCase();
+  document.querySelectorAll('.ev-card').forEach(card => { card.style.display = !q || (card.dataset.search||'').includes(q) ? '' : 'none'; });
 }
 
 function renderEventLog() {
-  const log  = document.getElementById('elog');
-  const ids  = Object.keys(activeEventIds);
-  if (!ids.length) {
-    log.innerHTML = '<span class="elog-empty">No events active — inject scenarios via the Events panel</span>';
-    return;
-  }
-  const label = '<span class="elog-label">ACTIVE EVENTS:</span>';
-  const chips = ids.map(id => {
-    const ev = EVENTS.find(e => e.id === id);
-    if (!ev) return '';
-    return `<span class="elog-chip ${ev.pos ? 'pos' : 'neg'}">${ev.label}<span class="elog-x" onclick="toggleEvent('${id}')">✕</span></span>`;
+  const log = document.getElementById('elog'); if (!log) return;
+  const ids = Object.keys(activeEventIds);
+  if (!ids.length) { log.innerHTML='<span class="elog-empty">No shocks active — build a scenario in Events &amp; Shocks</span>'; return; }
+  const report=resolveActiveShocks(vals);
+  const label='<span class="elog-label">ACTIVE SHOCKS:</span>';
+  const chips=ids.map(id=>{
+    const ev=findShock(id); const cfg=normalizeActiveShockConfig(id,activeEventIds[id]); const summary=report.eventSummaries.find(s=>s.id===id);
+    if(!ev||!cfg)return'';
+    return `<span class="elog-chip ${ev.pos?'pos':'neg'}" onclick="selectShock('${id}')">${escapeHtml(ev.label)} · ${Math.round(cfg.magnitude*100)}%${summary?.activeChannels===0?' · pending':''}<span class="elog-x" onclick="event.stopPropagation();toggleEvent('${id}')">✕</span></span>`;
   }).join('');
-  log.innerHTML = label + chips;
+  log.innerHTML=label+chips;
 }
 
 // ── SCENARIOS ────────────────────────────────────────────────────
@@ -2535,7 +3110,8 @@ function saveScenario() {
   const m    = compute();
   const sc   = {
     name, date: new Date().toLocaleString(),
-    vals: {...vals}, activeEventIds: {...activeEventIds},
+    vals: {...vals}, activeEventIds: JSON.parse(JSON.stringify(activeEventIds)),
+    shockProjectionMonth, customEvents:serializeCustomEvents(),
     out: { gdp: m.gdp, cpi: m.cpi, tenyr: m.tenyr, mortg: m.mortg, housingAff: m.housingAff, sp500: m.sp500, conf: m.conf }
   };
   if (scenarios.length >= 3) scenarios.shift();
@@ -2577,7 +3153,15 @@ function loadScenario(i) {
   const sc = scenarios[i];
   if (!sc) return;
   vals = {...DEFAULTS, ...sc.vals};
-  activeEventIds = {...(sc.activeEventIds || {})};
+  restoreCustomEvents(sc.customEvents);
+  activeEventIds = JSON.parse(JSON.stringify(sc.activeEventIds || {}));
+  normalizeAllActiveShocks();
+  shockProjectionMonth = Number.isFinite(sc.shockProjectionMonth) ? sc.shockProjectionMonth : 3;
+  selectedShockId = Object.keys(activeEventIds)[0] || null;
+  // Rebuild content so restored custom event cards are available.
+  buildContent();
+  const sectionBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + currentSection + "'"));
+  showSection(currentSection, sectionBtn || null);
   // Update all range inputs
   for (const [k, v] of Object.entries(vals)) {
     const el = document.getElementById('r-' + k);
@@ -2860,7 +3444,7 @@ function renderPolChart(m) {
 // ── EXPORT / RESET ───────────────────────────────────────────────
 function exportJSON() {
   const m    = compute();
-  const data = { metadata:{ name:document.getElementById('sc-name').value, timestamp:new Date().toISOString(), version:'MACROSCOPE v1.0' }, inputs:vals, activeEvents:Object.keys(activeEventIds), outputs:{ gdp:m.gdp, cpi:m.cpi, tfp:m.tfp, tenyr:m.tenyr, twoyr:m.twoyr, thirtyr:m.thirtyr, mortgage:m.mortg, yieldSpread:m.yldSprd, housingAffordability:m.housingAff, sp500:m.sp500, consumerConfidence:m.conf, deficitPctGDP:m.defAdj, dollar:m.dollarAdj } };
+  const data = { metadata:{ name:document.getElementById('sc-name').value, timestamp:new Date().toISOString(), version:'MACROSCOPE v4.2', shockProjectionMonth }, inputs:vals, activeShocks:JSON.parse(JSON.stringify(activeEventIds)), customShockDefinitions:serializeCustomEvents(), shockAttribution:m.shockReport, outputs:{ gdp:m.gdp, cpi:m.cpi, tfp:m.tfp, tenyr:m.tenyr, twoyr:m.twoyr, thirtyr:m.thirtyr, mortgage:m.mortg, yieldSpread:m.yldSprd, housingAffordability:m.housingAff, sp500:m.sp500, consumerConfidence:m.conf, deficitPctGDP:m.defAdj, dollar:m.dollarAdj } };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(blob);
@@ -2871,6 +3455,8 @@ function exportJSON() {
 function resetAll() {
   vals = {...DEFAULTS};
   activeEventIds = {};
+  selectedShockId = null;
+  shockProjectionMonth = 3;
   for (const cat of CATEGORIES) {
     for (const sl of cat.sliders) {
       const el = document.getElementById('r-' + sl.id);
@@ -3316,8 +3902,9 @@ function encodeState() {
   if (currentCountry !== 'us') o.c = currentCountry;
   if (timeHorizon !== 1) o.h = timeHorizon;
   if (taylorRuleOn) o.t = 1;
-  const ev = Object.keys(activeEventIds).filter(id => !id.startsWith('custom_'));
-  if (ev.length) o.e = ev.join(',');
+  const ev = Object.fromEntries(Object.entries(activeEventIds).filter(([id]) => !id.startsWith('custom_')).map(([id,cfg]) => [id, normalizeActiveShockConfig(id,cfg)]));
+  if (Object.keys(ev).length) o.e = ev;
+  if (shockProjectionMonth !== 3) o.m = shockProjectionMonth;
   const d = {};
   for (const id in vals) {
     const def = getSliderDefault(id);
@@ -3376,7 +3963,10 @@ function applyStateFromURL() {
   if (o.h) timeHorizon = +o.h;
   taylorRuleOn = !!o.t;
   activeEventIds = {};
-  if (o.e) o.e.split(',').forEach(id => { if (EVENTS.find(e => e.id === id)) activeEventIds[id] = true; });
+  if (typeof o.e === 'string') o.e.split(',').forEach(id => { if (findShock(id)) activeEventIds[id] = defaultShockConfig(findShock(id)); });
+  else if (o.e && typeof o.e === 'object') for (const [id,cfg] of Object.entries(o.e)) { if (findShock(id)) activeEventIds[id] = normalizeActiveShockConfig(id,cfg); }
+  shockProjectionMonth = Number.isFinite(+o.m) ? Math.max(0,Math.min(120,+o.m)) : 3;
+  selectedShockId = Object.keys(activeEventIds)[0] || null;
   if (o.v) for (const id in o.v) { if (vals[id] !== undefined) vals[id] = o.v[id]; }
   return true;
 }
@@ -3389,14 +3979,15 @@ function syncControlsToState() {
   if (trb) { trb.textContent = taylorRuleOn ? '\u26a1 Taylor Rule: ON' : '\u26a1 Taylor Rule: OFF'; trb.classList.toggle('on', taylorRuleOn); }
   const ffrCard = document.getElementById('r-ffr');
   if (ffrCard && ffrCard.closest('.slider-card')) ffrCard.closest('.slider-card').classList.toggle('tr-active', taylorRuleOn);
-  document.querySelectorAll('.ev-card').forEach(c => c.classList.remove('active'));
-  Object.keys(activeEventIds).forEach(id => { const c = document.getElementById('ec-' + id); if (c) c.classList.add('active'); });
+  normalizeAllActiveShocks();
+  refreshShockCards();
+  const range = document.getElementById('shock-month-range'); if (range) range.value = shockProjectionMonth;
   renderEventLog();
 }
 
 // ── [#7] UNDO / REDO ──────────────────────────────────────────────
 let undoStack = [], redoStack = [];
-function snapshot() { return { vals: {...vals}, events: {...activeEventIds}, timeHorizon, currentCountry, taylorRuleOn }; }
+function snapshot() { return { vals:{...vals}, events:JSON.parse(JSON.stringify(activeEventIds)), customEvents:serializeCustomEvents(), shockProjectionMonth, timeHorizon, currentCountry, taylorRuleOn }; }
 let committed = snapshot();
 
 function commitChange() {
@@ -3414,7 +4005,11 @@ function restoreSnapshot(s) {
   timeHorizon    = s.timeHorizon;
   taylorRuleOn   = s.taylorRuleOn;
   vals           = {...s.vals};
-  activeEventIds = {...s.events};
+  restoreCustomEvents(s.customEvents);
+  activeEventIds = JSON.parse(JSON.stringify(s.events || {}));
+  normalizeAllActiveShocks();
+  shockProjectionMonth = Number.isFinite(s.shockProjectionMonth) ? s.shockProjectionMonth : 3;
+  selectedShockId = Object.keys(activeEventIds)[0] || null;
   Object.assign(BASELINES, COUNTRY_CONFIGS.us.baselines);
   const cc = COUNTRY_CONFIGS[currentCountry];
   if (cc) {
@@ -3517,7 +4112,8 @@ function exportCSV() {
   rows.push(['META', 'Country', currentCountry]);
   rows.push(['META', 'Horizon (yr)', timeHorizon]);
   rows.push(['META', 'Taylor Rule', taylorRuleOn ? 'ON' : 'OFF']);
-  rows.push(['META', 'Active Events', Object.keys(activeEventIds).join('; ')]);
+  rows.push(['META', 'Shock Evaluation Month', shockProjectionMonth]);
+  rows.push(['META', 'Active Shocks', Object.entries(activeEventIds).map(([id,cfg]) => `${id}@${Math.round(normalizeActiveShockConfig(id,cfg).magnitude*100)}%`).join('; ')]);
   rows.push(['META', 'Generated', new Date().toISOString()]);
   const csv = rows.map(r => r.map(cell => {
     const s = String(cell);
