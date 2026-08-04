@@ -8,7 +8,7 @@ This script is designed for GitHub Actions + GitHub Pages. It:
 - retries transient HTTP/network failures with exponential backoff;
 - writes data/economic-calendar.json atomically;
 - preserves a previously generated non-empty calendar if FRED is temporarily
-  unreachable, allowing Pages deployment to continue with stale data.
+  unreachable, allowing Pages deployment to continue with stale data..
 
 Usage:
     FRED_API_KEY=your_key python scripts/update_calendar.py
