@@ -4,7 +4,7 @@
 
 ## Live site
 
-🌐 **[Open MACROSCOPE](https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPOSITORY/)**
+🌐 **[Open MACROSCOPE](](https://jcalepos146.github.io/US-Economic-Simulator/)/)**
 
 Replace `YOUR-GITHUB-USERNAME` and `YOUR-REPOSITORY` with the values from your GitHub Pages URL after deployment.
 
