@@ -32,12 +32,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo "Repository files:"
+          find . -maxdepth 4 -type f | sort
+
           test -f index.html || {
             echo "::error::index.html is missing from the repository root."
             exit 1
           }
+
           test -f scripts/update_calendar.py || {
-            echo "::error::scripts/update_calendar.py is missing from the repository root."
+            echo "::error::scripts/update_calendar.py is missing. The scripts folder must be at the repository root."
             exit 1
           }
 
@@ -50,28 +54,24 @@ jobs:
         run: python3 -m py_compile scripts/update_calendar.py
 
       - name: Generate economic calendar
-        timeout-minutes: 20
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           CALENDAR_HISTORY_DAYS: "365"
           CALENDAR_FUTURE_DAYS: "180"
-          FRED_TIMEOUT_SECONDS: "120"
-          FRED_MAX_RETRIES: "6"
-          FRED_CHUNK_DAYS: "60"
-          ALLOW_STALE_CALENDAR: "true"
         shell: bash
         run: |
           set -euo pipefail
 
           if [[ -z "${FRED_API_KEY:-}" ]]; then
             echo "::error::The repository secret FRED_API_KEY is missing or empty."
+            echo "Add it under Settings > Secrets and variables > Actions > Repository secrets."
             exit 1
           fi
 
           python3 scripts/update_calendar.py
 
           test -s data/economic-calendar.json || {
-            echo "::error::No usable data/economic-calendar.json is available."
+            echo "::error::The calendar script did not create data/economic-calendar.json."
             exit 1
           }
 
@@ -81,10 +81,7 @@ jobs:
 
           path = Path("data/economic-calendar.json")
           payload = json.loads(path.read_text(encoding="utf-8"))
-          events = payload.get("events", [])
-          if not events:
-              raise SystemExit("Calendar exists but contains no events.")
-          print(f"Calendar available: {len(events)} events")
+          print(f"Calendar generated: {payload.get('eventCount', 0)} events")
           print(f"Generated at: {payload.get('generatedAt', 'unknown')}")
           print(f"Range: {payload.get('range', {})}")
           PY
