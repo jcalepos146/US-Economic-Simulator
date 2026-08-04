@@ -570,6 +570,30 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
 @media(max-width:1100px){.ov-headline-grid{grid-template-columns:repeat(3,1fr)}.ov-headline:nth-child(3){border-right:none}.ov-headline:nth-child(n+4){border-top:1px solid var(--border)}.ov-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.ov-regime-row{flex-direction:column}.ov-confidence{text-align:left}.ov-headline-grid{grid-template-columns:1fr 1fr}.ov-headline{border-top:1px solid var(--border)}.ov-headline:nth-child(odd){border-right:1px solid var(--border)}.ov-headline:nth-child(even){border-right:none}.ov-headline:first-child,.ov-headline:nth-child(2){border-top:none}.ov-water-row,.ov-risk-row{grid-template-columns:110px 1fr 54px}.ov-next-release{grid-template-columns:1fr}.ov-release-row{grid-template-columns:68px 1fr}}
 
+/* === PHASE B: OFFICIAL DATA SYNCHRONIZATION === */
+.obs-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--border);background:var(--surface);margin-bottom:12px;}
+.obs-toolbar-left,.obs-toolbar-right{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.obs-status{font-family:var(--font-mono);font-size:9px;letter-spacing:.7px;text-transform:uppercase;padding:4px 8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-dim);}
+.obs-status.live{color:var(--pos);border-color:rgba(0,212,122,.32);background:var(--pos-dim);}.obs-status.partial{color:var(--warn);border-color:rgba(255,212,74,.32);background:var(--warn-dim);}.obs-status.off{color:var(--muted);}
+.obs-summary{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);background:var(--surface);margin-bottom:12px;}
+.obs-summary-cell{padding:10px 12px;border-right:1px solid var(--border);}.obs-summary-cell:last-child{border-right:none;}
+.obs-summary-label{font-family:var(--font-mono);font-size:8px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);}
+.obs-summary-value{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--text);margin-top:3px;}
+.obs-summary-sub{font-family:var(--font-mono);font-size:8px;color:var(--muted);margin-top:2px;}
+.obs-category{margin-top:13px;}.obs-category-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:7px 2px 5px;border-bottom:1px solid var(--border);}
+.obs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:7px;margin-top:7px;}
+.obs-card{border:1px solid var(--border);background:var(--surface);padding:10px 11px;min-width:0;}.obs-card:hover{border-color:var(--border2);background:var(--surface2);}
+.obs-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}.obs-name{font-size:12px;font-weight:600;color:var(--text);}.obs-series{font-family:var(--font-mono);font-size:8px;color:var(--muted);margin-top:2px;}
+.obs-value{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--info);text-align:right;white-space:nowrap;}.obs-date{font-family:var(--font-mono);font-size:8px;color:var(--muted);text-align:right;margin-top:2px;}
+.obs-details{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid var(--border);}.obs-detail-label{font-family:var(--font-mono);font-size:7.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}.obs-detail-value{font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);margin-top:2px;}
+.obs-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;}.obs-badge{font-family:var(--font-mono);font-size:7.5px;padding:2px 5px;border:1px solid var(--border2);color:var(--muted);text-transform:uppercase;}.obs-badge.input{color:var(--accent);border-color:var(--accent-border);background:var(--accent-dim);}.obs-badge.output{color:var(--info);border-color:rgba(74,158,255,.28);background:var(--info-dim);}.obs-badge.stale{color:var(--warn);border-color:rgba(255,212,74,.28);background:var(--warn-dim);}.obs-badge.fallback{color:var(--neg);border-color:rgba(255,64,85,.25);background:var(--neg-dim);}
+.obs-note{font-family:var(--font-mono);font-size:9px;line-height:1.55;color:var(--muted);padding:9px 11px;margin-top:12px;border:1px solid var(--border);background:var(--surface2);}
+.sl-source{font-family:var(--font-mono);font-size:8px;color:var(--info);margin-top:4px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}.sl-source.user{color:var(--accent);}.sl-source-tag{padding:1px 5px;border:1px solid rgba(74,158,255,.22);background:var(--info-dim);}.sl-source.user .sl-source-tag{border-color:var(--accent-border);background:var(--accent-dim);}
+.release-row.has-data{grid-template-columns:105px minmax(170px,1fr) minmax(150px,.7fr) 92px 74px;}.release-actual{font-family:var(--font-mono);font-size:9px;color:var(--info);line-height:1.45;}.release-actual strong{color:var(--text);font-weight:700;}
+@media(max-width:900px){.obs-summary{grid-template-columns:1fr 1fr}.obs-summary-cell:nth-child(2){border-right:none}.obs-summary-cell:nth-child(n+3){border-top:1px solid var(--border)}.release-row.has-data{grid-template-columns:90px 1fr}.release-row.has-data .release-actual,.release-row.has-data .release-source,.release-row.has-data .release-state{grid-column:2;text-align:left}}
+@media(max-width:600px){.obs-summary{grid-template-columns:1fr}.obs-summary-cell{border-right:none;border-top:1px solid var(--border)}.obs-summary-cell:first-child{border-top:none}.obs-grid{grid-template-columns:1fr}.obs-details{grid-template-columns:1fr 1fr}}
+
+
 </style>
 </head>
 <body>
@@ -730,6 +754,19 @@ const DEFAULTS = {
   conflictIndex:6, natoCommit:6, chinaMilRisk:6, energyGeopolitics:5, dollarReserve:8, cyberRisk:6, allyRelations:6
 };
 let vals = {...DEFAULTS};
+
+// Phase B official-data state. Observations are loaded from the generated static
+// JSON; the browser never receives or requests the FRED API key.
+let officialData = null;
+let officialSyncEnabled = false;
+let officialBaselineVals = null;
+let officialAppliedAt = null;
+let officialCalibrationBypass = false;
+let officialCalibration = {gdp:0,cpi:0,tenyr:0,twoyr:0,mortg:0};
+let sharedStateRestored = false;
+let officialSyncRequestedFromShare = false;
+let pendingSharedSliderOverrides = null;
+
 // Active shock state is keyed by event id. Values are structured configs rather
 // than booleans, but legacy true/false states remain backward compatible.
 let activeEventIds = {};
@@ -892,6 +929,7 @@ const CATEGORIES = [
 ];
 
 const ANALYSIS_SECTIONS = [
+  { id:'observed',    label:'Official Data', icon:'◉' },
   { id:'calendar',    label:'Economic Calendar', icon:'▤' },
   { id:'events',      label:'Events & Shocks', icon:'◬' },
   { id:'charts',      label:'Charts & Analysis', icon:'◫' },
@@ -1564,7 +1602,8 @@ function switchCountry(id) {
   if (flagEl) flagEl.textContent = cc.flag;
   document.getElementById('country-select').value = id;
 
-  // Apply country defaults over global DEFAULTS
+  // Apply country defaults over global DEFAULTS. Official synchronization is U.S.-only.
+  officialSyncEnabled = false; officialBaselineVals = null; officialCalibration = {gdp:0,cpi:0,tenyr:0,twoyr:0,mortg:0};
   vals = Object.assign({}, DEFAULTS, cc.defaults);
   activeEventIds = {};
   selectedShockId = null;
@@ -1576,6 +1615,8 @@ function switchCountry(id) {
 
   // Rebuild content (updates labels + slider positions)
   buildContent();
+
+  if (id === 'us' && officialData) applyOfficialBaseline({silent:true, skipRebuild:true, force:true});
 
   // Restore section
   const btn = Array.from(document.querySelectorAll('.nav-item'))
@@ -1990,6 +2031,7 @@ function compute() {
 
   // [2] CPI self-reinforcement above 6% (second-round effects, expectations unanchoring)
   if (cpi > 6) cpi += (cpi - 6) * 0.12;
+  cpi += officialCalibrationBypass || !officialSyncEnabled ? 0 : (officialCalibration.cpi || 0);
   cpi = Math.max(0, Math.min(22, cpi));
 
   // ── [1] DEBT SERVICE FEEDBACK LOOP ─────────────────────────────
@@ -2022,10 +2064,13 @@ function compute() {
   // [2] Nonlinearity: deficit > 10% triggers additional premium (Liz Truss moment)
   if (effectiveDeficit > 10) tenyr += (effectiveDeficit - 10) * 0.13;
 
+  tenyr += officialCalibrationBypass || !officialSyncEnabled ? 0 : (officialCalibration.tenyr || 0);
   tenyr = Math.max(0.5, Math.min(12, tenyr));
 
-  const twoyr  = Math.max(0.2, s.ffr * 0.88 + 0.3
+  let twoyr  = Math.max(0.2, s.ffr * 0.88 + 0.3
                   - (s.guidanceTone < 5 ? (5 - s.guidanceTone) * 0.12 : 0));
+  twoyr += officialCalibrationBypass || !officialSyncEnabled ? 0 : (officialCalibration.twoyr || 0);
+  twoyr = Math.max(0.2, Math.min(12, twoyr));
   const fiveyr  = (twoyr + tenyr) / 2 + 0.1;
   const thirtyr = Math.min(12, tenyr + 0.3 + (s.termPremium - 30) * 0.002);
   const yldSprd = tenyr - twoyr;
@@ -2034,10 +2079,12 @@ function compute() {
   const inversionPenalty = yldSprd < -0.5 ? (Math.abs(yldSprd + 0.5)) * 0.18 : 0;
 
   // Mortgage: 10yr + 2.1% + credit stress
-  const mortg = Math.max(3, Math.min(14,
+  let mortg = Math.max(3, Math.min(14,
     tenyr + 2.1
     + (s.igSpreads - 100) * 0.0025
-    + (s.hySpreads > 700 ? (s.hySpreads - 700) / 1300 * 0.6 : 0))); // [2] nonlinear spread passthrough
+    + (s.hySpreads > 700 ? (s.hySpreads - 700) / 1300 * 0.6 : 0)));
+  mortg += officialCalibrationBypass || !officialSyncEnabled ? 0 : (officialCalibration.mortg || 0);
+  mortg = Math.max(3, Math.min(14, mortg)); // [2] nonlinear spread passthrough
 
   // ── [3] CROSS-VARIABLE AMPLIFIERS ─────────────────────────────
   // HY > 800bps: credit seizure propagates to CAPEX and hiring
@@ -2121,6 +2168,7 @@ function compute() {
       + (s.allyRelations - 6) * 0.012;
   const gdpCredit = creditSeizureGdp + creditImpulseEffect;
   const gdpEvents = gdpA;
+  const gdpOfficialCalibration = officialCalibrationBypass || !officialSyncEnabled ? 0 : (officialCalibration.gdp || 0);
 
   let gdp = _gdpBase
     + gdpMonetary
@@ -2134,7 +2182,8 @@ function compute() {
     + gdpPoliticalEconomy
     + gdpGeopolitics
     + gdpCredit
-    + gdpEvents;
+    + gdpEvents
+    + gdpOfficialCalibration;
 
   gdp = Math.max(-8, Math.min(10, gdp));
 
@@ -2293,6 +2342,7 @@ function compute() {
       Geopolitics:gdpGeopolitics,
       'Credit Conditions':gdpCredit,
       'Scenario Events':gdpEvents,
+      'Official Data Calibration':gdpOfficialCalibration,
       'Recession Feedback':-recessionAmplifier,
       'Global Spillback':rowSpillback,
       'Wealth Effects':wealthEffect
@@ -2405,6 +2455,14 @@ function getOverviewReference(m) {
     const stored = JSON.parse(localStorage.getItem('macroscope_overview_reference') || 'null');
     if (stored && stored.country === currentCountry && stored.horizon === timeHorizon) overviewReference = stored;
   } catch (_) {}
+  if (!overviewReference && officialSyncEnabled && officialBaselineVals) {
+    const saveVals = vals, saveEvents = activeEventIds;
+    vals = {...officialBaselineVals}; activeEventIds = {};
+    const anchored = compute();
+    vals = saveVals; activeEventIds = saveEvents;
+    overviewReference = overviewSnapshot(anchored);
+    overviewReference.capturedAt = null;
+  }
   if (!overviewReference) overviewReference = {
     country:currentCountry, horizon:timeHorizon, capturedAt:null,
     gdp:BASELINES.gdp, cpi:BASELINES.cpi, unemp:4.0, recessionRisk:20,
@@ -2444,11 +2502,11 @@ function renderOverview(m) {
   }
 
   const cards = [
-    ['GDP Nowcast',`${m.gdp.toFixed(1)}%`,'Model output',m.gdp<0?'bad':m.gdp<1.5?'warn':'good'],
-    ['Inflation',`${m.cpi.toFixed(1)}%`,'Model output',m.cpi>5?'bad':m.cpi>3.5?'warn':''],
-    ['Unemployment',`${m.unemp.toFixed(1)}%`,'Input state',m.unemp>6?'bad':m.unemp>4.8?'warn':''],
+    ['GDP Nowcast',`${m.gdp.toFixed(1)}%`,officialSyncEnabled?'Official-anchored model':'Model output',m.gdp<0?'bad':m.gdp<1.5?'warn':'good'],
+    ['Inflation',`${m.cpi.toFixed(1)}%`,officialSyncEnabled?'Official-anchored model':'Model output',m.cpi>5?'bad':m.cpi>3.5?'warn':''],
+    ['Unemployment',`${m.unemp.toFixed(1)}%`,officialSyncEnabled?'Observed baseline / scenario':'Input state',m.unemp>6?'bad':m.unemp>4.8?'warn':''],
     ['Recession Risk',`${Math.round(m.recessionRisk)}%`,'Deterministic model score',m.recessionRisk>60?'bad':m.recessionRisk>35?'warn':'good'],
-    ['10yr Treasury',`${m.tenyr.toFixed(2)}%`,'Model output',m.tenyr>6?'bad':m.tenyr>5?'warn':'']
+    ['10yr Treasury',`${m.tenyr.toFixed(2)}%`,officialSyncEnabled?'Official-anchored model':'Model output',m.tenyr>6?'bad':m.tenyr>5?'warn':'']
   ];
   const cardEl = document.getElementById('ov-headlines');
   if (cardEl) cardEl.innerHTML = cards.map(c => `<div class="ov-headline"><div class="ov-headline-label">${c[0]}</div><div class="ov-headline-value ${c[3]}">${c[1]}</div><div class="ov-headline-meta">${c[2]}</div></div>`).join('');
@@ -2492,7 +2550,7 @@ function renderOverview(m) {
   const generated = economicCalendar?.generatedAt ? new Date(economicCalendar.generatedAt) : null;
   const ageHours = generated && !Number.isNaN(generated.getTime()) ? (Date.now()-generated.getTime())/36e5 : null;
   const dataPill = document.getElementById('ov-data-status');
-  if (dataPill) { dataPill.className=`ov-pill ${ageHours!==null&&ageHours<=36?'live':'stale'}`; dataPill.textContent=ageHours===null?'CALENDAR PENDING':ageHours<=36?`DATA ${Math.round(ageHours)}H AGO`:`DATA ${Math.round(ageHours/24)}D OLD`; }
+  if (dataPill) { const synced=officialSyncEnabled&&officialData; dataPill.className=`ov-pill ${synced?'live':ageHours!==null&&ageHours<=36?'live':'stale'}`; dataPill.textContent=synced?`OFFICIAL ${officialData.seriesCount||0} SERIES`:ageHours===null?'CALENDAR PENDING':ageHours<=36?`CALENDAR ${Math.round(ageHours)}H AGO`:`CALENDAR ${Math.round(ageHours/24)}D OLD`; }
 }
 
 function renderOverviewReleases() {
@@ -2534,7 +2592,7 @@ function buildContent() {
   let html = `<div class="section active" id="sec-overview">
     <div class="ov-shell">
       <div class="ov-statusbar">
-        <div class="ov-status-left"><span class="ov-pill live">LIVE BASELINE</span><span class="ov-pill">MODEL v4.2</span><span class="ov-pill">${(COUNTRY_CONFIGS[currentCountry]||COUNTRY_CONFIGS.us).name}</span></div>
+        <div class="ov-status-left"><span class="ov-pill live">LIVE BASELINE</span><span class="ov-pill">MODEL v4.3</span><span class="ov-pill">${(COUNTRY_CONFIGS[currentCountry]||COUNTRY_CONFIGS.us).name}</span></div>
         <div class="ov-status-right"><span class="ov-pill" id="ov-data-status">CALENDAR PENDING</span><span class="ov-pill" id="ov-horizon-status">${timeHorizon}YR HORIZON</span></div>
       </div>
       <div class="ov-regime neutral" id="ov-regime"></div>
@@ -2561,6 +2619,21 @@ function buildContent() {
       </div>
     </div>`;
   }
+
+  // Official economic observations and live-baseline synchronization
+  html += `<div class="section" id="sec-observed">
+    <div class="sec-hdr">
+      <div class="sec-title">Official U.S. Economic Data</div>
+      <div class="sec-desc">Latest mapped FRED observations, previous-period values, revisions, freshness, and the inputs or outputs they anchor in MACROSCOPE. Synchronization changes the U.S. live baseline; scenario deviations remain editable.</div>
+    </div>
+    <div class="obs-toolbar">
+      <div class="obs-toolbar-left"><span class="obs-status off" id="obs-sync-status">DATA PENDING</span><span class="obs-status" id="obs-generated-status">STATIC SNAPSHOT</span></div>
+      <div class="obs-toolbar-right"><button class="btn primary" onclick="applyOfficialBaseline({force:true})">Synchronize Official Baseline</button><button class="btn" onclick="restoreModelDefaults()">Use Model Defaults</button><button class="btn" onclick="loadEconomicCalendar(true)">&#8635; Refresh Snapshot</button></div>
+    </div>
+    <div class="obs-summary" id="obs-summary"></div>
+    <div id="obs-content"><div class="release-empty">Loading official observations…</div></div>
+    <div class="obs-note">Observed input mappings directly set compatible sliders. GDP, CPI, Treasury yields, and mortgage rates are used as transparent additive calibration anchors so scenario changes continue to move the model around the latest observed state. “Previous” means the prior observation period; “revision” compares the current value with FRED’s initial-release value when available.</div>
+  </div>`;
 
   // Economic release calendar
   html += `<div class="section" id="sec-calendar">
@@ -2755,6 +2828,7 @@ function buildSlider(sl) {
       </div>
     </div>
     <div class="sl-desc">${sl.desc}</div>
+    ${sliderOfficialSourceHtml(sl.id)}
     <input type="range" min="${sl.min}" max="${sl.max}" step="${sl.step}" value="${v}" id="r-${sl.id}"
       oninput="onSlider('${sl.id}', this.value)" onchange="commitChange()">
     <div class="sl-range"><span>${sl.fmt(sl.min)}</span><span>${sl.fmt(sl.max)}</span></div>
@@ -2763,6 +2837,7 @@ function buildSlider(sl) {
 
 // Default value for a slider, accounting for current country overrides
 function getSliderDefault(id) {
+  if (currentCountry === 'us' && officialSyncEnabled && officialBaselineVals && officialBaselineVals[id] !== undefined) return officialBaselineVals[id];
   const cc = COUNTRY_CONFIGS[currentCountry];
   if (cc && cc.defaults && cc.defaults[id] !== undefined) return cc.defaults[id];
   return DEFAULTS[id];
@@ -2893,6 +2968,7 @@ function showSection(id, btn) {
   if (btn) btn.classList.add('active');
   if (id === 'overview') { chartsVisible = false; sensitivityVisible = false; renderOverview(compute()); }
   else if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
+  else if (id === 'observed') { renderOfficialData(); }
   else if (id === 'calendar') { loadEconomicCalendar(); }
   else if (id === 'events') { renderShockWorkbench(compute()); }
   else if (id === 'compare') { setTimeout(renderCountryComparison, 0); }
@@ -3111,7 +3187,7 @@ function saveScenario() {
   const sc   = {
     name, date: new Date().toLocaleString(),
     vals: {...vals}, activeEventIds: JSON.parse(JSON.stringify(activeEventIds)),
-    shockProjectionMonth, customEvents:serializeCustomEvents(),
+    shockProjectionMonth, customEvents:serializeCustomEvents(), officialSyncEnabled,
     out: { gdp: m.gdp, cpi: m.cpi, tenyr: m.tenyr, mortg: m.mortg, housingAff: m.housingAff, sp500: m.sp500, conf: m.conf }
   };
   if (scenarios.length >= 3) scenarios.shift();
@@ -3152,6 +3228,9 @@ function renderScenarios() {
 function loadScenario(i) {
   const sc = scenarios[i];
   if (!sc) return;
+  officialSyncEnabled = !!sc.officialSyncEnabled && currentCountry==='us' && !!officialData;
+  if (officialSyncEnabled) { officialBaselineVals = Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS.us||{}).defaults||{}, officialData.baseline?.inputs||{}); calculateOfficialCalibration(); }
+  else { officialBaselineVals=null; officialCalibration=emptyOfficialCalibration(); }
   vals = {...DEFAULTS, ...sc.vals};
   restoreCustomEvents(sc.customEvents);
   activeEventIds = JSON.parse(JSON.stringify(sc.activeEventIds || {}));
@@ -3444,7 +3523,7 @@ function renderPolChart(m) {
 // ── EXPORT / RESET ───────────────────────────────────────────────
 function exportJSON() {
   const m    = compute();
-  const data = { metadata:{ name:document.getElementById('sc-name').value, timestamp:new Date().toISOString(), version:'MACROSCOPE v4.2', shockProjectionMonth }, inputs:vals, activeShocks:JSON.parse(JSON.stringify(activeEventIds)), customShockDefinitions:serializeCustomEvents(), shockAttribution:m.shockReport, outputs:{ gdp:m.gdp, cpi:m.cpi, tfp:m.tfp, tenyr:m.tenyr, twoyr:m.twoyr, thirtyr:m.thirtyr, mortgage:m.mortg, yieldSpread:m.yldSprd, housingAffordability:m.housingAff, sp500:m.sp500, consumerConfidence:m.conf, deficitPctGDP:m.defAdj, dollar:m.dollarAdj } };
+  const data = { metadata:{ name:document.getElementById('sc-name').value, timestamp:new Date().toISOString(), version:'MACROSCOPE v4.3', shockProjectionMonth, officialSyncEnabled, officialDataGeneratedAt:officialData?.generatedAt||null }, inputs:vals, activeShocks:JSON.parse(JSON.stringify(activeEventIds)), customShockDefinitions:serializeCustomEvents(), shockAttribution:m.shockReport, outputs:{ gdp:m.gdp, cpi:m.cpi, tfp:m.tfp, tenyr:m.tenyr, twoyr:m.twoyr, thirtyr:m.thirtyr, mortgage:m.mortg, yieldSpread:m.yldSprd, housingAffordability:m.housingAff, sp500:m.sp500, consumerConfidence:m.conf, deficitPctGDP:m.defAdj, dollar:m.dollarAdj } };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(blob);
@@ -3453,16 +3532,18 @@ function exportJSON() {
 }
 
 function resetAll() {
-  vals = {...DEFAULTS};
+  const base = (currentCountry==='us' && officialSyncEnabled && officialBaselineVals) ? officialBaselineVals : Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS[currentCountry]||{}).defaults||{});
+  vals = {...base};
   activeEventIds = {};
   selectedShockId = null;
   shockProjectionMonth = 3;
   for (const cat of CATEGORIES) {
     for (const sl of cat.sliders) {
       const el = document.getElementById('r-' + sl.id);
-      if (el) el.value = DEFAULTS[sl.id];
+      const baseVal = base[sl.id] !== undefined ? base[sl.id] : DEFAULTS[sl.id];
+      if (el) el.value = baseVal;
       const vEl = document.getElementById('v-' + sl.id);
-      if (vEl) vEl.textContent = sl.fmt(DEFAULTS[sl.id]);
+      if (vEl) vEl.textContent = sl.fmt(baseVal);
     }
   }
   document.querySelectorAll('.ev-card').forEach(c => c.classList.remove('active'));
@@ -3902,6 +3983,7 @@ function encodeState() {
   if (currentCountry !== 'us') o.c = currentCountry;
   if (timeHorizon !== 1) o.h = timeHorizon;
   if (taylorRuleOn) o.t = 1;
+  o.x = officialSyncEnabled ? 1 : 0;
   const ev = Object.fromEntries(Object.entries(activeEventIds).filter(([id]) => !id.startsWith('custom_')).map(([id,cfg]) => [id, normalizeActiveShockConfig(id,cfg)]));
   if (Object.keys(ev).length) o.e = ev;
   if (shockProjectionMonth !== 3) o.m = shockProjectionMonth;
@@ -3962,11 +4044,14 @@ function applyStateFromURL() {
   }
   if (o.h) timeHorizon = +o.h;
   taylorRuleOn = !!o.t;
+  officialSyncRequestedFromShare = o.x === 1;
+  officialSyncEnabled = false;
   activeEventIds = {};
   if (typeof o.e === 'string') o.e.split(',').forEach(id => { if (findShock(id)) activeEventIds[id] = defaultShockConfig(findShock(id)); });
   else if (o.e && typeof o.e === 'object') for (const [id,cfg] of Object.entries(o.e)) { if (findShock(id)) activeEventIds[id] = normalizeActiveShockConfig(id,cfg); }
   shockProjectionMonth = Number.isFinite(+o.m) ? Math.max(0,Math.min(120,+o.m)) : 3;
   selectedShockId = Object.keys(activeEventIds)[0] || null;
+  pendingSharedSliderOverrides = o.v && typeof o.v === 'object' ? {...o.v} : {};
   if (o.v) for (const id in o.v) { if (vals[id] !== undefined) vals[id] = o.v[id]; }
   return true;
 }
@@ -3987,7 +4072,7 @@ function syncControlsToState() {
 
 // ── [#7] UNDO / REDO ──────────────────────────────────────────────
 let undoStack = [], redoStack = [];
-function snapshot() { return { vals:{...vals}, events:JSON.parse(JSON.stringify(activeEventIds)), customEvents:serializeCustomEvents(), shockProjectionMonth, timeHorizon, currentCountry, taylorRuleOn }; }
+function snapshot() { return { vals:{...vals}, events:JSON.parse(JSON.stringify(activeEventIds)), customEvents:serializeCustomEvents(), shockProjectionMonth, timeHorizon, currentCountry, taylorRuleOn, officialSyncEnabled }; }
 let committed = snapshot();
 
 function commitChange() {
@@ -4004,6 +4089,7 @@ function restoreSnapshot(s) {
   currentCountry = s.currentCountry;
   timeHorizon    = s.timeHorizon;
   taylorRuleOn   = s.taylorRuleOn;
+  officialSyncEnabled = !!s.officialSyncEnabled && currentCountry==='us' && !!officialData;
   vals           = {...s.vals};
   restoreCustomEvents(s.customEvents);
   activeEventIds = JSON.parse(JSON.stringify(s.events || {}));
@@ -4016,6 +4102,13 @@ function restoreSnapshot(s) {
     Object.assign(BASELINES, cc.baselines);
     const flagEl = document.getElementById('country-flag'); if (flagEl) flagEl.textContent = cc.flag;
     const sel = document.getElementById('country-select'); if (sel) sel.value = currentCountry;
+  }
+  if (officialSyncEnabled && officialData && currentCountry==='us') {
+    officialBaselineVals = Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS.us||{}).defaults||{}, officialData.baseline?.inputs||{});
+    calculateOfficialCalibration();
+  } else {
+    officialCalibration = emptyOfficialCalibration();
+    officialBaselineVals = null;
   }
   buildContent(); // rebuilds sliders (values + modified state) from vals
   const btn = Array.from(document.querySelectorAll('.nav-item'))
@@ -4112,6 +4205,8 @@ function exportCSV() {
   rows.push(['META', 'Country', currentCountry]);
   rows.push(['META', 'Horizon (yr)', timeHorizon]);
   rows.push(['META', 'Taylor Rule', taylorRuleOn ? 'ON' : 'OFF']);
+  rows.push(['META', 'Official Data Sync', officialSyncEnabled ? 'ON' : 'OFF']);
+  rows.push(['META', 'Official Data Generated', officialData?.generatedAt || '']);
   rows.push(['META', 'Shock Evaluation Month', shockProjectionMonth]);
   rows.push(['META', 'Active Shocks', Object.entries(activeEventIds).map(([id,cfg]) => `${id}@${Math.round(normalizeActiveShockConfig(id,cfg).magnitude*100)}%`).join('; ')]);
   rows.push(['META', 'Generated', new Date().toISOString()]);
@@ -4265,6 +4360,224 @@ function wireKeyboard() {
 
 
 
+
+// ── PHASE B: OFFICIAL DATA SYNCHRONIZATION ───────────────────────
+function emptyOfficialCalibration() { return {gdp:0,cpi:0,tenyr:0,twoyr:0,mortg:0}; }
+
+function officialObservationForInput(id) {
+  const obs = officialData?.observations || {};
+  return Object.values(obs).find(o => o && o.inputTarget === id) || null;
+}
+
+function officialObservationForOutput(id) {
+  const obs = officialData?.observations || {};
+  return Object.values(obs).find(o => o && o.outputTarget === id) || null;
+}
+
+function formatOfficialValue(obs, value) {
+  if (!obs || value === null || value === undefined || !Number.isFinite(+value)) return '—';
+  const digits = Number.isFinite(+obs.precision) ? +obs.precision : 2;
+  const num = (+value).toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+  if (String(obs.units||'').startsWith('$')) return '$' + num;
+  return `${num}${String(obs.units||'').includes('%') ? '%' : ''}`;
+}
+
+function sliderOfficialSourceHtml(id) {
+  const obs = officialObservationForInput(id);
+  if (!obs || currentCountry !== 'us') return '';
+  const baseline = officialBaselineVals?.[id];
+  const overridden = officialSyncEnabled && Number.isFinite(+baseline) && Math.abs((vals[id]??0)-baseline)>1e-9;
+  const cls = overridden ? 'sl-source user' : 'sl-source';
+  const label = overridden ? 'USER OVERRIDE' : officialSyncEnabled ? 'OFFICIAL BASELINE' : 'OFFICIAL AVAILABLE';
+  return `<div class="${cls}"><span class="sl-source-tag">${label}</span><span>FRED ${escapeCalendarHtml(obs.seriesId)} · ${escapeCalendarHtml(obs.observationDate||'')}</span></div>`;
+}
+
+function modelCountryDefaults() {
+  const cc = COUNTRY_CONFIGS[currentCountry] || COUNTRY_CONFIGS.us;
+  return Object.assign({}, DEFAULTS, cc.defaults || {});
+}
+
+function syncSliderDomFromVals() {
+  for (const cat of CATEGORIES) for (const sl of cat.sliders) {
+    const value = vals[sl.id];
+    const range = document.getElementById('r-' + sl.id); if (range) range.value = value;
+    const out = document.getElementById('v-' + sl.id); if (out) out.textContent = sl.fmt(value);
+  }
+  refreshAllModified();
+}
+
+function calculateOfficialCalibration() {
+  const outputTargets = officialData?.baseline?.outputs || {};
+  const savedVals = vals;
+  const savedEvents = activeEventIds;
+  const savedTaylor = taylorRuleOn;
+  const savedMonth = shockProjectionMonth;
+  vals = {...(officialBaselineVals || modelCountryDefaults())};
+  activeEventIds = {};
+  taylorRuleOn = false;
+  shockProjectionMonth = 0;
+  officialCalibration = emptyOfficialCalibration();
+  officialCalibrationBypass = false;
+  try {
+    // Sequential anchoring respects transmission: CPI first, then yields,
+    // mortgage, and finally GDP after all financial-condition effects.
+    let baseline = compute();
+    if (Number.isFinite(+outputTargets.cpi) && Number.isFinite(+baseline.cpi)) officialCalibration.cpi = +outputTargets.cpi - +baseline.cpi;
+    baseline = compute();
+    for (const key of ['tenyr','twoyr']) {
+      if (Number.isFinite(+outputTargets[key]) && Number.isFinite(+baseline[key])) officialCalibration[key] = +outputTargets[key] - +baseline[key];
+    }
+    baseline = compute();
+    if (Number.isFinite(+outputTargets.mortg) && Number.isFinite(+baseline.mortg)) officialCalibration.mortg = +outputTargets.mortg - +baseline.mortg;
+    if (Number.isFinite(+outputTargets.gdp)) {
+      // GDP feeds back through global spillovers and wealth effects, so solve
+      // the additive anchor iteratively rather than assuming a one-pass offset.
+      for (let i=0;i<4;i++) {
+        baseline = compute();
+        if (!Number.isFinite(+baseline.gdp)) break;
+        officialCalibration.gdp += +outputTargets.gdp - +baseline.gdp;
+      }
+    }
+  } finally {
+    vals = savedVals;
+    activeEventIds = savedEvents;
+    taylorRuleOn = savedTaylor;
+    shockProjectionMonth = savedMonth;
+  }
+}
+
+function applyOfficialBaseline(options={}) {
+  const {silent=false, skipRebuild=false, force=false} = options;
+  if (!officialData || currentCountry !== 'us') { if (!silent) toast('Official U.S. data are not available'); return false; }
+  const inputs = officialData.baseline?.inputs || {};
+  if (!force && sharedStateRestored) return false;
+  officialSyncEnabled = true;
+  officialBaselineVals = Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS.us||{}).defaults||{}, inputs);
+  for (const [id,value] of Object.entries(inputs)) {
+    const sl = getSliderDef(id);
+    if (!sl || !Number.isFinite(+value)) continue;
+    vals[id] = Math.max(sl.min, Math.min(sl.max, +value));
+    officialBaselineVals[id] = vals[id];
+  }
+  calculateOfficialCalibration();
+  officialAppliedAt = new Date().toISOString();
+  overviewReference = null;
+  if (!skipRebuild) {
+    buildContent();
+    const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => (b.getAttribute('onclick')||'').includes(`'${currentSection}'`));
+    showSection(currentSection, btn || null);
+  } else syncSliderDomFromVals();
+  renderOfficialData();
+  render();
+  if (!silent) { toast(`Official baseline synchronized from ${officialData.seriesCount||0} series`); commitChange(); }
+  return true;
+}
+
+function restoreModelDefaults() {
+  officialSyncEnabled = false;
+  officialBaselineVals = null;
+  officialCalibration = emptyOfficialCalibration();
+  officialAppliedAt = null;
+  vals = modelCountryDefaults();
+  activeEventIds = {};
+  selectedShockId = null;
+  buildContent();
+  const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => (b.getAttribute('onclick')||'').includes(`'${currentSection}'`));
+  showSection(currentSection, btn || null);
+  renderEventLog();
+  renderOfficialData();
+  render();
+  commitChange();
+  toast('Restored model defaults');
+}
+
+function canAutoApplyOfficialBaseline() {
+  if (sharedStateRestored || currentCountry !== 'us' || Object.keys(activeEventIds).length) return false;
+  const base = modelCountryDefaults();
+  return Object.keys(base).every(k => vals[k] === undefined || Math.abs((vals[k]??0)-(base[k]??0)) < 1e-9);
+}
+
+function ingestOfficialData(payload) {
+  const next = payload?.officialData;
+  if (!next || typeof next !== 'object' || !next.observations || !Object.keys(next.observations).length) { officialData = null; officialSyncEnabled=false; officialCalibration=emptyOfficialCalibration(); renderOfficialData(); return; }
+  const priorBaseline = officialBaselineVals ? {...officialBaselineVals} : null;
+  const priorVals = {...vals};
+  const wasSynced = officialSyncEnabled && currentCountry === 'us' && !!priorBaseline;
+  officialData = next;
+  if (sharedStateRestored && officialSyncRequestedFromShare && currentCountry === 'us') {
+    officialSyncEnabled = true;
+    officialBaselineVals = Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS.us||{}).defaults||{}, officialData.baseline?.inputs||{});
+    vals = Object.assign({}, officialBaselineVals, pendingSharedSliderOverrides || {});
+    calculateOfficialCalibration();
+    officialAppliedAt = new Date().toISOString();
+    buildContent();
+    const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => (b.getAttribute('onclick')||'').includes(`'${currentSection}'`));
+    showSection(currentSection, btn || null);
+    renderOfficialData();
+    render();
+  } else if (wasSynced) {
+    // Rebase the open scenario onto the new official baseline. User changes are
+    // preserved as deltas from the previous baseline, while newly released
+    // observations replace the underlying economic state.
+    officialBaselineVals = Object.assign({}, DEFAULTS, (COUNTRY_CONFIGS.us||{}).defaults||{}, officialData.baseline?.inputs||{});
+    vals = {...officialBaselineVals};
+    for (const [id,oldValue] of Object.entries(priorVals)) {
+      if (!Number.isFinite(+oldValue) || !Number.isFinite(+priorBaseline[id]) || !Number.isFinite(+officialBaselineVals[id])) continue;
+      const delta = +oldValue - +priorBaseline[id];
+      const sl = getSliderDef(id);
+      vals[id] = sl ? Math.max(sl.min,Math.min(sl.max,+officialBaselineVals[id]+delta)) : +officialBaselineVals[id]+delta;
+    }
+    calculateOfficialCalibration();
+    officialAppliedAt = new Date().toISOString();
+    overviewReference = null;
+    buildContent();
+    const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => (b.getAttribute('onclick')||'').includes(`'${currentSection}'`));
+    showSection(currentSection, btn || null);
+    renderOfficialData();
+    render();
+    toast('Official snapshot updated; scenario deviations preserved');
+  } else if (canAutoApplyOfficialBaseline()) applyOfficialBaseline({silent:true, skipRebuild:false, force:true});
+  else renderOfficialData();
+}
+
+function renderOfficialData() {
+  const content = document.getElementById('obs-content');
+  const summary = document.getElementById('obs-summary');
+  const syncStatus = document.getElementById('obs-sync-status');
+  const generatedStatus = document.getElementById('obs-generated-status');
+  if (!content || !summary) return;
+  if (!officialData) {
+    summary.innerHTML = '';
+    content.innerHTML = '<div class="release-empty">Official observations are not present in this snapshot. Run the Phase B updater through GitHub Actions.</div>';
+    if (syncStatus) { syncStatus.className='obs-status off'; syncStatus.textContent='OFFICIAL DATA UNAVAILABLE'; }
+    return;
+  }
+  if (syncStatus) {
+    syncStatus.className = `obs-status ${officialSyncEnabled?'live':officialData.status==='partial'?'partial':'off'}`;
+    syncStatus.textContent = officialSyncEnabled ? 'OFFICIAL BASELINE ACTIVE' : 'OFFICIAL DATA AVAILABLE';
+  }
+  const generated = officialData.generatedAt ? new Date(officialData.generatedAt) : null;
+  if (generatedStatus) generatedStatus.textContent = generated && !Number.isNaN(generated.getTime()) ? `GENERATED ${generated.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}` : 'STATIC SNAPSHOT';
+  const observations = Object.values(officialData.observations || {}).filter(Boolean);
+  const inputCount = observations.filter(o=>o.inputTarget).length;
+  const outputCount = observations.filter(o=>o.outputTarget).length;
+  const staleCount = observations.filter(o=>o.isStale || o.fallback).length;
+  summary.innerHTML = [
+    ['Series loaded',observations.length,`${officialData.freshSeriesCount??observations.length} fresh`],
+    ['Direct inputs',inputCount,'Mapped to sliders'],
+    ['Output anchors',outputCount,'GDP · CPI · rates'],
+    ['Stale / fallback',staleCount,officialData.status==='partial'?'Partial snapshot':'No material gaps']
+  ].map(x=>`<div class="obs-summary-cell"><div class="obs-summary-label">${x[0]}</div><div class="obs-summary-value">${x[1]}</div><div class="obs-summary-sub">${x[2]}</div></div>`).join('');
+  const groups = {};
+  observations.forEach(o => (groups[o.category||'Other'] ||= []).push(o));
+  content.innerHTML = Object.entries(groups).map(([category,items]) => `<div class="obs-category"><div class="obs-category-title">${escapeCalendarHtml(category)}</div><div class="obs-grid">${items.map(o => {
+    const change = Number.isFinite(+o.change) ? `${+o.change>=0?'+':''}${formatOfficialValue(o,o.change)}` : '—';
+    const revision = Number.isFinite(+o.revision) ? `${+o.revision>=0?'+':''}${formatOfficialValue(o,o.revision)}` : 'Not available';
+    const badges = [o.inputTarget?`<span class="obs-badge input">Input → ${escapeCalendarHtml(o.inputTarget)}</span>`:'',o.outputTarget?`<span class="obs-badge output">Anchor → ${escapeCalendarHtml(o.outputTarget)}</span>`:'',(o.isStale?'<span class="obs-badge stale">Stale</span>':''),(o.fallback?'<span class="obs-badge fallback">Prior snapshot</span>':'')].join('');
+    return `<div class="obs-card"><div class="obs-card-top"><div><div class="obs-name">${escapeCalendarHtml(o.label)}</div><div class="obs-series">FRED ${escapeCalendarHtml(o.seriesId)} · ${escapeCalendarHtml(o.frequency||'')}</div></div><div><div class="obs-value">${formatOfficialValue(o,o.actual)}</div><div class="obs-date">${escapeCalendarHtml(o.observationDate||'')}</div></div></div><div class="obs-details"><div><div class="obs-detail-label">Previous period</div><div class="obs-detail-value">${formatOfficialValue(o,o.previous)}</div></div><div><div class="obs-detail-label">Period change</div><div class="obs-detail-value">${change}</div></div><div><div class="obs-detail-label">Revision vs initial</div><div class="obs-detail-value">${revision}</div></div></div><div class="obs-badges">${badges}</div></div>`;
+  }).join('')}</div></div>`).join('');
+}
+
 // ── STATIC ECONOMIC RELEASE CALENDAR ─────────────────────────────
 const ECON_CALENDAR_URL = './data/economic-calendar.json';
 let economicCalendar = null;
@@ -4313,10 +4626,13 @@ async function loadEconomicCalendar(force = false) {
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.events)) throw new Error('Invalid calendar JSON');
     economicCalendar = payload;
+    ingestOfficialData(payload);
     renderEconomicCalendar();
     renderOverview(compute());
   } catch (err) {
     economicCalendar = null;
+    officialData = null; officialSyncEnabled = false; officialCalibration = emptyOfficialCalibration();
+    renderOfficialData();
     renderOverview(compute());
     if (list) list.innerHTML = `<div class="release-empty"><strong style="color:var(--warn)">Calendar snapshot not available.</strong><br>Run <code>python scripts/update_calendar.py</code> with the <code>FRED_API_KEY</code> environment variable, or trigger the included GitHub Actions workflow.<br><span style="color:var(--muted)">${escapeCalendarHtml(err.message)}</span></div>`;
     const meta = document.getElementById('release-meta');
@@ -4363,7 +4679,8 @@ function renderEconomicCalendar() {
     <span class="release-badge ${freshness}">UPDATED ${escapeCalendarHtml(generatedLabel)}</span>
     <span class="release-badge">${pastCount} PAST RELEASES</span>
     <span class="release-badge">${upcomingCount} UPCOMING</span>
-    <span class="release-badge">${events.length} SHOWN</span>`;
+    <span class="release-badge">${events.length} SHOWN</span>
+    <span class="release-badge ${economicCalendar.officialData?.status==='complete'?'good':'warn'}">${economicCalendar.officialData?.seriesCount||0} OFFICIAL SERIES</span>`;
 
   if (!events.length) {
     list.innerHTML = '<div class="release-empty">No releases match the current filter.</div>';
@@ -4380,9 +4697,12 @@ function renderEconomicCalendar() {
     }
     const state = calendarEventState(e.date);
     const status = state === 'today' ? 'Today' : state === 'past' ? 'Released' : 'Scheduled';
-    return `${monthHeading}<div class="release-row">
+    const data = Array.isArray(e.latestData) ? e.latestData.slice(0,3) : [];
+    const actualHtml = data.length ? `<div class="release-actual">${data.map(d=>{const digits=Number.isFinite(+d.precision)?+d.precision:2;const n=Number(d.actual).toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits});return `<strong>${escapeCalendarHtml(d.label)}</strong> ${String(d.units||'').startsWith('$')?'$':''}${n}${String(d.units||'').includes('%')?'%':''}`;}).join('<br>')}</div>` : '';
+    return `${monthHeading}<div class="release-row${data.length?' has-data':''}">
       <div class="release-date">${escapeCalendarHtml(formatCalendarDate(e.date,{month:'short',day:'numeric',weekday:'short'}))}</div>
       <div class="release-name">${escapeCalendarHtml(e.name)}</div>
+      ${actualHtml}
       <div class="release-source">${escapeCalendarHtml(e.source || 'FRED')}</div>
       <div class="release-state ${state}">${status}</div>
     </div>`;
@@ -4426,6 +4746,7 @@ function runBootSequence() {
 // ── INIT ─────────────────────────────────────────────────────────
 buildSidebar();
 const _restored = applyStateFromURL();   // mutate state from #s= hash if present
+sharedStateRestored = _restored;
 buildContent();                          // build sliders from current vals
 runBootSequence();                       // terminal-style startup overlay
 loadEconomicCalendar();                  // preload static release snapshot
