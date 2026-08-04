@@ -393,9 +393,61 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
   .mbar-primary,.mbar-secondary{grid-template-columns:repeat(2,1fr);}
   .logo-sub{display:none;}
 }
+
+
+/* === TERMINAL BOOT SEQUENCE === */
+#boot-screen{position:fixed;inset:0;z-index:5000;background:#02060d;color:var(--accent);font-family:var(--font-mono);display:flex;align-items:center;justify-content:center;transition:opacity .28s ease,visibility .28s ease;}
+#boot-screen.done{opacity:0;visibility:hidden;pointer-events:none;}
+.boot-shell{width:min(760px,90vw);border:1px solid rgba(240,160,48,.28);background:rgba(6,11,24,.96);box-shadow:0 0 70px rgba(240,160,48,.08);padding:24px 28px;position:relative;overflow:hidden;}
+.boot-shell::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(255,255,255,.015) 4px);}
+.boot-brand{font-family:var(--font-cond);font-weight:700;font-size:25px;letter-spacing:3px;color:var(--text);margin-bottom:4px;}
+.boot-brand span{color:var(--accent);}
+.boot-build{font-size:9px;letter-spacing:1.3px;color:var(--muted);margin-bottom:19px;}
+.boot-log{min-height:180px;font-size:11px;line-height:1.9;color:var(--text-dim);}
+.boot-line{opacity:0;transform:translateY(2px);animation:bootLine .18s ease forwards;}
+.boot-ok{color:var(--pos);}.boot-warn{color:var(--warn);}.boot-muted{color:var(--muted);}
+.boot-ready{margin-top:13px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--accent);letter-spacing:.8px;}
+.boot-cursor{display:inline-block;width:7px;height:13px;background:var(--accent);vertical-align:-2px;margin-left:4px;animation:bootBlink .75s steps(1,end) infinite;}
+.boot-skip{position:absolute;right:14px;bottom:11px;color:var(--muted);font-size:8.5px;letter-spacing:.7px;}
+@keyframes bootLine{to{opacity:1;transform:none;}}
+@keyframes bootBlink{50%{opacity:0;}}
+
+/* === ECONOMIC RELEASE CALENDAR === */
+.cal-toolbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:12px;}
+.cal-toolbar .btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+.release-search{min-width:220px;flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:11px;padding:7px 10px;border-radius:var(--r);outline:none;}
+.release-search:focus{border-color:var(--accent);}
+.release-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}
+.release-badge{font-family:var(--font-mono);font-size:9.5px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);background:var(--surface);}
+.release-badge.good{color:var(--pos);border-color:rgba(0,212,122,.25);background:var(--pos-dim);}
+.release-badge.warn{color:var(--warn);border-color:rgba(255,212,74,.25);background:var(--warn-dim);}
+.release-list{display:grid;gap:6px;}
+.release-day{font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 2px 3px;border-bottom:1px solid var(--border);}
+.release-row{display:grid;grid-template-columns:105px 1fr 92px 74px;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;}
+.release-row:hover{border-color:var(--border2);background:var(--surface2);}
+.release-date{font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);}
+.release-name{font-size:12.5px;color:var(--text);font-weight:500;line-height:1.3;}
+.release-source{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:right;}
+.release-state{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;text-align:right;}
+.release-state.past{color:var(--muted);}.release-state.today{color:var(--warn);}.release-state.upcoming{color:var(--pos);}
+.release-empty{padding:24px 16px;text-align:center;background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r-lg);font-family:var(--font-mono);font-size:11px;color:var(--muted);line-height:1.7;}
+.release-source-note{font-size:9.5px;color:var(--muted);font-family:var(--font-mono);line-height:1.55;margin-top:12px;padding:9px 11px;border:1px solid var(--border);background:var(--surface2);border-radius:var(--r);}
+@media(max-width:700px){.release-row{grid-template-columns:82px 1fr}.release-source,.release-state{text-align:left}.release-source{grid-column:2}.release-state{grid-column:1}}
+
 </style>
 </head>
 <body>
+
+<div id="boot-screen" role="status" aria-live="polite" aria-label="MACROSCOPE initialization">
+  <div class="boot-shell">
+    <div class="boot-brand">MACRO<span>SCOPE</span></div>
+    <div class="boot-build">U.S. ECONOMIC OUTLOOK TERMINAL // STATIC BUILD 4.0</div>
+    <div class="boot-log" id="boot-log"></div>
+    <div class="boot-ready" id="boot-ready" style="display:none">SYSTEM READY <span class="boot-cursor"></span></div>
+    <div class="boot-skip">CLICK OR PRESS ANY KEY TO CONTINUE</div>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- HEADER -->
@@ -698,6 +750,7 @@ const CATEGORIES = [
 ];
 
 const ANALYSIS_SECTIONS = [
+  { id:'calendar',    label:'Economic Calendar', icon:'▤' },
   { id:'events',      label:'Events & Shocks', icon:'◬' },
   { id:'charts',      label:'Charts & Analysis', icon:'◫' },
   { id:'scenarios',   label:'Scenarios', icon:'◩' },
@@ -1900,6 +1953,27 @@ function buildContent() {
       </div>
     </div>`;
   }
+
+  // Economic release calendar
+  html += `<div class="section" id="sec-calendar">
+    <div class="sec-hdr">
+      <div class="sec-title">U.S. Economic Release Calendar</div>
+      <div class="sec-desc">Rolling one-year release archive and upcoming schedule generated from the FRED release calendar. Data are loaded from a static JSON snapshot so no API key is exposed to visitors.</div>
+    </div>
+    <div class="cal-toolbar">
+      <button class="btn active" id="cal-view-all" onclick="setCalendarView('all',this)">Past Year + Upcoming</button>
+      <button class="btn" id="cal-view-past" onclick="setCalendarView('past',this)">Past Year</button>
+      <button class="btn" id="cal-view-upcoming" onclick="setCalendarView('upcoming',this)">Upcoming</button>
+      <input class="release-search" id="release-search" type="search" placeholder="Filter releases…" oninput="renderEconomicCalendar()">
+      <button class="btn" onclick="loadEconomicCalendar(true)">&#8635; Refresh Snapshot</button>
+    </div>
+    <div class="release-meta" id="release-meta"></div>
+    <div class="release-list" id="release-list"><div class="release-empty">Loading economic release calendar…</div></div>
+    <div class="release-source-note">
+      Source: Federal Reserve Bank of St. Louis FRED® release calendar. Release dates are supplied by the originating statistical agencies and may change. This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.
+    </div>
+  </div>`;
+
   // Events section
   html += buildEventsSection();
   // Charts section
@@ -2168,6 +2242,7 @@ function showSection(id, btn) {
   if (sec) sec.classList.add('active');
   if (btn) btn.classList.add('active');
   if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
+  else if (id === 'calendar') { loadEconomicCalendar(); }
   else if (id === 'compare') { setTimeout(renderCountryComparison, 0); }
   else if (id === 'scenarios') { renderScenarios(); }
   else if (id === 'sensitivity') { sensitivityVisible = true; renderSensitivity(compute(), true); }
@@ -3376,10 +3451,170 @@ function wireKeyboard() {
   });
 }
 
+
+
+// ── STATIC ECONOMIC RELEASE CALENDAR ─────────────────────────────
+const ECON_CALENDAR_URL = './data/economic-calendar.json';
+let economicCalendar = null;
+let calendarView = 'all';
+let calendarLoading = false;
+
+function escapeCalendarHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function localIsoDate(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function parseCalendarDate(iso) {
+  const [y,m,d] = String(iso).split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function formatCalendarDate(iso, options = {month:'short', day:'numeric', year:'numeric'}) {
+  const d = parseCalendarDate(iso);
+  if (Number.isNaN(d.getTime())) return iso || '—';
+  return new Intl.DateTimeFormat('en-US', options).format(d);
+}
+
+async function loadEconomicCalendar(force = false) {
+  if (calendarLoading || (economicCalendar && !force)) {
+    renderEconomicCalendar();
+    return;
+  }
+  calendarLoading = true;
+  const list = document.getElementById('release-list');
+  if (list) list.innerHTML = '<div class="release-empty">Loading generated calendar snapshot…</div>';
+  try {
+    const bust = force ? `?v=${Date.now()}` : '';
+    const response = await fetch(ECON_CALENDAR_URL + bust, { cache: force ? 'no-store' : 'default' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.events)) throw new Error('Invalid calendar JSON');
+    economicCalendar = payload;
+    renderEconomicCalendar();
+  } catch (err) {
+    economicCalendar = null;
+    if (list) list.innerHTML = `<div class="release-empty"><strong style="color:var(--warn)">Calendar snapshot not available.</strong><br>Run <code>python scripts/update_calendar.py</code> with the <code>FRED_API_KEY</code> environment variable, or trigger the included GitHub Actions workflow.<br><span style="color:var(--muted)">${escapeCalendarHtml(err.message)}</span></div>`;
+    const meta = document.getElementById('release-meta');
+    if (meta) meta.innerHTML = '<span class="release-badge warn">STATIC FALLBACK</span><span class="release-badge">No API key is requested by the browser</span>';
+  } finally {
+    calendarLoading = false;
+  }
+}
+
+function setCalendarView(view, btn) {
+  calendarView = view;
+  document.querySelectorAll('.cal-toolbar .btn[id^="cal-view-"]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderEconomicCalendar();
+}
+
+function calendarEventState(dateIso) {
+  const today = localIsoDate();
+  if (dateIso === today) return 'today';
+  return dateIso < today ? 'past' : 'upcoming';
+}
+
+function renderEconomicCalendar() {
+  const list = document.getElementById('release-list');
+  const meta = document.getElementById('release-meta');
+  if (!list || !meta || !economicCalendar) return;
+  const today = localIsoDate();
+  const search = (document.getElementById('release-search')?.value || '').trim().toLowerCase();
+  let events = economicCalendar.events
+    .filter(e => e && e.date && e.name)
+    .filter(e => calendarView === 'past' ? e.date < today : calendarView === 'upcoming' ? e.date >= today : true)
+    .filter(e => !search || `${e.name} ${e.source || ''}`.toLowerCase().includes(search))
+    .sort((a,b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+
+  const generated = economicCalendar.generatedAt ? new Date(economicCalendar.generatedAt) : null;
+  const ageHours = generated && !Number.isNaN(generated.getTime()) ? Math.max(0, (Date.now() - generated.getTime()) / 36e5) : null;
+  const freshness = ageHours === null ? 'warn' : ageHours <= 36 ? 'good' : 'warn';
+  const generatedLabel = generated && !Number.isNaN(generated.getTime())
+    ? new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}).format(generated)
+    : 'Unknown';
+  const upcomingCount = economicCalendar.events.filter(e => e.date >= today).length;
+  const pastCount = economicCalendar.events.filter(e => e.date < today).length;
+  meta.innerHTML = `
+    <span class="release-badge ${freshness}">UPDATED ${escapeCalendarHtml(generatedLabel)}</span>
+    <span class="release-badge">${pastCount} PAST RELEASES</span>
+    <span class="release-badge">${upcomingCount} UPCOMING</span>
+    <span class="release-badge">${events.length} SHOWN</span>`;
+
+  if (!events.length) {
+    list.innerHTML = '<div class="release-empty">No releases match the current filter.</div>';
+    return;
+  }
+
+  let currentMonth = '';
+  list.innerHTML = events.map(e => {
+    const monthKey = e.date.slice(0,7);
+    let monthHeading = '';
+    if (monthKey !== currentMonth) {
+      currentMonth = monthKey;
+      monthHeading = `<div class="release-day">${escapeCalendarHtml(formatCalendarDate(e.date,{month:'long',year:'numeric'}))}</div>`;
+    }
+    const state = calendarEventState(e.date);
+    const status = state === 'today' ? 'Today' : state === 'past' ? 'Released' : 'Scheduled';
+    return `${monthHeading}<div class="release-row">
+      <div class="release-date">${escapeCalendarHtml(formatCalendarDate(e.date,{month:'short',day:'numeric',weekday:'short'}))}</div>
+      <div class="release-name">${escapeCalendarHtml(e.name)}</div>
+      <div class="release-source">${escapeCalendarHtml(e.source || 'FRED')}</div>
+      <div class="release-state ${state}">${status}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── TERMINAL BOOT ────────────────────────────────────────────────
+function runBootSequence() {
+  const screen = document.getElementById('boot-screen');
+  const log = document.getElementById('boot-log');
+  const ready = document.getElementById('boot-ready');
+  if (!screen || !log || !ready) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seen = sessionStorage.getItem('macroscope_boot_seen') === '1';
+  const finish = () => {
+    sessionStorage.setItem('macroscope_boot_seen','1');
+    screen.classList.add('done');
+    setTimeout(() => screen.remove(), 350);
+  };
+  screen.addEventListener('click', finish, {once:true});
+  document.addEventListener('keydown', finish, {once:true});
+  if (reduced || seen) { setTimeout(finish, 80); return; }
+  const lines = [
+    ['OK','INITIALIZING ECONOMIC ENGINE'],
+    ['OK','RESTORING LOCAL SCENARIO STATE'],
+    ['OK','LOADING STRUCTURAL PARAMETERS'],
+    ['OK','CONNECTING STATIC DATA MANIFEST'],
+    ['OK','CHECKING RELEASE CALENDAR VINTAGE'],
+    ['OK','RENDERING ANALYTICS WORKSPACE']
+  ];
+  lines.forEach((line,i) => setTimeout(() => {
+    const div = document.createElement('div');
+    div.className = 'boot-line';
+    div.style.animationDelay = '0ms';
+    div.innerHTML = `<span class="boot-ok">[${line[0]}]</span> ${line[1]}`;
+    log.appendChild(div);
+    if (i === lines.length - 1) setTimeout(() => { ready.style.display = 'block'; setTimeout(finish, 650); }, 180);
+  }, 150 + i * 190));
+}
+
 // ── INIT ─────────────────────────────────────────────────────────
 buildSidebar();
 const _restored = applyStateFromURL();   // mutate state from #s= hash if present
 buildContent();                          // build sliders from current vals
+runBootSequence();                       // terminal-style startup overlay
+loadEconomicCalendar();                  // preload static release snapshot
 syncControlsToState();                   // horizon / Taylor / country / event UI
 buildHistoricalGrid();
 render();
