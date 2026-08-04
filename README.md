@@ -6,7 +6,6 @@
 
 🌐 **[Open MACROSCOPE](](https://jcalepos146.github.io/US-Economic-Simulator/)/)**
 
-Replace `YOUR-GITHUB-USERNAME` and `YOUR-REPOSITORY` with the values from your GitHub Pages URL after deployment.
 
 > MACROSCOPE is an educational and analytical model. Its forecasts, risk scores, and shock effects are not official forecasts, investment advice, or causal estimates.
 
