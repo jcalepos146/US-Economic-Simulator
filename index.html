@@ -43,7 +43,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 button,input,select{font-family:inherit;}
 
 /* === LAYOUT === */
-#app{display:grid;grid-template-rows:48px 120px 1fr;height:100vh;overflow:hidden;}
+#app{display:grid;grid-template-rows:48px 72px 1fr;height:100vh;overflow:hidden;}
 
 /* === HEADER === */
 #hdr{display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);}
@@ -63,15 +63,15 @@ button,input,select{font-family:inherit;}
 #mbar{display:flex;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--border);}
 .mbar-row{display:grid;overflow:hidden;}
 /* Primary row: 8 big tiles */
-.mbar-primary{grid-template-columns:repeat(8,1fr);flex:1.15;border-bottom:1px solid var(--border);}
+.mbar-primary{grid-template-columns:repeat(5,1fr);flex:1;border-bottom:none;}
 /* Secondary row: 7 smaller tiles */
-.mbar-secondary{grid-template-columns:repeat(7,1fr);flex:0.85;}
-.mc{padding:7px 12px 5px;border-right:1px solid var(--border);min-width:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;}
+.mbar-secondary{display:none;}
+.mc{padding:10px 14px 7px;border-right:1px solid var(--border);min-width:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
 .mc:last-child{border-right:none;}
 /* Primary tile typography */
 .mbar-primary .mc-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0;margin-bottom:3px;}
-.mbar-primary .mc-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--text);line-height:1.0;margin-top:0;}
-.mbar-primary .mc-delta{font-family:var(--font-mono);font-size:9px;margin-top:3px;white-space:nowrap;color:var(--muted);}
+.mbar-primary .mc-val{font-family:var(--font-mono);font-size:23px;font-weight:700;color:var(--text);line-height:1.0;margin-top:0;}
+.mbar-primary .mc-delta{font-family:var(--font-mono);font-size:8.5px;margin-top:4px;white-space:nowrap;color:var(--muted);overflow:hidden;text-overflow:ellipsis;}
 /* Secondary tile typography */
 .mbar-secondary .mc-lbl{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.7px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0;margin-bottom:2px;}
 .mbar-secondary .mc-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--text);line-height:1.0;margin-top:0;}
@@ -372,8 +372,8 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
 
 /* === ENHANCEMENTS: responsive === */
 @media (max-width:1100px){
-  .mbar-primary{grid-template-columns:repeat(4,1fr);}
-  .mbar-secondary{grid-template-columns:repeat(4,1fr);}
+  .mbar-primary{grid-template-columns:repeat(5,minmax(150px,1fr));}
+  .mbar-secondary{display:none;}
   .mbar-row{min-height:54px;}
   #mbar{overflow-x:hidden;}
   #app{grid-template-rows:48px auto 1fr;}
@@ -385,12 +385,14 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
   .hdr-r{flex-wrap:wrap;}
   #body{grid-template-columns:1fr;}
   #sidebar{border-right:none;border-bottom:1px solid var(--border);max-height:240px;}
-  .mbar-primary,.mbar-secondary{grid-template-columns:repeat(3,1fr);}
+  .mbar-primary{grid-template-columns:repeat(3,minmax(145px,1fr));}
+  .mbar-secondary{display:none;}
   #content-wrap{grid-template-rows:1fr auto;}
   .slider-grid{grid-template-columns:1fr;}
 }
 @media (max-width:520px){
-  .mbar-primary,.mbar-secondary{grid-template-columns:repeat(2,1fr);}
+  .mbar-primary{grid-template-columns:repeat(2,minmax(140px,1fr));}
+  .mbar-secondary{display:none;}
   .logo-sub{display:none;}
 }
 
@@ -433,6 +435,69 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
 .release-empty{padding:24px 16px;text-align:center;background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r-lg);font-family:var(--font-mono);font-size:11px;color:var(--muted);line-height:1.7;}
 .release-source-note{font-size:9.5px;color:var(--muted);font-family:var(--font-mono);line-height:1.55;margin-top:12px;padding:9px 11px;border:1px solid var(--border);background:var(--surface2);border-radius:var(--r);}
 @media(max-width:700px){.release-row{grid-template-columns:82px 1fr}.release-source,.release-state{text-align:left}.release-source{grid-column:2}.release-state{grid-column:1}}
+
+
+/* === TERMINAL OVERVIEW === */
+#sec-overview{padding-bottom:10px;}
+.ov-shell{display:grid;gap:14px;}
+.ov-statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:7px 10px;border:1px solid var(--border);background:var(--surface);font-family:var(--font-mono);font-size:9px;letter-spacing:.65px;text-transform:uppercase;color:var(--muted);}
+.ov-status-left,.ov-status-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ov-pill{padding:2px 7px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-dim);}
+.ov-pill.live{border-color:rgba(0,212,122,.35);color:var(--pos);background:var(--pos-dim);}
+.ov-pill.stale{border-color:rgba(255,212,74,.35);color:var(--warn);background:var(--warn-dim);}
+.ov-regime{position:relative;overflow:hidden;padding:18px 20px;border:1px solid var(--border2);background:linear-gradient(120deg,var(--surface),var(--surface2));}
+.ov-regime::after{content:'';position:absolute;right:-80px;top:-120px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(240,160,48,.11),transparent 68%);pointer-events:none;}
+.ov-regime.positive{border-left:4px solid var(--pos);}.ov-regime.warning{border-left:4px solid var(--warn);}.ov-regime.negative{border-left:4px solid var(--neg);}.ov-regime.neutral{border-left:4px solid var(--info);}
+.ov-regime-kicker{font-family:var(--font-mono);font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.ov-regime-row{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;position:relative;z-index:1;}
+.ov-regime-title{font-family:var(--font-cond);font-size:31px;line-height:1;font-weight:700;letter-spacing:.8px;color:var(--text);text-transform:uppercase;}
+.ov-regime-summary{max-width:820px;margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--text-dim);}
+.ov-confidence{text-align:right;flex-shrink:0;font-family:var(--font-mono);}
+.ov-confidence-value{font-size:25px;font-weight:700;color:var(--accent);}
+.ov-confidence-label{font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+.ov-headline-grid{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);background:var(--surface);}
+.ov-headline{padding:13px 14px;border-right:1px solid var(--border);min-width:0;}
+.ov-headline:last-child{border-right:none;}
+.ov-headline-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-headline-value{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--text);margin:4px 0 3px;}
+.ov-headline-value.good{color:var(--pos)}.ov-headline-value.warn{color:var(--warn)}.ov-headline-value.bad{color:var(--neg)}
+.ov-headline-meta{font-family:var(--font-mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.45px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px;}
+.ov-panel{border:1px solid var(--border);background:var(--surface);min-width:0;}
+.ov-panel-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-bottom:1px solid var(--border);background:var(--surface2);}
+.ov-panel-title{font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);}
+.ov-panel-sub{font-family:var(--font-mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.ov-panel-body{padding:11px 12px;}
+.ov-change-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px;}
+.ov-change-row:last-child{border-bottom:none;}
+.ov-change-name{color:var(--text-dim);}.ov-change-values{font-family:var(--font-mono);font-size:9.5px;color:var(--muted);}.ov-change-delta{font-family:var(--font-mono);font-size:10px;font-weight:700;text-align:right;min-width:58px;}
+.ov-change-delta.pos{color:var(--pos)}.ov-change-delta.neg{color:var(--neg)}.ov-change-delta.neu{color:var(--muted)}
+.ov-empty{padding:17px 8px;text-align:center;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.55;}
+.ov-next-release{display:grid;grid-template-columns:85px 1fr;gap:12px;padding-bottom:11px;margin-bottom:9px;border-bottom:1px solid var(--border);}
+.ov-next-date{font-family:var(--font-mono);font-size:10px;color:var(--accent);text-transform:uppercase;line-height:1.55;}
+.ov-next-name{font-family:var(--font-cond);font-size:19px;font-weight:700;color:var(--text);line-height:1.05;}
+.ov-next-desc{font-size:10.5px;color:var(--text-dim);line-height:1.4;margin-top:5px;}
+.ov-impact{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+.ov-impact-chip{font-family:var(--font-mono);font-size:8px;padding:2px 6px;border:1px solid rgba(74,158,255,.25);background:var(--info-dim);color:var(--info);text-transform:uppercase;}
+.ov-release-list{display:grid;gap:0;}
+.ov-release-row{display:grid;grid-template-columns:76px 1fr auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:10.5px;}
+.ov-release-row:last-child{border-bottom:none;}
+.ov-release-date{font-family:var(--font-mono);font-size:8.5px;color:var(--muted);text-transform:uppercase;}.ov-release-name{color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.ov-release-importance{font-family:var(--font-mono);font-size:8px;color:var(--warn);letter-spacing:1px;}
+.ov-waterfall{display:grid;gap:7px;}
+.ov-water-row{display:grid;grid-template-columns:145px 1fr 58px;gap:9px;align-items:center;}
+.ov-water-label{font-size:10.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-water-track{height:7px;background:var(--surface3);position:relative;overflow:hidden;}
+.ov-water-bar{height:100%;min-width:2px;transition:width .25s ease;}.ov-water-bar.pos{background:var(--pos)}.ov-water-bar.neg{background:var(--neg)}.ov-water-bar.neu{background:var(--muted)}
+.ov-water-value{font-family:var(--font-mono);font-size:9.5px;text-align:right;}.ov-water-value.pos{color:var(--pos)}.ov-water-value.neg{color:var(--neg)}.ov-water-value.neu{color:var(--muted)}
+.ov-water-total{display:flex;justify-content:space-between;align-items:center;padding-top:9px;margin-top:4px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:10px;color:var(--text-dim);}.ov-water-total strong{font-size:16px;color:var(--accent);}
+.ov-risk-list{display:grid;gap:7px;}
+.ov-risk-row{display:grid;grid-template-columns:145px 1fr 68px;gap:9px;align-items:center;padding:3px 0;cursor:pointer;}
+.ov-risk-row:hover .ov-risk-name{color:var(--accent);}
+.ov-risk-name{font-size:10.5px;color:var(--text-dim);transition:color .12s;}
+.ov-risk-track{height:7px;background:var(--surface3);overflow:hidden;}.ov-risk-fill{height:100%;transition:width .25s ease;}.ov-risk-fill.low{background:var(--pos)}.ov-risk-fill.moderate{background:var(--info)}.ov-risk-fill.elevated{background:var(--warn)}.ov-risk-fill.high{background:var(--neg)}
+.ov-risk-level{font-family:var(--font-mono);font-size:8px;text-align:right;text-transform:uppercase;letter-spacing:.55px;}.ov-risk-level.low{color:var(--pos)}.ov-risk-level.moderate{color:var(--info)}.ov-risk-level.elevated{color:var(--warn)}.ov-risk-level.high{color:var(--neg)}
+@media(max-width:1100px){.ov-headline-grid{grid-template-columns:repeat(3,1fr)}.ov-headline:nth-child(3){border-right:none}.ov-headline:nth-child(n+4){border-top:1px solid var(--border)}.ov-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.ov-regime-row{flex-direction:column}.ov-confidence{text-align:left}.ov-headline-grid{grid-template-columns:1fr 1fr}.ov-headline{border-top:1px solid var(--border)}.ov-headline:nth-child(odd){border-right:1px solid var(--border)}.ov-headline:nth-child(even){border-right:none}.ov-headline:first-child,.ov-headline:nth-child(2){border-top:none}.ov-water-row,.ov-risk-row{grid-template-columns:110px 1fr 54px}.ov-next-release{grid-template-columns:1fr}.ov-release-row{grid-template-columns:68px 1fr}}
 
 </style>
 </head>
@@ -499,6 +564,8 @@ kbd{font-family:var(--font-mono);font-size:10.5px;background:var(--surface3);bor
         </div>
         <div class="hz-hint" id="hz-hint">Cyclical factors dominate</div>
       </div>
+      <div class="nav-grp">Terminal</div>
+      <div id="nav-terminal"></div>
       <div class="nav-grp">Macro Inputs</div>
       <div class="search-wrap">
         <span class="search-ico">&#128269;</span>
@@ -983,7 +1050,7 @@ const EVENTS = [
 
 // ── MULTI-COUNTRY SUPPORT ─────────────────────────────────────────
 let currentCountry = 'us';
-let currentSection = 'monetary';
+let currentSection = 'overview';
 
 const COUNTRY_CONFIGS = {
   us: {
@@ -1095,6 +1162,7 @@ function getCountryAdjustments(country) {
 function switchCountry(id) {
   if (!COUNTRY_CONFIGS[id]) return;
   currentCountry = id;
+  overviewReference = null;
   const cc = COUNTRY_CONFIGS[id];
 
   // Update flag display
@@ -1394,6 +1462,7 @@ const HZ_HINTS = {
 
 function setHorizon(h) {
   timeHorizon = h;
+  overviewReference = null;
   [1, 3, 10].forEach(x => {
     const b = document.getElementById('hz-' + x);
     if (b) b.classList.toggle('active', x === h);
@@ -1607,62 +1676,74 @@ function compute() {
   ));
 
   // ── PASS 2: GDP core ─────────────────────────────────────────────
+  // Grouped contributions power the Overview waterfall while preserving
+  // the original equation term-for-term.
+  const gdpMonetary =
+      -(s.ffr - _neutralFFR) * 0.28 * W.mon
+      + ffrConvexHit * W.mon
+      + (s.qePace > 0 ? s.qePace * 0.006 : s.qePace * 0.004) * W.mon
+      - inversionPenalty * W.mon;
+  const gdpFiscal =
+      -(effectiveDeficit - 4) * 0.032
+      - (s.corpTax - 21) * 0.022 * W.tax
+      - (s.incomeTax - 37) * 0.005 * W.tax
+      - (s.regBurden - 5) * 0.052 * W.tax
+      + s.govSpend * 0.048 * W.fis * fisMultScale
+      + (s.fedPermit - 4) * 0.032 * W.fis;
+  const gdpInnovation =
+      (s.innovRate - 1.5) * 0.42 * W.innov
+      + (s.rdSpend - 3.1) * 0.12 * W.innov
+      + (s.aiAdoption - 6) * 0.055 * W.innov
+      + (s.vcFunding - 170) / 170 * 0.12 * W.innov
+      + (s.stemGrowth - 2) * 0.025 * W.innov;
+  const gdpTrade =
+      -(s.tariff - 10) * 0.015 * W.trade
+      + (s.fdiInflows - 6) * 0.035 * W.trade
+      - (s.chinaDecoupling - 6) * 0.020 * W.trade
+      + (s.nearshoring - 4) * 0.012 * W.trade;
+  const gdpLabor =
+      -(s.unemp - 4) * 0.15 * W.labor
+      + (s.lfp - 62.5) * 0.05 * W.labor
+      + (s.highSkillImmig - 5) * 0.040 * W.labor
+      - (s.skillsGap - 6) * 0.025 * W.labor
+      - (s.autoDisplace - 5) * 0.010 * W.labor;
+  const gdpEnergy =
+      -(s.oil - 70) * 0.005
+      + (s.renewableShare - 22) * 0.003;
+  const gdpCapex =
+      capexEffect * W.capex
+      + (s.infraSpend - 350) / 350 * 0.08 * W.capex
+      + (s.permitSpeed - 4) * 0.032 * W.capex
+      - (s.shippingCost - 4) * 0.022
+      + (s.portEff - 6) * 0.015
+      + (s.gridReliability - 6) * 0.012;
+  const gdpState =
+      -(s.stateCorpTax - 5) * 0.012
+      - (s.stateRegEnv - 5) * 0.020
+      + (s.stateFiscalHealth - 5) * 0.010;
+  const gdpPoliticalEconomy = polEconGdpImpact(s) * W.polEcon;
+  const gdpGeopolitics =
+      -(s.conflictIndex - 5) * 0.040
+      - (s.chinaMilRisk - 6) * 0.025
+      - (s.cyberRisk - 6) * 0.010
+      + (s.dollarReserve - 8) * 0.020
+      + (s.allyRelations - 6) * 0.012;
+  const gdpCredit = creditSeizureGdp + creditImpulseEffect;
+  const gdpEvents = gdpA;
+
   let gdp = _gdpBase
-    // Monetary
-    - (s.ffr   - _neutralFFR) * 0.28 * W.mon
-    + ffrConvexHit * W.mon  // ffrOvershoot already above neutral                       // [2] convex FFR overshoot
-    + (s.qePace > 0 ? s.qePace * 0.006 : s.qePace * 0.004) * W.mon
-    - inversionPenalty * W.mon                   // [2] yield curve inversion
-    // Fiscal — use effectiveDeficit for crowding-out [1]
-    - (effectiveDeficit - 4) * 0.032
-    - (s.corpTax    - 21)    * 0.022 * W.tax
-    - (s.incomeTax  - 37)    * 0.005 * W.tax
-    - (s.regBurden  - 5)     * 0.052 * W.tax
-    + s.govSpend             * 0.048 * W.fis * fisMultScale
-    + (s.fedPermit  - 4)     * 0.032 * W.fis
-    // Innovation
-    + (s.innovRate  - 1.5)   * 0.42  * W.innov
-    + (s.rdSpend    - 3.1)   * 0.12  * W.innov
-    + (s.aiAdoption - 6)     * 0.055 * W.innov
-    + (s.vcFunding  - 170) / 170 * 0.12 * W.innov
-    + (s.stemGrowth - 2)     * 0.025 * W.innov
-    // Trade
-    - (s.tariff         - 10) * 0.015 * W.trade
-    + (s.fdiInflows     - 6)  * 0.035 * W.trade
-    - (s.chinaDecoupling - 6) * 0.020 * W.trade
-    + (s.nearshoring    - 4)  * 0.012 * W.trade
-    // Labor
-    - (s.unemp         - 4)   * 0.15  * W.labor
-    + (s.lfp           - 62.5)* 0.05  * W.labor
-    + (s.highSkillImmig - 5)  * 0.040 * W.labor
-    - (s.skillsGap     - 6)   * 0.025 * W.labor
-    - (s.autoDisplace  - 5)   * 0.010 * W.labor
-    // Energy
-    - (s.oil           - 70)  * 0.005
-    + (s.renewableShare - 22) * 0.003
-    // Infra & CAPEX
-    + capexEffect                * W.capex       // [9] confidence-scaled CAPEX
-    + (s.infraSpend  - 350) / 350 * 0.08 * W.capex
-    + (s.permitSpeed - 4)    * 0.032 * W.capex
-    - (s.shippingCost - 4)   * 0.022
-    + (s.portEff     - 6)    * 0.015
-    + (s.gridReliability-6)  * 0.012
-    // State
-    - (s.stateCorpTax - 5)   * 0.012
-    - (s.stateRegEnv  - 5)   * 0.020
-    + (s.stateFiscalHealth-5)* 0.010
-    // Political Economy [8] asymmetric hysteresis
-    + polEconGdpImpact(s) * W.polEcon
-    // Geopolitics
-    - (s.conflictIndex - 5)  * 0.040
-    - (s.chinaMilRisk  - 6)  * 0.025
-    - (s.cyberRisk     - 6)  * 0.010
-    + (s.dollarReserve - 8)  * 0.020
-    + (s.allyRelations - 6)  * 0.012
-    // Cross-variable amplifiers [3]
-    + creditSeizureGdp
-    + creditImpulseEffect  // [CREDIT IMPULSE] leading indicator
-    + gdpA;
+    + gdpMonetary
+    + gdpFiscal
+    + gdpInnovation
+    + gdpTrade
+    + gdpLabor
+    + gdpEnergy
+    + gdpCapex
+    + gdpState
+    + gdpPoliticalEconomy
+    + gdpGeopolitics
+    + gdpCredit
+    + gdpEvents;
 
   gdp = Math.max(-8, Math.min(10, gdp));
 
@@ -1720,7 +1801,8 @@ function compute() {
   // Map to GDP: S&P ±10pts → ±0.25% GDP; housing ±10 afford pts → ±0.15% GDP
   const spWealthEffect  = ((sp_pre   - 100) / 100) * 0.25;
   const hsWealthEffect  = ((haff_pre - 50)  / 50)  * 0.15;
-  gdp = Math.max(-8, Math.min(10, gdp + spWealthEffect * 0.5 + hsWealthEffect * 0.3));
+  const wealthEffect = spWealthEffect * 0.5 + hsWealthEffect * 0.3;
+  gdp = Math.max(-8, Math.min(10, gdp + wealthEffect));
 
   // ── TFP ─────────────────────────────────────────────────────────
   let tfp = 1.2
@@ -1767,6 +1849,18 @@ function compute() {
     - vigilantePremium           * 8.0
   ));
 
+  // Transparent deterministic risk score, not a statistically calibrated probability.
+  const recessionRisk = Math.max(2, Math.min(98,
+    18
+    + Math.max(0, 1.8 - gdp) * 15
+    + Math.max(0, s.unemp - 4.0) * 9
+    + Math.max(0, -yldSprd) * 13
+    + Math.max(0, s.hySpreads - 350) * 0.025
+    + Math.max(0, 70 - fsi) * 0.45
+    + Math.max(0, -s.creditImpulse) * 3.5
+    + (inRecession ? 35 : 0)
+  ));
+
   // ── SIX-SECTOR BREAKDOWN (0-100) ─────────────────────────────────
   const secHousing = clamp(50 - (mortg-6.9)*5.5 + (s.housingSupply-1.4)*12 - (s.pti-7)*4 + s.housingAct*2 - (s.zoning-7)*1.5);
   const secMfg     = clamp(50 - (s.tariff-10)*0.9 - (s.oil-70)*0.08 + (s.privateCapex-17)*2 - (s.dxy-104)*0.25 - (s.shippingCost-4)*1.8 + (s.nearshoring-4)*2 + (gdp-2.5)*4);
@@ -1778,6 +1872,7 @@ function compute() {
   return {
     gdp, cpi, tfp, tenyr, twoyr, fiveyr, thirtyr, mortg, yldSprd,
     housingAff, sp500, conf, defAdj, dollarAdj,
+    unemp:+s.unemp.toFixed(1), recessionRisk:+recessionRisk.toFixed(1),
     // New diagnostic outputs
     inRecession,
     effectiveDeficit,
@@ -1792,6 +1887,24 @@ function compute() {
     rowGrowth:          +rowGrowth.toFixed(2),
     rowSpillback:       +rowSpillback.toFixed(3),
     creditImpulseEffect:+creditImpulseEffect.toFixed(3),
+    gdpContributions: {
+      baseline:_gdpBase,
+      Monetary:gdpMonetary,
+      Fiscal:gdpFiscal,
+      Innovation:gdpInnovation,
+      Trade:gdpTrade,
+      Labor:gdpLabor,
+      Energy:gdpEnergy,
+      'CAPEX & Infrastructure':gdpCapex,
+      'State & Local':gdpState,
+      'Political Economy':gdpPoliticalEconomy,
+      Geopolitics:gdpGeopolitics,
+      'Credit Conditions':gdpCredit,
+      'Scenario Events':gdpEvents,
+      'Recession Feedback':-recessionAmplifier,
+      'Global Spillback':rowSpillback,
+      'Wealth Effects':wealthEffect
+    },
     sectorOutputs: { Housing:secHousing, Manufacturing:secMfg, Services:secServices, Finance:secFinance, Energy:secEnergy, Technology:secTech },
     sectors: {
       Growth:    clamp(50 + (gdp - 2.5) * 15),
@@ -1815,6 +1928,7 @@ let _heavyTimer = null;
 function render() {
   const m = compute();
   renderMetrics(m);          // cheap — always immediate
+  renderOverview(m);         // dashboard narrative + releases + diagnostics
   scheduleHeavyRender();     // charts + sensitivity (Monte Carlo) debounced
   scheduleURLUpdate();       // keep shareable hash current
 }
@@ -1833,102 +1947,186 @@ function scheduleHeavyRender() {
 
 function renderMetrics(m) {
   const bar = document.getElementById('mbar');
+  if (!bar) return;
+  const metrics = [
+    { key:'gdp', label:'GDP Nowcast', value:`${m.gdp.toFixed(1)}%`, note:'Model output', cls:m.gdp<0?'bad':m.gdp<1.5?'warn':'' },
+    { key:'cpi', label:'Inflation', value:`${m.cpi.toFixed(1)}%`, note:'Model output', cls:m.cpi>5?'bad':m.cpi>3.5?'warn':'' },
+    { key:'unemp', label:'Unemployment', value:`${m.unemp.toFixed(1)}%`, note:'Input state', cls:m.unemp>6?'bad':m.unemp>4.8?'warn':'' },
+    { key:'recessionRisk', label:'Recession Risk', value:`${Math.round(m.recessionRisk)}%`, note:'Model risk score', cls:m.recessionRisk>60?'bad':m.recessionRisk>35?'warn':'' },
+    { key:'tenyr', label:'10yr Treasury', value:`${m.tenyr.toFixed(2)}%`, note:'Model output', cls:m.tenyr>6?'bad':m.tenyr>5?'warn':'' }
+  ];
+  bar.innerHTML = `<div class="mbar-row mbar-primary">${metrics.map(d => `<div class="mc" data-metric="${d.key}">
+    <div class="mc-lbl">${d.label}</div>
+    <div class="mc-val ${d.cls}">${d.value}</div>
+    <div class="mc-delta neu">${d.note}</div>
+  </div>`).join('')}</div>`;
+}
 
-  // ── Helper: build one metric cell ────────────────────────────────
-  function cell(d) {
-    const v = m[d.key];
-    if (v === undefined) return '';
-    const base = BASELINES[d.key];
-    const diff = base !== undefined ? v - base : 0;
-    const good = base !== undefined && diff * d.dir > 0.05;
-    const bad  = base !== undefined && diff * d.dir < -0.05;
-    const dStr = base !== undefined
-      ? `${diff >= 0 ? '+' : ''}${Math.abs(diff) < 1 ? diff.toFixed(2) : diff.toFixed(1)} vs base`
-      : '';
-    const cls = good ? 'pos' : bad ? 'neg' : 'neu';
-    let valCls = '';
-    if (d.key === 'gdp')        valCls = v < 0 ? 'bad' : v < 1.5 ? 'warn' : '';
-    if (d.key === 'cpi')        valCls = v > 5 ? 'bad' : v > 3.5 ? 'warn' : '';
-    if (d.key === 'yldSprd')    valCls = v < 0 ? 'bad' : '';
-    if (d.key === 'housingAff') valCls = v < 30 ? 'bad' : v < 45 ? 'warn' : '';
-    if (d.key === 'interestCostPctGDP') valCls = v > 4.5 ? 'bad' : v > 3.5 ? 'warn' : '';
-    if (d.key === 'fsi')        valCls = v < 50 ? 'bad' : v < 70 ? 'warn' : 'good';
-    if (d.key === 'defAdj')     valCls = v > 10 ? 'bad' : v > 7 ? 'warn' : '';
-    return `<div class="mc" data-metric="${d.key}">
-      <div class="mc-lbl">${d.lbl}</div>
-      <div class="mc-val ${valCls}">${d.fmt(v)}</div>
-      ${dStr ? `<div class="mc-delta ${cls}">${dStr}</div>` : ''}
-    </div>`;
+const RELEASE_METADATA = [
+  {pattern:'employment situation', category:'Labor', importance:5, channels:['Payrolls','Unemployment','Wages','Fed'], description:'The principal monthly report on payroll employment, unemployment, participation, and wage growth.'},
+  {pattern:'consumer price index', category:'Inflation', importance:5, channels:['Inflation','Fed','Treasuries','Mortgages'], description:'The primary monthly measure of consumer-price inflation and a major input into monetary-policy expectations.'},
+  {pattern:'producer price index', category:'Inflation', importance:4, channels:['Pipeline inflation','Margins','Fed'], description:'Measures price pressure received by domestic producers and can foreshadow consumer-price changes.'},
+  {pattern:'gross domestic product', category:'Growth', importance:5, channels:['Growth','Profits','Fiscal ratios'], description:'The broadest official measure of U.S. output, demand composition, and economic momentum.'},
+  {pattern:'personal income and outlays', category:'Consumption', importance:5, channels:['PCE inflation','Income','Consumption','Fed'], description:'Includes personal income, spending, saving, and the Federal Reserve’s preferred PCE inflation measures.'},
+  {pattern:'retail sales', category:'Consumption', importance:4, channels:['Consumption','GDP','Inventories'], description:'A high-frequency reading on household goods spending and near-term consumption momentum.'},
+  {pattern:'industrial production', category:'Production', importance:4, channels:['Manufacturing','Capacity','GDP'], description:'Tracks real output in manufacturing, mining, and utilities.'},
+  {pattern:'housing starts', category:'Housing', importance:4, channels:['Housing supply','Construction','Rates'], description:'Measures new residential construction and permits, an interest-rate-sensitive leading indicator.'},
+  {pattern:'new residential construction', category:'Housing', importance:4, channels:['Housing supply','Construction','Rates'], description:'Measures starts, permits, and completions in residential construction.'},
+  {pattern:'international trade', category:'Trade', importance:3, channels:['Net exports','Dollar','Inventories'], description:'Tracks exports and imports and directly affects the net-export component of GDP.'},
+  {pattern:'productivity and costs', category:'Productivity', importance:4, channels:['TFP','Unit labor costs','Inflation'], description:'Measures labor productivity and unit labor costs, linking potential growth to inflation pressure.'},
+  {pattern:'federal open market committee', category:'Monetary policy', importance:5, channels:['Fed funds','Yield curve','Credit','Dollar'], description:'Federal Reserve policy decisions and communications that reprice rates and financial conditions.'},
+  {pattern:'fomc', category:'Monetary policy', importance:5, channels:['Fed funds','Yield curve','Credit','Dollar'], description:'Federal Reserve policy decisions and communications that reprice rates and financial conditions.'},
+  {pattern:'weekly claims', category:'Labor', importance:3, channels:['Layoffs','Unemployment','Recession risk'], description:'A weekly high-frequency indicator of layoffs and labor-market deterioration.'},
+  {pattern:'job openings', category:'Labor', importance:4, channels:['Labor demand','Wages','Fed'], description:'JOLTS data measure openings, hires, quits, and separations across the labor market.'}
+];
+
+let overviewReference = null;
+
+function classifyRegime(m) {
+  let code = 'LATE-CYCLE SLOWDOWN', tone = 'neutral', confidence = 65;
+  if (m.inRecession || m.gdp < 0) { code='RECESSION'; tone='negative'; confidence=90; }
+  else if (m.gdp < 1.2 && m.cpi > 4) { code='STAGFLATION RISK'; tone='warning'; confidence=80; }
+  else if (m.vigilantePremium > .3 || m.effectiveDeficit > 10) { code='FISCAL DOMINANCE RISK'; tone='warning'; confidence=76; }
+  else if (m.gdp >= 2.5 && m.cpi <= 3 && m.tfp >= 1.4) { code='PRODUCTIVITY-LED EXPANSION'; tone='positive'; confidence=78; }
+  else if (m.gdp >= 2 && m.cpi <= 3.4) { code='MODERATE EXPANSION'; tone='positive'; confidence=72; }
+  else if (m.gdp >= 1.2 && m.cpi <= 3.2) { code='SOFT-LANDING PATH'; tone='positive'; confidence=68; }
+  else if (m.cpi > 4.2) { code='INFLATION PRESSURE'; tone='warning'; confidence=74; }
+  const constraints = [];
+  if (m.interestCostPctGDP > 3.8) constraints.push('elevated debt-service costs');
+  if (m.housingAff < 40) constraints.push('weak housing affordability');
+  if (m.fsi < 70) constraints.push('tight financial conditions');
+  if (m.cpi > 3.2) constraints.push('persistent price pressure');
+  if (m.tfp > 1.5) constraints.push('strong productivity support');
+  const conditionText = constraints.length ? `with ${constraints.slice(0,3).join(', ')}` : 'while most major stress channels remain contained';
+  const summary = `${m.gdp >= 2 ? 'Growth remains above stall speed' : 'Growth momentum is subdued'}, ${conditionText}. The classification reflects current simulator inputs and is not an official forecast.`;
+  return {code,tone,confidence,summary};
+}
+
+function overviewSnapshot(m) {
+  return { country:currentCountry, horizon:timeHorizon, capturedAt:new Date().toISOString(), gdp:m.gdp, cpi:m.cpi, unemp:m.unemp, recessionRisk:m.recessionRisk, tenyr:m.tenyr, mortg:m.mortg, fsi:m.fsi, housingAff:m.housingAff, defAdj:m.defAdj };
+}
+
+function getOverviewReference(m) {
+  if (overviewReference) return overviewReference;
+  try {
+    const stored = JSON.parse(localStorage.getItem('macroscope_overview_reference') || 'null');
+    if (stored && stored.country === currentCountry && stored.horizon === timeHorizon) overviewReference = stored;
+  } catch (_) {}
+  if (!overviewReference) overviewReference = {
+    country:currentCountry, horizon:timeHorizon, capturedAt:null,
+    gdp:BASELINES.gdp, cpi:BASELINES.cpi, unemp:4.0, recessionRisk:20,
+    tenyr:BASELINES.tenyr, mortg:BASELINES.mortg, fsi:BASELINES.fsi,
+    housingAff:BASELINES.housingAff, defAdj:BASELINES.defAdj
+  };
+  return overviewReference;
+}
+
+function releaseMeta(name='') {
+  const n = name.toLowerCase();
+  return RELEASE_METADATA.find(r => n.includes(r.pattern)) || {category:'Macro release',importance:3,channels:['Growth','Inflation','Rates'],description:'An official economic release that may alter the model baseline and forecast interpretation.'};
+}
+
+function daysUntil(iso) {
+  const target = parseCalendarDate(iso);
+  const now = new Date(); now.setHours(0,0,0,0);
+  return Math.max(0, Math.round((target-now)/86400000));
+}
+
+function openModelSection(id) {
+  const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => (b.getAttribute('onclick')||'').includes(`'${id}'`));
+  showSection(id, btn || null);
+}
+
+function renderOverview(m) {
+  const section = document.getElementById('sec-overview');
+  if (!section) return;
+  const regime = classifyRegime(m);
+  const regimeEl = document.getElementById('ov-regime');
+  if (regimeEl) {
+    regimeEl.className = `ov-regime ${regime.tone}`;
+    const economyName = (COUNTRY_CONFIGS[currentCountry] || COUNTRY_CONFIGS.us).name;
+    regimeEl.innerHTML = `<div class="ov-regime-kicker">${economyName} Economic Regime · ${timeHorizon} Year Horizon</div>
+      <div class="ov-regime-row"><div><div class="ov-regime-title">${regime.code}</div><div class="ov-regime-summary">${regime.summary}</div></div>
+      <div class="ov-confidence"><div class="ov-confidence-value">${regime.confidence}%</div><div class="ov-confidence-label">Model confidence score</div></div></div>`;
   }
 
-  // ── Primary row: 8 most critical metrics ─────────────────────────
-  const primary = [
-    { key:'gdp',        lbl:'GDP Growth',      fmt:v=>`${v.toFixed(1)}%`,       dir:1  },
-    { key:'cpi',        lbl:'CPI Inflation',   fmt:v=>`${v.toFixed(1)}%`,       dir:-1 },
-    { key:'tenyr',      lbl:'10yr Treasury',   fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
-    { key:'mortg',      lbl:'30yr Mortgage',   fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
-    { key:'housingAff', lbl:'Housing Afford.', fmt:v=>`${Math.round(v)}/100`,   dir:1  },
-    { key:'sp500',      lbl:'S&P 500',         fmt:v=>`${Math.round(v)}`,       dir:1  },
-    { key:'conf',       lbl:'Consumer Conf.',  fmt:v=>`${Math.round(v)}`,       dir:1  },
-    { key:'fsi',        lbl:'Fin. Stability',  fmt:v=>`${Math.round(v)}/100`,   dir:1  },
+  const cards = [
+    ['GDP Nowcast',`${m.gdp.toFixed(1)}%`,'Model output',m.gdp<0?'bad':m.gdp<1.5?'warn':'good'],
+    ['Inflation',`${m.cpi.toFixed(1)}%`,'Model output',m.cpi>5?'bad':m.cpi>3.5?'warn':''],
+    ['Unemployment',`${m.unemp.toFixed(1)}%`,'Input state',m.unemp>6?'bad':m.unemp>4.8?'warn':''],
+    ['Recession Risk',`${Math.round(m.recessionRisk)}%`,'Deterministic model score',m.recessionRisk>60?'bad':m.recessionRisk>35?'warn':'good'],
+    ['10yr Treasury',`${m.tenyr.toFixed(2)}%`,'Model output',m.tenyr>6?'bad':m.tenyr>5?'warn':'']
   ];
+  const cardEl = document.getElementById('ov-headlines');
+  if (cardEl) cardEl.innerHTML = cards.map(c => `<div class="ov-headline"><div class="ov-headline-label">${c[0]}</div><div class="ov-headline-value ${c[3]}">${c[1]}</div><div class="ov-headline-meta">${c[2]}</div></div>`).join('');
 
-  // ── Secondary row: 7 supporting metrics ──────────────────────────
-  const secondary = [
-    { key:'twoyr',      lbl:'2yr Treasury',    fmt:v=>`${v.toFixed(2)}%`,       dir:-1 },
-    { key:'yldSprd',    lbl:'2-10 Spread',     fmt:v=>`${v.toFixed(2)}%`,       dir:1  },
-    { key:'tfp',        lbl:'TFP Growth',      fmt:v=>`${v.toFixed(2)}%`,       dir:1  },
-    { key:'defAdj',     lbl:'Eff. Deficit',    fmt:v=>`${v.toFixed(1)}%`,       dir:-1 },
-    { key:'interestCostPctGDP', lbl:'Debt Svc % GDP', fmt:v=>`${v.toFixed(1)}%`, dir:-1 },
-    { key:'dollarAdj',  lbl:'DXY',             fmt:v=>`${Math.round(v)}`,       dir:1  },
-    { key:'rowGrowth',  lbl:'Global Growth',   fmt:v=>`${v.toFixed(1)}%`,       dir:1  },
+  const ref = getOverviewReference(m);
+  const defs = [
+    ['GDP forecast','gdp','pp',.03],['Inflation forecast','cpi','pp',.03],['Unemployment','unemp','pp',.03],['10yr Treasury','tenyr','pp',.02],['Mortgage rate','mortg','pp',.02],['Financial stability','fsi','pts',.5],['Housing affordability','housingAff','pts',.5],['Effective deficit','defAdj','pp',.05]
   ];
+  const changes = defs.map(([label,key,unit,cut]) => ({label,key,unit,old:ref[key],now:m[key],delta:m[key]-ref[key],cut})).filter(x => Number.isFinite(x.old) && Math.abs(x.delta)>=x.cut).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,5);
+  const changeEl = document.getElementById('ov-changes');
+  const changeSub = document.getElementById('ov-change-sub');
+  if (changeSub) changeSub.textContent = ref.capturedAt ? 'Since previous saved visit' : 'Versus model baseline';
+  if (changeEl) changeEl.innerHTML = changes.length ? changes.map(x => {
+    const favorable = ['gdp','fsi','housingAff'].includes(x.key) ? x.delta>0 : ['cpi','unemp','tenyr','mortg','defAdj'].includes(x.key) ? x.delta<0 : false;
+    const cls = Math.abs(x.delta)<x.cut?'neu':favorable?'pos':'neg';
+    const digits = x.unit==='pts' ? 1 : 2;
+    return `<div class="ov-change-row"><div class="ov-change-name">${x.label}</div><div class="ov-change-values">${x.old.toFixed(digits)} → ${x.now.toFixed(digits)}</div><div class="ov-change-delta ${cls}">${x.delta>=0?'+':''}${x.delta.toFixed(digits)}${x.unit==='pp'?'pp':''}</div></div>`;
+  }).join('') : '<div class="ov-empty">No material changes relative to the reference snapshot.</div>';
 
-  // ── Regime / Taylor badge for primary row slot 8 (replaces FSI when alert) ──
-  let regimeBadge = '';
-  if (m.inRecession) {
-    regimeBadge = `<div class="mc" style="background:var(--neg-dim);border-left:3px solid var(--neg);">
-      <div class="mc-lbl" style="color:var(--neg);margin-bottom:3px">⚠ REGIME</div>
-      <div class="mc-val bad" style="font-size:18px">RECESSION</div>
-      <div class="mc-delta neg">Amplification active</div>
-    </div>`;
-  } else if (m.vigilantePremium > 0.3) {
-    regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
-      <div class="mc-lbl" style="color:var(--warn);margin-bottom:3px">⚠ REGIME</div>
-      <div class="mc-val warn" style="font-size:18px">DEBT SPIRAL</div>
-      <div class="mc-delta neg">+${m.vigilantePremium.toFixed(2)}% premium</div>
-    </div>`;
-  } else if (m.wagePriceSpiral > 0.05) {
-    regimeBadge = `<div class="mc" style="background:var(--warn-dim);border-left:3px solid var(--warn);">
-      <div class="mc-lbl" style="color:var(--warn);margin-bottom:3px">⚠ REGIME</div>
-      <div class="mc-val warn" style="font-size:18px">WAGE SPIRAL</div>
-      <div class="mc-delta neg">+${m.wagePriceSpiral.toFixed(2)}% CPI</div>
-    </div>`;
+  renderOverviewReleases();
+
+  const contrib = Object.entries(m.gdpContributions || {}).filter(([k])=>k!=='baseline').map(([label,value])=>({label,value:+value||0})).sort((a,b)=>Math.abs(b.value)-Math.abs(a.value)).slice(0,8);
+  const maxAbs = Math.max(.01,...contrib.map(x=>Math.abs(x.value)));
+  const water = document.getElementById('ov-waterfall');
+  if (water) water.innerHTML = contrib.map(x => { const cls=x.value>0.005?'pos':x.value<-.005?'neg':'neu'; return `<div class="ov-water-row"><div class="ov-water-label">${x.label}</div><div class="ov-water-track"><div class="ov-water-bar ${cls}" style="width:${Math.max(2,Math.abs(x.value)/maxAbs*100)}%"></div></div><div class="ov-water-value ${cls}">${x.value>=0?'+':''}${x.value.toFixed(2)}pp</div></div>`; }).join('') + `<div class="ov-water-total"><span>Final GDP nowcast</span><strong>${m.gdp.toFixed(1)}%</strong></div>`;
+
+  const bounded = v => Math.max(0,Math.min(100,v));
+  const risks = [
+    {name:'Fiscal sustainability',score:bounded((m.effectiveDeficit-4)*11 + Math.max(0,m.interestCostPctGDP-3)*14),section:'fiscal'},
+    {name:'Inflation persistence',score:bounded((m.cpi-2)*27 + m.wagePriceSpiral*130),section:'monetary'},
+    {name:'Labor deterioration',score:bounded((m.unemp-3.5)*22 + Math.max(0,1.5-m.gdp)*18),section:'labor'},
+    {name:'Financial stress',score:bounded(100-m.fsi),section:'bonds'},
+    {name:'Housing affordability',score:bounded(100-m.housingAff),section:'housing'},
+    {name:'Geopolitical disruption',score:bounded(((vals.conflictIndex+vals.chinaMilRisk+vals.energyGeopolitics+vals.cyberRisk)/4-3)*14),section:'geopolitics'}
+  ];
+  const riskEl = document.getElementById('ov-risks');
+  if (riskEl) riskEl.innerHTML = risks.map(r => { const cls=r.score>=70?'high':r.score>=48?'elevated':r.score>=25?'moderate':'low'; const level=cls==='high'?'High':cls==='elevated'?'Elevated':cls==='moderate'?'Moderate':'Low'; return `<div class="ov-risk-row" onclick="openModelSection('${r.section}')" title="Open ${r.name} inputs"><div class="ov-risk-name">${r.name}</div><div class="ov-risk-track"><div class="ov-risk-fill ${cls}" style="width:${r.score.toFixed(0)}%"></div></div><div class="ov-risk-level ${cls}">${level}</div></div>`; }).join('');
+
+  const hzStatus = document.getElementById('ov-horizon-status');
+  if (hzStatus) hzStatus.textContent = `${timeHorizon}YR HORIZON`;
+  const generated = economicCalendar?.generatedAt ? new Date(economicCalendar.generatedAt) : null;
+  const ageHours = generated && !Number.isNaN(generated.getTime()) ? (Date.now()-generated.getTime())/36e5 : null;
+  const dataPill = document.getElementById('ov-data-status');
+  if (dataPill) { dataPill.className=`ov-pill ${ageHours!==null&&ageHours<=36?'live':'stale'}`; dataPill.textContent=ageHours===null?'CALENDAR PENDING':ageHours<=36?`DATA ${Math.round(ageHours)}H AGO`:`DATA ${Math.round(ageHours/24)}D OLD`; }
+}
+
+function renderOverviewReleases() {
+  const nextEl = document.getElementById('ov-next-release');
+  const listEl = document.getElementById('ov-upcoming-list');
+  if (!nextEl || !listEl) return;
+  if (!economicCalendar || !Array.isArray(economicCalendar.events)) {
+    nextEl.innerHTML='<div class="ov-empty">Loading the static economic-calendar snapshot…</div>';
+    listEl.innerHTML=''; return;
   }
-
-  const trBadge = taylorRuleOn
-    ? `<div class="mc" style="background:var(--accent-dim);border-left:3px solid var(--accent);">
-        <div class="mc-lbl" style="color:var(--accent);margin-bottom:3px">⚡ TAYLOR RULE</div>
-        <div class="mc-val" style="font-size:20px;color:var(--accent)">${m.taylorFFR ? m.taylorFFR.toFixed(2) : '—'}%</div>
-        <div class="mc-delta neu">Endogenous FFR</div>
-      </div>`
-    : '';
-
-  // Primary row: regime badge (if any) occupies slot 1; then 7 primary metrics (or 8 if no badge)
-  const primaryCells = (regimeBadge || trBadge)
-    ? (regimeBadge || trBadge) + primary.slice(0, 7).map(cell).join('')
-    : primary.map(cell).join('');
-
-  bar.innerHTML =
-    `<div class="mbar-row mbar-primary">${primaryCells}</div>` +
-    `<div class="mbar-row mbar-secondary">${secondary.map(cell).join('')}</div>`;
+  const today = localIsoDate();
+  const upcoming = economicCalendar.events.filter(e=>e?.date>=today&&e?.name).sort((a,b)=>a.date.localeCompare(b.date)||a.name.localeCompare(b.name));
+  if (!upcoming.length) { nextEl.innerHTML='<div class="ov-empty">No upcoming releases are present in the current snapshot.</div>'; listEl.innerHTML=''; return; }
+  const next=upcoming[0], meta=releaseMeta(next.name), days=daysUntil(next.date);
+  nextEl.innerHTML=`<div class="ov-next-date">${formatCalendarDate(next.date,{month:'short',day:'numeric',year:'numeric'})}<br>${days===0?'TODAY':days===1?'IN 1 DAY':`IN ${days} DAYS`}</div><div><div class="ov-next-name">${escapeCalendarHtml(next.name)}</div><div class="ov-next-desc">${meta.description}</div><div class="ov-impact">${meta.channels.map(c=>`<span class="ov-impact-chip">${c}</span>`).join('')}</div></div>`;
+  listEl.innerHTML=upcoming.slice(1,6).map(e=>{const md=releaseMeta(e.name);return `<div class="ov-release-row"><div class="ov-release-date">${formatCalendarDate(e.date,{month:'short',day:'numeric'})}</div><div class="ov-release-name">${escapeCalendarHtml(e.name)}</div><div class="ov-release-importance">${'●'.repeat(Math.min(5,md.importance))}</div></div>`;}).join('') || '<div class="ov-empty">No additional releases in the current snapshot.</div>';
 }
 
 // ── BUILD SECTIONS ───────────────────────────────────────────────
 function buildSidebar() {
+  const terminal = document.getElementById('nav-terminal');
+  terminal.innerHTML = `<button class="nav-item active" onclick="showSection('overview',this)">
+    <span class="nav-icon">⌂</span>Terminal Overview
+  </button>`;
   const inp = document.getElementById('nav-inputs');
   inp.innerHTML = CATEGORIES.map(c =>
-    `<button class="nav-item${c.id==='monetary'?' active':''}" onclick="showSection('${c.id}',this)">
+    `<button class="nav-item" onclick="showSection('${c.id}',this)">
       <span class="nav-icon">${c.icon}</span>${c.label}${c.warn?'<span class="nav-warn">★</span>':''}
     </button>`).join('');
   const ana = document.getElementById('nav-analysis');
@@ -1940,9 +2138,26 @@ function buildSidebar() {
 
 function buildContent() {
   const el = document.getElementById('content');
-  let html = '';
+  let html = `<div class="section active" id="sec-overview">
+    <div class="ov-shell">
+      <div class="ov-statusbar">
+        <div class="ov-status-left"><span class="ov-pill live">LIVE BASELINE</span><span class="ov-pill">MODEL v4.1</span><span class="ov-pill">${(COUNTRY_CONFIGS[currentCountry]||COUNTRY_CONFIGS.us).name}</span></div>
+        <div class="ov-status-right"><span class="ov-pill" id="ov-data-status">CALENDAR PENDING</span><span class="ov-pill" id="ov-horizon-status">${timeHorizon}YR HORIZON</span></div>
+      </div>
+      <div class="ov-regime neutral" id="ov-regime"></div>
+      <div class="ov-headline-grid" id="ov-headlines"></div>
+      <div class="ov-grid">
+        <div class="ov-panel"><div class="ov-panel-hd"><div class="ov-panel-title">What Changed</div><div class="ov-panel-sub" id="ov-change-sub">Versus model baseline</div></div><div class="ov-panel-body" id="ov-changes"></div></div>
+        <div class="ov-panel"><div class="ov-panel-hd"><div class="ov-panel-title">Next Major Release</div><button class="btn" onclick="openModelSection('calendar')">Full Calendar</button></div><div class="ov-panel-body"><div class="ov-next-release" id="ov-next-release"></div><div class="ov-release-list" id="ov-upcoming-list"></div></div></div>
+      </div>
+      <div class="ov-grid">
+        <div class="ov-panel"><div class="ov-panel-hd"><div class="ov-panel-title">GDP Driver Waterfall</div><div class="ov-panel-sub">Contribution to annualized growth</div></div><div class="ov-panel-body"><div class="ov-waterfall" id="ov-waterfall"></div></div></div>
+        <div class="ov-panel"><div class="ov-panel-hd"><div class="ov-panel-title">Risk Monitor</div><div class="ov-panel-sub">Click a risk to open its inputs</div></div><div class="ov-panel-body"><div class="ov-risk-list" id="ov-risks"></div></div></div>
+      </div>
+    </div>
+  </div>`;
   for (const cat of CATEGORIES) {
-    html += `<div class="section${cat.id==='monetary'?' active':''}" id="sec-${cat.id}">
+    html += `<div class="section" id="sec-${cat.id}">
       <div class="sec-hdr">
         <div class="sec-title">${cat.label}</div>
         <div class="sec-desc">${cat.desc}</div>
@@ -2241,7 +2456,8 @@ function showSection(id, btn) {
   const sec = document.getElementById('sec-' + id);
   if (sec) sec.classList.add('active');
   if (btn) btn.classList.add('active');
-  if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
+  if (id === 'overview') { chartsVisible = false; sensitivityVisible = false; renderOverview(compute()); }
+  else if (id === 'charts') { chartsVisible = true; renderCharts(compute()); }
   else if (id === 'calendar') { loadEconomicCalendar(); }
   else if (id === 'compare') { setTimeout(renderCountryComparison, 0); }
   else if (id === 'scenarios') { renderScenarios(); }
@@ -3398,7 +3614,7 @@ function toggleShortcuts() {
   if (ov) ov.classList.toggle('active');
 }
 function cycleSection(dir) {
-  const ids = [...CATEGORIES.map(c => c.id), ...ANALYSIS_SECTIONS.map(s => s.id)];
+  const ids = ['overview', ...CATEGORIES.map(c => c.id), ...ANALYSIS_SECTIONS.map(s => s.id)];
   let idx = ids.indexOf(currentSection); if (idx < 0) idx = 0;
   idx = (idx + dir + ids.length) % ids.length;
   const id = ids[idx];
@@ -3502,8 +3718,10 @@ async function loadEconomicCalendar(force = false) {
     if (!payload || !Array.isArray(payload.events)) throw new Error('Invalid calendar JSON');
     economicCalendar = payload;
     renderEconomicCalendar();
+    renderOverview(compute());
   } catch (err) {
     economicCalendar = null;
+    renderOverview(compute());
     if (list) list.innerHTML = `<div class="release-empty"><strong style="color:var(--warn)">Calendar snapshot not available.</strong><br>Run <code>python scripts/update_calendar.py</code> with the <code>FRED_API_KEY</code> environment variable, or trigger the included GitHub Actions workflow.<br><span style="color:var(--muted)">${escapeCalendarHtml(err.message)}</span></div>`;
     const meta = document.getElementById('release-meta');
     if (meta) meta.innerHTML = '<span class="release-badge warn">STATIC FALLBACK</span><span class="release-badge">No API key is requested by the browser</span>';
@@ -3625,6 +3843,10 @@ wireMetricTooltips();
 if (_restored) toast('Scenario restored from shared link');
 
 // Re-apply when the user pastes a new shared hash into the same tab
+window.addEventListener('beforeunload', () => {
+  try { localStorage.setItem('macroscope_overview_reference', JSON.stringify(overviewSnapshot(compute()))); } catch (_) {}
+});
+
 window.addEventListener('hashchange', () => {
   if (applyStateFromURL()) {
     buildContent();
