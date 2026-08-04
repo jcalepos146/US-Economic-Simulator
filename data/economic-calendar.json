@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": null,
+  "range": {
+    "start": null,
+    "end": null
+  },
+  "source": {
+    "name": "FRED Economic Release Calendar",
+    "provider": "Federal Reserve Bank of St. Louis",
+    "endpoint": "fred/releases/dates"
+  },
+  "eventCount": 0,
+  "events": []
+}
